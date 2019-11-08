@@ -1,0 +1,26 @@
+{
+  "name": "m7011e",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aundron/M7011E.git"
+  },
+  "author": "Filip Öberg, Josefin Andersson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aundron/M7011E/issues"
+  },
+  "homepage": "https://github.com/Aundron/M7011E#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "gaussian": "^1.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  }
+}
