@@ -1,4 +1,5 @@
 var gaussian = require('gaussian');
+var { Household, Consumption } = require('../models/');
 
 class Simulator {
     constructor() {
@@ -17,7 +18,7 @@ class Simulator {
 
             for(var i = 0; i < households.length; i++) {
                 this.households[i] = new HouseholdClass(households[i]._id, this.consumptionDistribution);
-        }
+            }
         }.bind(this));
         
     }
@@ -88,6 +89,17 @@ class HouseholdClass {
 
     newHour() {
         this.currentConsumption = this.distribution.ppf(Math.random());
+
+        var currConsumption = new Consumption({
+            householdId: this.id,
+            consumption: this.currentConsumption,
+            timestamp: 13
+        });
+
+        currConsumption.save(function (err, c) {
+            if (err) return console.error(err);
+            console.log(c._id + " saved.");
+          });
     }
 
 }
