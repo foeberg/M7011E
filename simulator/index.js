@@ -1,7 +1,7 @@
 var gaussian = require('gaussian');
 
 class Simulator {
-    constructor(numHouseholds) {
+    constructor() {
         this.hourOfDay = 0;
         this.windDayDistribution = gaussian(0, 8*8);
 
@@ -11,9 +11,15 @@ class Simulator {
         this.consumptionDistribution = gaussian(2.85, 0.5*0.5);
 
         this.households = [];
-        for(var i = 0; i < numHouseholds; i++) {
-            this.households[i] = new Household(this.consumptionDistribution);
+
+        Household.find(function (err, households) {
+            if (err) return console.error(err);
+
+            for(var i = 0; i < households.length; i++) {
+                this.households[i] = new HouseholdClass(households[i]._id, this.consumptionDistribution);
         }
+        }.bind(this));
+        
     }
 
     newDay() {
@@ -70,8 +76,9 @@ class Simulator {
     }
 }
 
-class Household {
-    constructor(distribution) {
+class HouseholdClass {
+    constructor(id, distribution) {
+        this.id = id;
         this.distribution = distribution;
     }
 

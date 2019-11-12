@@ -11,7 +11,7 @@ db.once('open', function() {
     console.log('Connected to database!');
 });
 
-const sim = new Simulator(4);
+const sim = new Simulator();
 sim.start();
 
 app.get('/', function (req, res) {
