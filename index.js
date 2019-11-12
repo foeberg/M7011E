@@ -1,6 +1,15 @@
 var express = require('express');
+var mongoose = require('mongoose');
 var app = express();
 var Simulator = require('./simulator/');
+
+mongoose.connect('mongodb://localhost/M7011E', {useNewUrlParser: true});
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+    console.log('Connected to database!');
+});
 
 const sim = new Simulator(4);
 sim.start();
@@ -31,7 +40,7 @@ app.get('/simulator/', function (req, res) {
     }
     var electricityPrice = sim.getElectricityPrice();
 
-    string = "Wind: " + wind + "\nTotal consumption: " + totalConsumption + "\nPrice: " + electricityPrice;
+    string = "Wind: " + wind + "\n Total consumption: " + totalConsumption + "\n Price: " + electricityPrice;
     res.send(string);
 });
 

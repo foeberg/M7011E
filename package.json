@@ -18,7 +18,8 @@
   "homepage": "https://github.com/Aundron/M7011E#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "gaussian": "^1.1.0"
+    "gaussian": "^1.1.0",
+    "mongoose": "^5.7.10"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"
