@@ -9,6 +9,8 @@
 | 2019-11-15  | 1       | Adding date functionality for simulator. |
 | 2019-11-15  | 2       | Watching tutorial video and reading about react. |
 | 2019-11-18  | 2,5     | trying to create react app, issues getting it to work on my computer. |
-
+| 2019-11-18  | 3       | creating login page |
+| 2019-11-19  | 3       | creating registration page and handling input validation |
+| 2019-11-20  | 3,5     | creating prosumer page and making it responsive |
                       
 

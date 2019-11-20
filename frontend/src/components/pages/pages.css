@@ -1,0 +1,177 @@
+/*Style for login/register page*/
+
+
+/*white box containing login/register forms*/
+.loginRegisterContainer {
+    background-color: #fff;
+    overflow:hidden;
+    max-width: 40%;
+	border-radius: 8px;
+    margin: 4.0em auto;
+    padding: 1.0em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+
+/*input fields for login/register*/
+.loginInput {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1.5px solid #D8D0D0;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/*input fields for login/register when focused*/
+input[type=text]:focus {
+    border: 3px solid #D8D0D0;
+    outline: none;
+}
+
+input[type=password]:focus {
+    border: 3px solid #D8D0D0;
+    outline: none;
+}
+
+.submitButton {
+    background-color: #D8D0D0;
+    padding: 12px;
+    margin: 20px;
+    width: 50%;
+    color: black;
+    border: 2px solid #e7e7e7;
+    border-radius: 4px;
+    outline: none;
+}
+
+.submitButton:hover {
+    background-color: #C1BCBB;
+    cursor: pointer;
+}
+
+.link {
+    color: #4F3C3C;
+}
+
+.link:hover {
+    color: #82646E;
+}
+
+/*Style for prosumer/manager page*/
+
+/*display child elements in rows*/
+.flexboxRow {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/*display child elements in columns*/
+.flexboxColumn {
+    display: flex;
+    flex-direction: column;
+}
+
+/*white box containing household info on prosumer page*/
+.householdInfoBox {
+    flex: 1 1 15%;
+    background-color: #fff;
+    height: 50%;
+    border-radius: 8px;
+    float: left;
+    margin: 0.5em;
+    margin-top: 2.0em;
+    padding: 1.0em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+
+/*white box containing electricity details on prosumer page*/
+.mainInfoBox {
+    flex: 1 1 50%;
+    background-color: #fff;
+    min-height: 100%;
+    border-radius: 8px;
+    float: left;
+    margin: 0.5em;
+    margin-top: 2.0em;
+    padding: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+
+/*white box containing price/buffer info on prosumer page*/
+.priceBufferInfoBox {
+    flex: 1 1 10%;
+    background-color: #fff;
+    min-height: 20%;
+    border-radius: 8px;
+    float: left;
+    margin: 0.5em;
+    margin-top: 2.0em;
+    padding: 1.0em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+
+/*box containing electricity values on prosumer page*/
+.displayValues {
+    border: 1px solid #B7B5B5;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    height: 30%;
+    margin: auto;
+    margin-top: 2.0em;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/*container for electricity values on prosumer page*/
+.value {
+    flex: 1 1 20%;
+    padding-bottom: 1.0em;
+}
+
+/*electricity data on prosumer page*/
+.data {
+    margin: 0px;
+}
+
+/**/
+.ratioContainer{
+    flex: 1 1 20%;
+    margin: 1.0em;
+    padding: 2.0em;
+}
+
+/*Make page responsive when browser window is smaller*/
+@media all and (max-width: 1000px) {
+    .flexboxRow {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+    }
+
+    .flexboxColumn {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .displayValues {
+        border: 1px solid #B7B5B5;
+        border-radius: 8px;
+        display: flex;
+        flex-direction: column;
+        width: 40%;
+        height: 100%;
+        float:left;
+        margin-top: 2.0em;
+        font-family: Arial, Helvetica, sans-serif;
+    }
+}    
+
+
