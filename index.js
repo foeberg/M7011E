@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var fileUpload = require('express-fileupload');
 var Simulator = require('./simulator/');
 var { Household } = require('./models/');
 
@@ -28,6 +29,8 @@ app.use(session({
     }
 }));
 
+app.use(fileUpload());
+
 var server = app.listen(8081, function () {
     var host = server.address().address;
     var port = server.address().port;
@@ -35,30 +38,42 @@ var server = app.listen(8081, function () {
     console.log("Example app listening at http://%s:%s", host, port);
 });
 
-var checkIfLoggedIn = (req, res, next) => {
+var ensureNotLoggedIn = (req, res, next) => {
     if(req.session.user) {
-        res.send('already logged in');
-        // TODO: Send to logged in page
+        res.redirect('/');
+        return;
     } else {
         next();
     }
 };
 
-app.get('/', checkIfLoggedIn,  function (req, res) {
-    res.redirect('/login');
+var ensureLoggedIn = (req, res, next) => {
+    if(!req.session.user) {
+        res.redirect('/login');
+        return;
+    } else {
+        next();
+    }
+};
+
+app.get('/', ensureLoggedIn,  function (req, res) {
+    // TODO: Redirect to logged in page
 });
  
 app.get('/simulator/wind', function (req, res) {
      res.send(sim.getWind().toString());
+     return;
 });
  
 app.get('/simulator/householdConsumption/:houseId', function (req, res) {
     var households = sim.getHouseholds();
     res.send(households[req.params.houseId].getConsumption().toString());
+    return;
 });
  
 app.get('/simulator/electricityPrice/', function (req, res) {
     res.send(sim.getElectricityPrice().toString());
+    return;
 });
 
 app.get('/simulator/', function (req, res) {
@@ -72,6 +87,7 @@ app.get('/simulator/', function (req, res) {
 
     string = "Wind: " + wind + "\n Total consumption: " + totalConsumption + "\n Price: " + electricityPrice;
     res.send(string);
+    return;
 });
 
 app.route('/signup')
@@ -92,14 +108,15 @@ app.route('/signup')
             if (err) {
                 console.error(err);
                 res.status(400);
-                res.send('Error creating user');
                 res.redirect('/signup');
+                return;
             } else {
                 console.log("New household " + c.lastname + " saved.");
                 req.session.user = c;
 
                 res.status(200);
                 res.send('User created');
+                return;
 
                 // TODO: Redirect to logged in pages
                 // res.redirect('path')
@@ -108,26 +125,26 @@ app.route('/signup')
     });
 
 app.route('/login')
-    .get(checkIfLoggedIn, (req, res) => {
-        // TODO: Check if logged in and redirect to login page
-        // res.redirect('path')
+    .get(ensureNotLoggedIn, (req, res) => {
+        // TODO: send login page to user
     })
     .post((req, res) => {
         Household.findOne({ username: req.body.username }, (err, user) => {
             if(err) {
                 res.status(400);
-                res.send('Error trying to log in');
                 res.redirect('/login');
+                return;
             } else {
                 if(bcrypt.compareSync(req.body.password, user.password)) {
                     req.session.user = user;
 
                     res.status(200);
                     res.send('Logged in');
+                    return;
                 } else {
                     res.status(400);
-                    res.send('Incorrect password');
                     res.redirect('/login');
+                    return;
                 }
             }
         });
@@ -139,12 +156,60 @@ app.get('/logout', function(req, res) {
             if(err) {
                 console.error(err);
                 res.send('Error logging out');
+                return;
             } else {
                 res.send('Logged out');
+                return;
             }
         });
     } else {
         res.send('Not logged in');
         res.redirect('/');
+        return;
+    }
+});
+
+app.post('/householdImage', ensureLoggedIn, function(req, res) {
+    if (!req.files || Object.keys(req.files).length === 0) {
+        res.status(400);
+        res.send('No files were uploaded');
+        return;
+    } else {
+        // TODO: Update form name to the actual name in frontend
+        let file = req.files.file;
+
+        if(!file.mimetype.includes('image')) {
+            res.status(400);
+            res.send('Invalid image format');
+            return;
+        }
+
+        // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
+        let filetype = file.mimetype.split('/')[1];
+        let filename = req.session.user._id + '.' + filetype;
+        file.mv('./householdImages/' + filename, (err) => {
+            if (err) {
+                console.error(err);
+                res.status(500);
+                res.send('Error uploading image');
+                return;
+            } else {
+                res.status(200);
+                res.send('File uploaded!');
+
+                Household.findOne({ _id: req.session.user._id }, (err, household) => {
+                    household.imageURL = filename;
+                    household.save((err) => {
+                        if(err) {
+                            console.error(err);
+                            return;
+                        }
+                        console.log('Image URL for user' + req.session.user.username + ' updated');
+                    });
+                });
+
+                return;
+            }
+        });
     }
 });
