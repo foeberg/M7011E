@@ -1,6 +1,7 @@
 var express = require('express');
 var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var Simulator = require('./simulator/');
 var { Household } = require('./models/');
@@ -20,6 +21,13 @@ var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(session({
+    secret: 'ji754gkl0+a',
+    cookie: {
+        maxAge: 60000
+    }
+}));
+
 var server = app.listen(8081, function () {
     var host = server.address().address;
     var port = server.address().port;
@@ -27,8 +35,17 @@ var server = app.listen(8081, function () {
     console.log("Example app listening at http://%s:%s", host, port);
 });
 
-app.get('/', function (req, res) {
-    res.send('Hello World');
+var checkIfLoggedIn = (req, res, next) => {
+    if(req.session.user) {
+        res.send('already logged in');
+        // TODO: Send to logged in page
+    } else {
+        next();
+    }
+};
+
+app.get('/', checkIfLoggedIn,  function (req, res) {
+    res.redirect('/login');
 });
  
 app.get('/simulator/wind', function (req, res) {
@@ -59,7 +76,8 @@ app.get('/simulator/', function (req, res) {
 
 app.route('/signup')
     .get((req, res) => {
-        // TODO: Redirect to signup page
+        // TODO: send signup page
+        // res.redirect('path')
     })
     .post((req, res) => {
         const salt = bcrypt.genSaltSync();
@@ -75,12 +93,58 @@ app.route('/signup')
                 console.error(err);
                 res.status(400);
                 res.send('Error creating user');
+                res.redirect('/signup');
             } else {
                 console.log("New household " + c.lastname + " saved.");
+                req.session.user = c;
+
                 res.status(200);
                 res.send('User created');
+
+                // TODO: Redirect to logged in pages
+                // res.redirect('path')
             }
         });
-
-        // TODO: Redirect to logged in pages
     });
+
+app.route('/login')
+    .get(checkIfLoggedIn, (req, res) => {
+        // TODO: Check if logged in and redirect to login page
+        // res.redirect('path')
+    })
+    .post((req, res) => {
+        Household.findOne({ username: req.body.username }, (err, user) => {
+            if(err) {
+                res.status(400);
+                res.send('Error trying to log in');
+                res.redirect('/login');
+            } else {
+                if(bcrypt.compareSync(req.body.password, user.password)) {
+                    req.session.user = user;
+
+                    res.status(200);
+                    res.send('Logged in');
+                } else {
+                    res.status(400);
+                    res.send('Incorrect password');
+                    res.redirect('/login');
+                }
+            }
+        });
+    });
+
+app.get('/logout', function(req, res) {
+    if(req.session.user) {
+        req.session.destroy((err) => {
+            if(err) {
+                console.error(err);
+                res.send('Error logging out');
+            } else {
+                res.send('Logged out');
+            }
+        });
+    } else {
+        res.send('Not logged in');
+        res.redirect('/');
+    }
+});
