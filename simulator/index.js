@@ -78,11 +78,9 @@ class Simulator {
             }
         }.bind(this)).exec();
 
-        this.newDay();
-        this.newHour();
         setInterval(function() {
             this.newHour();
-        }.bind(this), 10000);
+        }.bind(this), 3600000);
     }
 }
 

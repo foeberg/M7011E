@@ -2,7 +2,20 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 var householdSchema = new Schema({
-    lastname: String
+    lastname: {
+        type: String,
+        required: true,
+    },
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        dropDups: true
+    },
+    password: {
+        type: String,
+        required: true
+    }
 });
 
 module.exports = mongoose.model('household', householdSchema);

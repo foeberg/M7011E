@@ -1,7 +1,9 @@
 var express = require('express');
 var mongoose = require('mongoose');
-var app = express();
+var bcrypt = require('bcrypt');
+var bodyParser = require('body-parser');
 var Simulator = require('./simulator/');
+var { Household } = require('./models/');
 
 mongoose.connect('mongodb://localhost/M7011E', {useNewUrlParser: true});
 
@@ -13,6 +15,17 @@ db.once('open', function() {
 
 const sim = new Simulator();
 sim.start();
+
+var app = express();
+
+app.use(bodyParser.urlencoded({ extended: true }));
+
+var server = app.listen(8081, function () {
+    var host = server.address().address;
+    var port = server.address().port;
+    
+    console.log("Example app listening at http://%s:%s", host, port);
+});
 
 app.get('/', function (req, res) {
     res.send('Hello World');
@@ -44,9 +57,30 @@ app.get('/simulator/', function (req, res) {
     res.send(string);
 });
 
-var server = app.listen(8081, function () {
-   var host = server.address().address;
-   var port = server.address().port;
-   
-   console.log("Example app listening at http://%s:%s", host, port);
-});
+app.route('/signup')
+    .get((req, res) => {
+        // TODO: Redirect to signup page
+    })
+    .post((req, res) => {
+        const salt = bcrypt.genSaltSync();
+        
+        let newHousehold = new Household({
+            lastname: req.body.lastname,
+            username: req.body.username,
+            password: bcrypt.hashSync(req.body.password, salt)
+        });
+
+        newHousehold.save(function (err, c) {
+            if (err) {
+                console.error(err);
+                res.status(400);
+                res.send('Error creating user');
+            } else {
+                console.log("New household " + c.lastname + " saved.");
+                res.status(200);
+                res.send('User created');
+            }
+        });
+
+        // TODO: Redirect to logged in pages
+    });
