@@ -4,6 +4,8 @@ var { Household, Consumption, Simdate } = require('../models/');
 class Simulator {
     constructor() {
         this.windDayDistribution = gaussian(0, 8*8);
+        var daySample = this.windDayDistribution.ppf(Math.random());
+        this.windHourDistribution = gaussian(daySample, 1);
 
         // Average swedish house annual consumption is 25 000 kWh, divided by amount of hours in a year
         // we get 2.85 kWh average consumtion per hour
@@ -78,6 +80,8 @@ class Simulator {
             }
         }.bind(this)).exec();
 
+        this.currentWind = Math.abs(this.windHourDistribution.ppf(Math.random()));
+        
         setInterval(function() {
             this.newHour();
         }.bind(this), 3600000);
