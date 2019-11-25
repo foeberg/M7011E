@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './pages.css';
 import { Link } from 'react-router-dom';
+import LoginRegisterInput from '../loginRegisterInput';
 
 export class Register extends Component{
   state = {
@@ -30,12 +31,11 @@ export class Register extends Component{
 
     if(!username){
       formIsValid = false;
-      errors["username"] = "Username can not be empty";
+      errors["createUsername"] = "Username can not be empty";
     }
-    
     if(!password){
       formIsValid = false;
-      errors["password"] = "Password can not be empty";
+      errors["createPassword"] = "Password can not be empty";
     }
 
     if(!household){
@@ -53,21 +53,9 @@ export class Register extends Component{
           <div className="loginRegisterContainer">
               <h1>Register</h1>
               <form>
-              <label>
-                  Household:<br/>
-                  <input className="loginInput" type="text" name="household" onChange={this.onChange}/>
-              </label><br/>
-              <span style={{color: "red"}}>{this.state.errors["household"]}</span><br/>
-              <label>
-                  Username:<br/>
-                  <input className="loginInput" type="text" name="createUsername" onChange={this.onChange}/>
-              </label><br/>
-              <span style={{color: "red"}}>{this.state.errors["username"]}</span><br/>
-              <label>
-                  Password:<br/>
-                  <input className="loginInput" type="password" name="createPassword" onChange={this.onChange}/>
-              </label><br/>
-              <span style={{color: "red"}}>{this.state.errors["password"]}</span><br/>
+                <LoginRegisterInput type={"text"} value ={this.state.household} name={"household"} title={"Household"} errors={this.state.errors} onChange={this.onChange}/> 
+                <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
+                <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
               <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.handleClick(event)}/>
               </form>
               <Link className="link" to="/">Back to sign in page</Link>

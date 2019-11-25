@@ -2,13 +2,16 @@ import React, { Component } from 'react'
 import './pages.css';
 import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
+import ElectricityData from '../electricityData';
+import PriceBufferInfoBox from '../priceBufferInfoBox';
+
 
 export class Prosumer extends Component{
-    state = {
-        soldToMarket: 20,
-        buyFromMarket: 20
+        state = {
+            soldToMarket: 0,
+            buyFromMarket: 0,
         }
-    
+
   render() {
     return (
         <React.Fragment>
@@ -21,51 +24,36 @@ export class Prosumer extends Component{
                 <div className="mainInfoBox">
                     <h1>Electricity panel</h1>
                     <div className="displayValues">
-                        <div className="value">
-                            <h4>Wind</h4>
-                            <div className="data">0.00</div>
-                        </div>
-                        <div className="value">
-                            <h4>Production</h4>
-                            <div className="data">0.00</div>
-                        </div>
-                        <div className="value">
-                            <h4>Consumption</h4>
-                            <div className="data">0.00</div>
-                        </div>
-                        <div className="value">
-                            <h4>Net production</h4>
-                            <div className="data">0.00</div>
-                        </div>
+                        <ElectricityData value={this.props.wind} title={"Wind"}/>
+                        <ElectricityData value={this.props.production} title={"Production"}/>
+                        <ElectricityData value={this.props.consumption} title={"Consumption"}/>
+                        <ElectricityData value={this.props.production - this.props.consumption} title={"Net Production"}/>
                     </div>
                     <div className="flexboxRow">
-                        <div className="ratioContainer">
+                    <div className="ratioContainer">
                             <h3>Excessive production</h3>
-                            <p>Sell to market: </p><br/>
-                            <InputRange maxValue={100} minValue={0} value={this.state.soldToMarket} onChange={value => this.setState({ ["soldToMarket"]: value })} />
+                            <h4>Sell to market:</h4><br/>
+                            <InputRange  maxValue={100} minValue={0} value={this.state.soldToMarket} onChange={value => this.setState({ soldToMarket: value })} />
+                            <p>{this.state.soldToMarket}% sold to market</p>
+                            <p>{100-this.state.soldToMarket}% sent to buffer</p>
                         </div>
                         <div className="ratioContainer">
                             <h3>Under-production</h3>
-                            <p>Buy from market:</p><br/>
-                            <InputRange maxValue={100} minValue={0} value={this.state.buyFromMarket} onChange={value => this.setState({ ["buyFromMarket"]: value })} />
+                            <h4>Buy from market:</h4><br/>
+                            <InputRange  maxValue={100} minValue={0} value={this.state.buyFromMarket} onChange={value => this.setState({ buyFromMarket: value })} />
+                            <p>{this.state.buyFromMarket}% bought from market</p>
+                            <p>{100-this.state.buyFromMarket}% taken from buffer</p>
                         </div>
                     </div>  
                 </div>
-            <div className="flexboxColumn">        
-                <div className="priceBufferInfoBox">
-                    <h1>Market price</h1>
-                        <p>price</p>
-                </div>
-                <div className="priceBufferInfoBox">
-                    <h1>Buffer</h1>
-                        <p>buffer</p>
-                </div>
+            <div className="flexboxColumn"> 
+                <PriceBufferInfoBox title={"Market Price"} value={this.props.price}/>
+                <PriceBufferInfoBox title={"Buffer"} value={this.props.buffer}/>
             </div>    
         </div>      
         </React.Fragment>
     )
   } 
 }
-
 
 export default Prosumer;
