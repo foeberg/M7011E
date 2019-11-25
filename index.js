@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 var bcrypt = require('bcrypt');
 var session = require('express-session');
 var bodyParser = require('body-parser');
+var cors = require('cors');
 var fileUpload = require('express-fileupload');
 var Simulator = require('./simulator/');
 var { Household } = require('./models/');
@@ -19,6 +20,10 @@ const sim = new Simulator();
 sim.start();
 
 var app = express();
+
+app.use(cors({
+    origin: 'http://localhost:3000'
+}));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
