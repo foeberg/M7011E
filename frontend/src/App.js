@@ -55,6 +55,12 @@ class App extends Component {
 		clearInterval(this.interval);
 	}
 
+	/*componentDidMount() {
+		axios
+			.get('https://localhost:8081/simulator/wind')
+			.then((res) => this.setState({ wind: res.data }));
+	}
+*/
 	render() {
 		return (
 				<Router>
