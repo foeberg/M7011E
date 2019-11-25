@@ -81,7 +81,7 @@ class Simulator {
         }.bind(this)).exec();
 
         this.currentWind = Math.abs(this.windHourDistribution.ppf(Math.random()));
-        
+
         setInterval(function() {
             this.newHour();
         }.bind(this), 3600000);
@@ -93,6 +93,7 @@ class HouseholdClass {
         this.id = id;
         this.distribution = distribution;
         this.date = new Date(dateObj.date);
+        this.currentConsumption = this.distribution.ppf(Math.random());
     }
 
     getConsumption() {
