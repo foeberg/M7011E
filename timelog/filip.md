@@ -9,3 +9,4 @@
 | 2019-11-18  | 2.5     | Created a react app, tried to get it running on both computers. Created tasks and a backlog in google drive |
 | 2019-11-20  | 2.5       | Created a basic signup and login system in the backend |
 | 2019-11-20  | 1.5       | Implemented a file upload api call to save images of households |
+| 2019-11-20  | 3       | Integrated the current frontend to the current backend |
