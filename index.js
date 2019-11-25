@@ -25,6 +25,7 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }));
 
+app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
@@ -70,7 +71,7 @@ app.get('/simulator/wind', function (req, res) {
      return;
 });
  
-app.get('/simulator/householdConsumption/:houseId', function (req, res) {
+app.get('/simulator/householdConsumption/:householdId', function (req, res) {
     var households = sim.getHouseholds();
     res.send(households[req.params.houseId].getConsumption().toString());
     return;
@@ -218,3 +219,48 @@ app.post('/householdImage', ensureLoggedIn, function(req, res) {
         });
     }
 });
+
+app.route('/sellRatio/:householdId')
+    .get(ensureLoggedIn, (req, res) => {
+        Household.findOne({ username: req.body.username }, (err, user) => {
+            if(err) {
+                res.status(400);
+                res.redirect('/login');
+                return;
+            } else {
+                if(bcrypt.compareSync(req.body.password, user.password)) {
+                    req.session.user = user;
+
+                    res.status(200);
+                    res.send('Logged in');
+                    return;
+                } else {
+                    res.status(400);
+                    res.redirect('/login');
+                    return;
+                }
+            }
+        });
+
+    })
+    .post((req, res) => {
+        Household.findOne({ username: req.body.username }, (err, user) => {
+            if(err) {
+                res.status(400);
+                res.redirect('/login');
+                return;
+            } else {
+                if(bcrypt.compareSync(req.body.password, user.password)) {
+                    req.session.user = user;
+
+                    res.status(200);
+                    res.send('Logged in');
+                    return;
+                } else {
+                    res.status(400);
+                    res.redirect('/login');
+                    return;
+                }
+            }
+        });
+    });
