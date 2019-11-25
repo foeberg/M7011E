@@ -12,9 +12,21 @@ import './App.css';
 
 class App extends Component {
 	state = {
-
+		soldToMarket: 50,
+		buyFromMarket: 50,
+		wind: 3.01,
+		production: 4.01,
+		consumption: 5.01,
+		price: 4,
+		buffer:5,
 	}
 
+	/*componentDidMount() {
+		axios
+			.get('https://localhost:8081/simulator/wind')
+			.then((res) => this.setState({ wind: res.data }));
+	}
+*/
 	render() {
 		return (
 				<Router>
@@ -22,7 +34,14 @@ class App extends Component {
 						<Header/>
 						<Route exact path='/' component={Login} />
 						<Route path='/register' component={Register} />
-						<Route path='/prosumer' component={Prosumer} />
+						<Route
+							exact
+							path='/prosumer'
+							render={(props) => (
+								<Prosumer consumption={this.state.consumption} production={this.state.production} wind={this.state.wind} buyFromMarket={this.state.buyFromMarket}
+								price={this.state.price} buffer={this.state.buffer} />
+							)}
+						/>				
 					</div>
 				</Router>	
 
