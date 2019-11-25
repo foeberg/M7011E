@@ -19,6 +19,18 @@ var householdSchema = new Schema({
     imageURL: {
         type: String,
         default: ''
+    },
+    sellRatio: {
+        type: mongoose.Types.Decimal128,
+        default: 0.3
+    },
+    buyRatio: {
+        type: mongoose.Types.Decimal128,
+        default: 0.3
+    },
+    buffer: {
+        type: mongoose.Types.Decimal128,
+        default: 0.0
     }
 });
 
