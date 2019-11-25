@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import './pages.css';
 import { Link } from 'react-router-dom';
+import LoginRegisterInput from '../loginRegisterInput';
 
 export class Login extends Component{
   state = {
@@ -48,16 +49,8 @@ export class Login extends Component{
           <div className="loginRegisterContainer">
               <h1>Sign in</h1>
               <form>
-              <label>
-                  Username:<br/>
-                  <input className="loginInput" type="text" value = {this.state.username} name="username" onChange={this.onChange}/>
-              </label><br/>
-              <span style={{color: "red"}}>{this.state.errors["username"]}</span><br/>
-              <label>
-                  Password:<br/>
-                  <input className="loginInput" type="password" value = {this.state.password} name="password" onChange={this.onChange}/>
-              </label><br/>
-              <span style={{color: "red"}}>{this.state.errors["password"]}</span><br/>
+              <LoginRegisterInput type={"text"} value ={this.state.username} name={"username"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
+              <LoginRegisterInput type={"password"} value ={this.state.password} name={"password"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
               <input className="submitButton" type="submit" value="Login" onClick={(event) => this.handleClick(event)}/>
               </form>
               <Link className="link" to="/register">Register new user</Link>
