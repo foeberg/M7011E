@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
 import axios from 'axios';
 
+
 export class Register extends Component{
   state = {
     household: '',
@@ -29,6 +30,7 @@ export class Register extends Component{
       .catch(function (error) {
         console.log(error);
       });
+
     }else{
     
     }

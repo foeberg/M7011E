@@ -20,6 +20,7 @@ export class Prosumer extends Component{
                     <h1>Household</h1>
                     <p>name</p><br/>
                     <input className="submitButton" type="button" value="Sign out"/>
+
                 </div> 
                 <div className="mainInfoBox">
                     <h1>Electricity panel</h1>
