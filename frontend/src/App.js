@@ -5,7 +5,7 @@ import Header from './components/layouts/header';
 import Login from './components/pages/login';
 import Register from './components/pages/register';
 import Prosumer from './components/pages/prosumer';
-//import axios from 'axios';
+import axios from 'axios';
 
 import './App.css';
 
@@ -21,12 +21,39 @@ class App extends Component {
 		buffer:5,
 	}
 
-	/*componentDidMount() {
+	componentDidMount() {
 		axios
-			.get('https://localhost:8081/simulator/wind')
-			.then((res) => this.setState({ wind: res.data }));
+		.get('http://localhost:8081/simulator/wind')
+		.then((res) => {
+			this.setState({ wind: Math.round(res.data * 100)/100 })
+			console.log(res.data);	
+		});
+		axios
+		.get('http://localhost:8081/simulator/electricityPrice')
+		.then((res) => {
+			this.setState({ price: Math.round(res.data * 100)/100 })
+			console.log(res.data);	
+		});
+		this.interval = setInterval(() => {
+		axios
+			.get('http://localhost:8081/simulator/wind')
+			.then((res) => {
+				this.setState({ wind: Math.round(res.data * 100)/100 })
+				console.log(res.data);	
+			});
+		axios
+			.get('http://localhost:8081/simulator/electricityPrice')
+			.then((res) => {
+				this.setState({ price: Math.round(res.data * 100)/100 })
+				console.log(res.data);	
+			});
+		}, 10000);	
 	}
-*/
+
+	componentWillUnmount() {
+		clearInterval(this.interval);
+	}
+
 	render() {
 		return (
 				<Router>
