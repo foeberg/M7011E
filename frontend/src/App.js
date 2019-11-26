@@ -5,11 +5,8 @@ import Header from './components/layouts/header';
 import Login from './components/pages/login';
 import Register from './components/pages/register';
 import Prosumer from './components/pages/prosumer';
-<<<<<<< HEAD
 import axios from 'axios';
-=======
-//import axios from 'axios';
->>>>>>> 205eb3794ad3db6ba746b12c83c09dd8fb94caa6
+
 
 import './App.css';
 

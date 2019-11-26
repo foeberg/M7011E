@@ -2,10 +2,8 @@ import React, { Component } from 'react'
 import './pages.css';
 import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
-<<<<<<< HEAD
 import axios from 'axios';
-=======
->>>>>>> 205eb3794ad3db6ba746b12c83c09dd8fb94caa6
+
 
 export class Login extends Component{
   state = {
