@@ -6,7 +6,6 @@ import Login from './components/pages/login';
 import Register from './components/pages/register';
 import Prosumer from './components/pages/prosumer';
 import axios from 'axios';
-
 import './App.css';
 
 
