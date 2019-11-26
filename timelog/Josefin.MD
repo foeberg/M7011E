@@ -14,6 +14,7 @@
 | 2019-11-20  | 3,5     | creating prosumer page and making it responsive |
 | 2019-11-22  | 2       | trying to send data between components in react app to later on be able to recieve data from backend |
 | 2019-11-22  | 2       | dividing recurring components into separate components to be able to reuse them (frontend)|
+| 2019-11-25  | 3       | integrating frontend to backend |
 
 
                       

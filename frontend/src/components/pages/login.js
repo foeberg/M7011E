@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './pages.css';
 import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
+import axios from 'axios';
 
 export class Login extends Component{
   state = {
@@ -17,7 +18,16 @@ export class Login extends Component{
   handleClick =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
-
+      axios.post('http://localhost:8081/login', {
+        username: this.state.username,
+        password: this.state.password
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }else{
     
     }

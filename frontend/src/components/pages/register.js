@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './pages.css';
 import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
+import axios from 'axios';
 
 export class Register extends Component{
   state = {
@@ -16,7 +17,18 @@ export class Register extends Component{
   handleClick =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
-
+      console.log(this.state.household + this.state.createUsername + this.state.createPassword)
+      axios.post('http://localhost:8081/signup', {
+        lastname: this.state.household,
+        username: this.state.createUsername,
+        password: this.state.createPassword
+      })
+      .then(function (response) {
+        console.log(response);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     }else{
     
     }
