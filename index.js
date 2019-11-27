@@ -162,18 +162,18 @@ app.route('/login')
     });
 
 app.get('/logout', ensureLoggedIn, function(req, res) {
-        req.session.destroy((err) => {
-            if(err) {
-                console.error(err);
+    req.session.destroy((err) => {
+        if(err) {
+            console.error(err);
             res.status(500);
-                res.send('Error logging out');
-                return;
-            } else {
+            res.send('Error logging out');
+            return;
+        } else {
             res.status(200);
-                res.send('Logged out');
-                return;
-            }
-        });
+            res.send('Logged out');
+            return;
+        }
+    }); 
 });
 
 app.route('/householdImage')
@@ -194,58 +194,58 @@ app.route('/householdImage')
         });
     })
     .post(ensureLoggedIn, function(req, res) {
-    if (!req.files || Object.keys(req.files).length === 0) {
-        res.status(400);
-        res.send('No files were uploaded');
-        return;
-    } else {
-        // TODO: Update form name to the actual name in frontend
-        let file = req.files.file;
-
-        if(!file.mimetype.includes('image')) {
+        if (!req.files || Object.keys(req.files).length === 0) {
             res.status(400);
-            res.send('Invalid image format');
+            res.send('No files were uploaded');
             return;
-        }
+        } else {
+            // TODO: Update form name to the actual name in frontend
+            let file = req.files.file;
 
-        // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
-        let filetype = file.mimetype.split('/')[1];
-        let filename = req.session.user._id + '.' + filetype;
-            file.mv('./frontend/src/householdImages/' + filename, (err) => {
-            if (err) {
-                console.error(err);
-                res.status(500);
-                res.send('Error uploading image');
+            if(!file.mimetype.includes('image')) {
+                res.status(400);
+                res.send('Invalid image format');
                 return;
-            } else {
-                Household.findOne({ _id: req.session.user._id }, (err, household) => {
+            }
+
+            // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
+            let filetype = file.mimetype.split('/')[1];
+            let filename = req.session.user._id + '.' + filetype;
+            file.mv('./frontend/src/householdImages/' + filename, (err) => {
+                if (err) {
+                    console.error(err);
+                    res.status(500);
+                    res.send('Error uploading image');
+                    return;
+                } else {
+                    Household.findOne({ _id: req.session.user._id }, (err, household) => {
                         if(err) {
                             console.error(err);
                             res.status(500);
                             res.send('Error getting image');
                             return;
                         }
-                    household.imageURL = filename;
-                    household.save((err) => {
-                        if(err) {
-                            console.error(err);
-                            res.status(500);
-                            res.send('Error saving URL');
-                            return;
-                        }
-                        console.log('Image URL for user' + req.session.user.username + ' updated');
+                        household.imageURL = filename;
+                        household.save((err) => {
+                            if(err) {
+                                console.error(err);
+                                res.status(500);
+                                res.send('Error saving URL');
+                                return;
+                            }
+                            console.log('Image URL for user' + req.session.user.username + ' updated');
+                        });
                     });
-                });
 
-                res.status(200);
-                res.send('File uploaded!');
-                return;
-            }
-        });
-    }
+                    res.status(200);
+                    res.send('File uploaded!');
+                    return;
+                }
+            });
+        }
 });
 
-app.route('/sellRatio/')
+app.route('/sellRatio')
     .get(ensureLoggedIn, (req, res) => {
         Household.findOne({ username: req.session.user.username }, (err, user) => {
             if(err) {
@@ -254,9 +254,9 @@ app.route('/sellRatio/')
                 res.send('error getting sell ratio');
                 return;
             } else {
-                    res.status(200);
+                res.status(200);
                 res.send(user.sellRatio.toString());
-                    return;
+                return;
             }
         });
     })
@@ -272,15 +272,15 @@ app.route('/sellRatio/')
                 res.status(500);
                 res.send('error setting sell ratio');
                 return;
-                } else {
+            } else {
                 user.sellRatio = req.body.sellRatio;
                 user.save((err) => {
                     if(err) {
                         console.error(err);
                         res.status(500);
                         res.send('error saving sell ratio');
-                    return;
-                }
+                        return;
+                    }
                     console.log('SellRatio for user "' + req.session.user.username + '" updated');
                 });
 
@@ -292,16 +292,16 @@ app.route('/sellRatio/')
     });
 
 
-app.route('/buyRatio/')
+app.route('/buyRatio')
 .get(ensureLoggedIn, (req, res) => {
     Household.findOne({ username: req.session.user.username }, (err, user) => {
-            if(err) {
+        if(err) {
             console.error(err);
             res.status(500);
             res.send('error getting buy ratio');
-                return;
-            } else {
-                    res.status(200);
+            return;
+        } else {
+            res.status(200);
             res.send(user.buyRatio.toString());
             return;
         }
@@ -318,8 +318,8 @@ app.route('/buyRatio/')
             console.error(err);
             res.status(500);
             res.send('error setting buy ratio');
-                    return;
-                } else {
+            return;
+        } else {
             user.buyRatio = req.body.buyRatio;
             user.save((err) => {
                 if(err) {
@@ -335,6 +335,6 @@ app.route('/buyRatio/')
             res.status(200);
             res.send('Buyratio updated');
             return;
-            }
-        });
+        }
     });
+});
