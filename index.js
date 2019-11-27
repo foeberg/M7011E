@@ -224,47 +224,96 @@ app.post('/householdImage', ensureLoggedIn, function(req, res) {
     }
 });
 
-app.route('/sellRatio/:householdId')
+app.route('/sellRatio/')
     .get(ensureLoggedIn, (req, res) => {
-        Household.findOne({ username: req.body.username }, (err, user) => {
+        Household.findOne({ username: req.session.user.username }, (err, user) => {
             if(err) {
-                res.status(400);
-                res.redirect('/login');
+                console.error(err);
+                res.status(500);
+                res.send('error getting sell ratio');
                 return;
             } else {
-                if(bcrypt.compareSync(req.body.password, user.password)) {
-                    req.session.user = user;
-
                     res.status(200);
-                    res.send('Logged in');
+                res.send(user.sellRatio.toString());
                     return;
-                } else {
-                    res.status(400);
-                    res.redirect('/login');
-                    return;
-                }
             }
         });
-
     })
-    .post((req, res) => {
-        Household.findOne({ username: req.body.username }, (err, user) => {
+    .post(ensureLoggedIn, (req, res) => {
+        if(!req.body.sellRatio) {
+            res.status(400);
+            res.send('sellRatio field not provided');
+            return;
+        }
+        Household.findOne({ username: req.session.user.username }, (err, user) => {
             if(err) {
-                res.status(400);
-                res.redirect('/login');
+                console.error(err);
+                res.status(500);
+                res.send('error setting sell ratio');
                 return;
-            } else {
-                if(bcrypt.compareSync(req.body.password, user.password)) {
-                    req.session.user = user;
-
-                    res.status(200);
-                    res.send('Logged in');
-                    return;
                 } else {
-                    res.status(400);
-                    res.redirect('/login');
+                user.sellRatio = req.body.sellRatio;
+                user.save((err) => {
+                    if(err) {
+                        console.error(err);
+                        res.status(500);
+                        res.send('error saving sell ratio');
                     return;
                 }
+                    console.log('SellRatio for user "' + req.session.user.username + '" updated');
+                });
+
+                res.status(200);
+                res.send('Sellratio updated');
+                return;
+            }
+        });
+    });
+
+
+app.route('/buyRatio/')
+.get(ensureLoggedIn, (req, res) => {
+    Household.findOne({ username: req.session.user.username }, (err, user) => {
+            if(err) {
+            console.error(err);
+            res.status(500);
+            res.send('error getting buy ratio');
+                return;
+            } else {
+                    res.status(200);
+            res.send(user.buyRatio.toString());
+            return;
+        }
+    });
+})
+.post(ensureLoggedIn, (req, res) => {
+    if(!req.body.buyRatio) {
+        res.status(400);
+        res.send('buyRatio field not provided');
+        return;
+    }
+    Household.findOne({ username: req.session.user.username }, (err, user) => {
+        if(err) {
+            console.error(err);
+            res.status(500);
+            res.send('error setting buy ratio');
+                    return;
+                } else {
+            user.buyRatio = req.body.buyRatio;
+            user.save((err) => {
+                if(err) {
+                    console.error(err);
+                    res.status(500);
+                    res.send('error saving buy ratio');
+                    return;
+                }
+                console.log('BuyRatio for user "' + req.session.user.username + '" updated');
+            });
+            
+
+            res.status(200);
+            res.send('Buyratio updated');
+            return;
             }
         });
     });
