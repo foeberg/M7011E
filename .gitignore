@@ -1,3 +1,3 @@
 node_modules/
-householdImages/*
-!householdImages/.gitkeep
+frontend/src/householdImages/*
+!frontend/src/householdImages/.gitkeep
