@@ -211,7 +211,7 @@ app.route('/householdImage')
         // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
         let filetype = file.mimetype.split('/')[1];
         let filename = req.session.user._id + '.' + filetype;
-        file.mv('./householdImages/' + filename, (err) => {
+            file.mv('./frontend/src/householdImages/' + filename, (err) => {
             if (err) {
                 console.error(err);
                 res.status(500);
