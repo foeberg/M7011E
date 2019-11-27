@@ -156,8 +156,7 @@ app.route('/login')
         });
     });
 
-app.get('/logout', function(req, res) {
-    if(req.session.user) {
+app.get('/logout', ensureLoggedIn, function(req, res) {
         req.session.destroy((err) => {
             if(err) {
                 console.error(err);
