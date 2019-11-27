@@ -176,7 +176,24 @@ app.get('/logout', ensureLoggedIn, function(req, res) {
         });
 });
 
-app.post('/householdImage', ensureLoggedIn, function(req, res) {
+app.route('/householdImage')
+    .get(ensureLoggedIn, function(req, res) {
+        Household.findOne({ _id: req.session.user._id }, (err, household) => {
+            if(err) {
+                console.error(err);
+                res.status(500);
+                res.send('Error getting image URL');
+                return;
+            } else {
+                if(household.imageURL === ""){
+                    res.send('placeholder.jpg');
+                } else {
+                    res.send(household.imageURL);
+                }
+            }
+        });
+    })
+    .post(ensureLoggedIn, function(req, res) {
     if (!req.files || Object.keys(req.files).length === 0) {
         res.status(400);
         res.send('No files were uploaded');
