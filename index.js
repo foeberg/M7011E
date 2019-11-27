@@ -141,6 +141,11 @@ app.route('/login')
                 res.send('error logging in');
                 return;
             } else {
+                if(!user) {
+                    res.status(400);
+                    res.send('Username not found');
+                    return;
+                }
                 if(bcrypt.compareSync(req.body.password, user.password)) {
                     req.session.user = user;
 
