@@ -3,16 +3,18 @@ import './pages.css';
 import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
 import axios from 'axios';
+import history from '../../history';
 
 export class Login extends Component{
   state = {
     username: '',
     password: '',
-    errors: {}
+    errors: {},
   }
 
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
+    document.getElementById("errorMessage").innerHTML = "";
   }
 
   handleClick =(e) => {
@@ -24,11 +26,17 @@ export class Login extends Component{
       })
       .then(function (response) {
         console.log(response);
+        if(response.status === 200){
+          history.push('/prosumer');
+        }else{
+          document.getElementById("errorMessage").innerHTML = "wrong";
+        }
+        
       })
       .catch(function (error) {
         console.log(error);
       });
-    }  
+    }
   };
 
   handleValidation(){
@@ -52,21 +60,22 @@ export class Login extends Component{
     }
 
   render() {
-    return (
-      <React.Fragment>
-          <div className="loginRegisterContainer">
-              <h1>Sign in</h1>
-              <form>
-              <LoginRegisterInput type={"text"} value ={this.state.username} name={"username"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
-              <LoginRegisterInput type={"password"} value ={this.state.password} name={"password"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
-              <input className="submitButton" type="submit" value="Login" onClick={(event) => this.handleClick(event)}/>
-              </form>
-              <Link className="link" to="/register">Register new user</Link>
-          </div>    
-      </React.Fragment>
-    )
-  } 
-}
+      return (
+        <React.Fragment>
+            <div className="loginRegisterContainer">
+                <h1>Sign in</h1>
+                <form>
+                <LoginRegisterInput type={"text"} value ={this.state.username} name={"username"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
+                <LoginRegisterInput type={"password"} value ={this.state.password} name={"password"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
+                <div id="errorMessage" className="errorMsg"></div>
+                <input className="submitButton" type="submit" value="Login" onClick={(event) => this.handleClick(event)}/>
+                </form>
+                <Link className="link" to="/register">Register new user</Link>
+            </div>    
+        </React.Fragment>
+      )
+    } 
 
+  }
 
 export default Login;
