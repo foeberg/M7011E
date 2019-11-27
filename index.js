@@ -219,6 +219,12 @@ app.route('/householdImage')
                 return;
             } else {
                 Household.findOne({ _id: req.session.user._id }, (err, household) => {
+                        if(err) {
+                            console.error(err);
+                            res.status(500);
+                            res.send('Error getting image');
+                            return;
+                        }
                     household.imageURL = filename;
                     household.save((err) => {
                         if(err) {
