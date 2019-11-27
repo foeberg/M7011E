@@ -49,7 +49,6 @@ var server = app.listen(8081, function () {
 
 var ensureNotLoggedIn = (req, res, next) => {
     if(req.session.user) {
-        res.redirect('/');
         return;
     } else {
         next();
@@ -103,7 +102,6 @@ app.get('/simulator/', function (req, res) {
 app.route('/signup')
     .get((req, res) => {
         // TODO: send signup page
-        // res.redirect('path')
     })
     .post((req, res) => {
         const salt = bcrypt.genSaltSync();
@@ -127,9 +125,6 @@ app.route('/signup')
                 res.status(200);
                 res.send('User created');
                 return;
-
-                // TODO: Redirect to logged in pages
-                // res.redirect('path')
             }
         });
     });
@@ -154,7 +149,7 @@ app.route('/login')
                     return;
                 } else {
                     res.status(400);
-                    res.redirect('/login');
+                    res.send('Wrong password');
                     return;
                 }
             }
@@ -174,11 +169,6 @@ app.get('/logout', function(req, res) {
                 return;
             }
         });
-    } else {
-        res.send('Not logged in');
-        res.redirect('/');
-        return;
-    }
 });
 
 app.post('/householdImage', ensureLoggedIn, function(req, res) {
