@@ -58,7 +58,8 @@ var ensureNotLoggedIn = (req, res, next) => {
 
 var ensureLoggedIn = (req, res, next) => {
     if(!req.session.user) {
-        res.redirect('/login');
+        res.status(400);
+        res.send('Not logged in');
         return;
     } else {
         next();
@@ -116,8 +117,8 @@ app.route('/signup')
         newHousehold.save(function (err, c) {
             if (err) {
                 console.error(err);
-                res.status(400);
-                res.redirect('/signup');
+                res.status(500);
+                res.send('error creating user');
                 return;
             } else {
                 console.log("New household " + c.lastname + " saved.");
@@ -138,11 +139,11 @@ app.route('/login')
         // TODO: send login page to user
     })
     .post((req, res) => {
-        console.log(req.session.user);
         Household.findOne({ username: req.body.username }, (err, user) => {
             if(err) {
-                res.status(400);
-                res.redirect('/login');
+                console.error(err);
+                res.status(500);
+                res.send('error logging in');
                 return;
             } else {
                 if(bcrypt.compareSync(req.body.password, user.password)) {
@@ -165,6 +166,7 @@ app.get('/logout', function(req, res) {
         req.session.destroy((err) => {
             if(err) {
                 console.error(err);
+                res.send(500);
                 res.send('Error logging out');
                 return;
             } else {
@@ -204,20 +206,21 @@ app.post('/householdImage', ensureLoggedIn, function(req, res) {
                 res.send('Error uploading image');
                 return;
             } else {
-                res.status(200);
-                res.send('File uploaded!');
-
                 Household.findOne({ _id: req.session.user._id }, (err, household) => {
                     household.imageURL = filename;
                     household.save((err) => {
                         if(err) {
                             console.error(err);
+                            res.status(500);
+                            res.send('Error saving URL');
                             return;
                         }
                         console.log('Image URL for user' + req.session.user.username + ' updated');
                     });
                 });
 
+                res.status(200);
+                res.send('File uploaded!');
                 return;
             }
         });
