@@ -22,16 +22,19 @@ sim.start();
 var app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000'
+    origin: 'http://localhost:3000',
+    credentials: true
 }));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
+    resave: false,
+    saveUninitialized: true,
     secret: 'ji754gkl0+a',
     cookie: {
-        maxAge: 60000
+        maxAge: 3600000
     }
 }));
 
@@ -135,6 +138,7 @@ app.route('/login')
         // TODO: send login page to user
     })
     .post((req, res) => {
+        console.log(req.session.user);
         Household.findOne({ username: req.body.username }, (err, user) => {
             if(err) {
                 res.status(400);
