@@ -29,9 +29,7 @@ export class Register extends Component{
       .catch(function (error) {
         console.log(error);
       });
-    }else{
-    
-    }
+    } 
   };
 
   handleValidation(){

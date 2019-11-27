@@ -28,9 +28,7 @@ export class Login extends Component{
       .catch(function (error) {
         console.log(error);
       });
-    }else{
-    
-    }
+    }  
   };
 
   handleValidation(){
