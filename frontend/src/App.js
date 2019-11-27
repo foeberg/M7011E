@@ -22,6 +22,7 @@ class App extends Component {
 	}
 
 	componentDidMount() {
+		axios.defaults.withCredentials = true;
 		axios
 		.get('http://localhost:8081/simulator/wind')
 		.then((res) => {
