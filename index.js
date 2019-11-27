@@ -74,8 +74,8 @@ app.get('/simulator/wind', function (req, res) {
      return;
 });
  
-app.get('/simulator/householdConsumption/:householdId', function (req, res) {
-    let household = sim.getHouseholds().find(h => h.id == req.params.householdId);
+app.get('/simulator/householdConsumption/', ensureLoggedIn, function (req, res) {
+    let household = sim.getHouseholds().find(h => h.id == req.session.user._id);
     res.send(household.getConsumption().toString());
     return;
 });
