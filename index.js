@@ -161,10 +161,11 @@ app.get('/logout', function(req, res) {
         req.session.destroy((err) => {
             if(err) {
                 console.error(err);
-                res.send(500);
+            res.status(500);
                 res.send('Error logging out');
                 return;
             } else {
+            res.status(200);
                 res.send('Logged out');
                 return;
             }
