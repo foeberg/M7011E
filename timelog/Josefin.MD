@@ -15,6 +15,14 @@
 | 2019-11-22  | 2       | trying to send data between components in react app to later on be able to recieve data from backend |
 | 2019-11-22  | 2       | dividing recurring components into separate components to be able to reuse them (frontend)|
 | 2019-11-25  | 3       | integrating frontend to backend |
+| 2019-11-26  | 1       | solving merge conflict |
+| 2019-11-26  | 3       | creating household image and image uploader on prosumer page |
+| 2019-11-26  | 2       | creating apply buttons for range sliders prosumer page |
+| 2019-11-26  | 1       | created 404 page not found and restrictions for visiting prosumer page |
+| 2019-11-27  | 3       | page routing, integrating frontend to backend to show image and consumption |
+| 2019-11-27  | 0.5     | connectiong frontend to backend: sell and buy ratio  |
+
+
 
 
                       

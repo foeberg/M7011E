@@ -7,6 +7,7 @@ export class PriceBufferInfoBox extends Component {
     return (
         <div className="priceBufferInfoBox">
         <h1>{this.props.title}</h1>
+            <h4>{this.props.text}</h4>
             <p>{this.props.value}</p>
         </div>
     )
