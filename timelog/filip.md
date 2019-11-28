@@ -12,3 +12,4 @@
 | 2019-11-25  | 3       | Integrated the current frontend to the current backend |
 | 2019-11-27  | 3       | Improved error handling in API, created api endpoints for buyRatio, sellRatio, modified session handling |
 | 2019-11-27  | 1       | Fixed more error handling bugs, created api endpoint to get image URL for the logged in user |
+| 2019-11-28  | 1.5       | Fixed more bugs relating to merging frontend and backend, removed specific error messages when trying to log in (Wrong username, Wrong password => Wrong username or password) |
