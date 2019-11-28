@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(session({
     resave: false,
-    saveUninitialized: true,
+    saveUninitialized: false,
     secret: 'ji754gkl0+a',
     cookie: {
         maxAge: 3600000
@@ -49,6 +49,8 @@ var server = app.listen(8081, function () {
 
 var ensureNotLoggedIn = (req, res, next) => {
     if(req.session.user) {
+        res.status(400);
+        res.send('Already logged in');
         return;
     } else {
         next();
@@ -64,10 +66,6 @@ var ensureLoggedIn = (req, res, next) => {
         next();
     }
 };
-
-app.get('/', ensureLoggedIn,  function (req, res) {
-    // TODO: Redirect to logged in page
-});
  
 app.get('/simulator/wind', function (req, res) {
      res.send(sim.getWind().toString());
@@ -133,7 +131,7 @@ app.route('/login')
     .get(ensureNotLoggedIn, (req, res) => {
         // TODO: send login page to user
     })
-    .post((req, res) => {
+    .post(ensureNotLoggedIn, (req, res) => {
         Household.findOne({ username: req.body.username }, (err, user) => {
             if(err) {
                 console.error(err);
@@ -143,6 +141,7 @@ app.route('/login')
             } else {
                 if(!user) {
                     res.status(400);
+                    res.send();
                     return;
                 }
                 if(bcrypt.compareSync(req.body.password, user.password)) {
@@ -153,6 +152,7 @@ app.route('/login')
                     return;
                 } else {
                     res.status(400);
+                    res.send();
                     return;
                 }
             }
