@@ -20,7 +20,8 @@
 | 2019-11-26  | 2       | creating apply buttons for range sliders prosumer page |
 | 2019-11-26  | 1       | created 404 page not found and restrictions for visiting prosumer page |
 | 2019-11-27  | 3       | page routing, integrating frontend to backend to show image and consumption |
-| 2019-11-27  | 0.5     | connectiong frontend to backend: sell and buy ratio  |
+| 2019-11-27  | 0.5     | connecting frontend to backend: sell and buy ratio  |
+| 2019-11-28  | 1,5     | connected uploading image in frontend to backend and fixed error message for wrong password/username when logging in  |
 
 
 

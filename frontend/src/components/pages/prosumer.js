@@ -62,8 +62,8 @@ export class Prosumer extends Component{
         /*when upload button is pressed, send image to server*/
         fileUploadHandler = () => {
             const fd = new FormData();
-            console.log(this.state.selectedFile + this.state.selectedFile.name)
-            fd.append("image", this.state.selectedFile, this.state.selectedFile.name);
+            fd.append("file", this.state.selectedFile, this.state.selectedFile.name);
+            console.log(fd)
             axios.post("http://localhost:8081/householdImage", fd)
                 .then(function (response) {
                     console.log(response);
