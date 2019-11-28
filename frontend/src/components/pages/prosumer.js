@@ -19,7 +19,7 @@ export class Prosumer extends Component{
             disableInputButton: true,
             disableSellButton: true,
             disableBuyButton: true,
-            imageName: "default.png"
+            imageName: "placeholder.jpg"
         }
 
         /*get data from server*/
@@ -58,26 +58,32 @@ export class Prosumer extends Component{
             });
             document.getElementById("choose").innerHTML = event.target.files[0].name;
         }
-
+        
         /*when upload button is pressed, send image to server*/
         fileUploadHandler = () => {
+            let currentComponent = this;
             const fd = new FormData();
             fd.append("file", this.state.selectedFile, this.state.selectedFile.name);
             console.log(fd)
             axios.post("http://localhost:8081/householdImage", fd)
                 .then(function (response) {
-                    console.log(response);
-                    this.setState({
+                    currentComponent.setState({
                         selectedFile: null,
                         disableInputButton: true
                     });
                     document.getElementById("choose").innerHTML = "Choose image";
                 })
                 .catch(function (error) {
-                    console.log(error);
+                    $("#errorMess").show();
+                    setTimeout(function() { $("#errorMess").hide(); }, 2000);
+                    currentComponent.setState({
+                        selectedFile: null,
+                        disableInputButton: true
+                    });
+                    document.getElementById("choose").innerHTML = "Choose image";
                 });
         }
-
+        
         /*when user want to change ratio of selling to market, send new value to server*/
         sellToMarketHandler = () => {
             this.setState({
@@ -117,9 +123,10 @@ export class Prosumer extends Component{
                     <h1>Household </h1>
                     <h3>{this.state.name} <input className="sendButton" type="button" value="Log out" onClick={this.props.logOut}/></h3><br/>
                     <Image source={this.state.imageName}/>
-                    <input type="file" name="file" id="file" className="inputfile" onChange={this.fileSelectedHandler}/>
+                    <input type="file" name="file" id="file" className="inputfile" onInput={this.fileSelectedHandler}/>
                     <label htmlFor="file" id="choose" >Choose image</label>
                     <input className="sendButton" type="button" value="Upload" disabled = {this.state.disableInputButton} onClick={this.fileUploadHandler}/>
+                    <div id="errorMess" className="errorMsg" hidden={true}>Invalid image format</div>
                 </div> 
                 <div className="mainInfoBox">
                     <h1>Monitoring panel</h1>
