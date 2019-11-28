@@ -11,3 +11,4 @@
 | 2019-11-20  | 1.5       | Implemented a file upload api call to save images of households |
 | 2019-11-25  | 3       | Integrated the current frontend to the current backend |
 | 2019-11-27  | 3       | Improved error handling in API, created api endpoints for buyRatio, sellRatio, modified session handling |
+| 2019-11-27  | 1       | Fixed more error handling bugs, created api endpoint to get image URL for the logged in user |
