@@ -28,13 +28,12 @@ export class Login extends Component{
         console.log(response);
         if(response.status === 200){
           history.push('/prosumer');
-        }else{
-          document.getElementById("errorMessage").innerHTML = "wrong";
-        }
-        
+        }    
       })
       .catch(function (error) {
-        console.log(error);
+        if(error.response.status === 400){
+        document.getElementById("errorMessage").innerHTML = "Wrong username or password";
+        }
       });
     }
   };
