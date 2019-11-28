@@ -143,7 +143,6 @@ app.route('/login')
             } else {
                 if(!user) {
                     res.status(400);
-                    res.send('Username not found');
                     return;
                 }
                 if(bcrypt.compareSync(req.body.password, user.password)) {
@@ -154,7 +153,6 @@ app.route('/login')
                     return;
                 } else {
                     res.status(400);
-                    res.send('Wrong password');
                     return;
                 }
             }
