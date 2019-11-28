@@ -199,7 +199,6 @@ app.route('/householdImage')
             res.send('No files were uploaded');
             return;
         } else {
-            // TODO: Update form name to the actual name in frontend
             let file = req.files.file;
 
             if(!file.mimetype.includes('image')) {
