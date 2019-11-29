@@ -1,3 +1,4 @@
 module.exports = {
-    simulatorRoutes: require('./simulator')
-}
+    simulatorRoutes: require('./simulator'),
+    apiRoutes: require('./api')
+};
