@@ -18,7 +18,7 @@ const ensureLoggedIn = (req, res, next) => {
     }
 };
 
-module.export = {
+module.exports = {
     ensureNotLoggedIn,
     ensureLoggedIn
 }
