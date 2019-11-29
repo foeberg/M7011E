@@ -1,5 +1,5 @@
 const { Household } = require('../models');
-
+const fs = require('fs');
 
 const getHouseholdImage = (req, res) => {
     Household.findOne({ _id: req.session.user._id }, (err, household) => {
@@ -35,7 +35,33 @@ const postHouseholdImage = (req, res) => {
         // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
         let filetype = file.mimetype.split('/')[1];
         let filename = req.session.user._id + '.' + filetype;
-        file.mv('./frontend/src/householdImages/' + filename, (err) => {
+        let dirpath = './frontend/src/householdImages/';
+
+        // If a picture associated with the user already exists, remove it
+        fs.readdir(dirpath, (err, files) => {
+            if(err) {
+                console.error(err);
+                res.status(500);
+                res.send('Error uploading image');
+                return;
+            }
+            files.forEach((f) => {
+                if(f.includes(req.session.user._id)) {
+                    fs.unlink(dirpath + f, (err) => {
+                        if(err) {
+                            console.error(err);
+                            res.status(500);
+                            res.send('Error uploading image');
+                            return;
+                        }
+                        console.log('Image for user ' + req.session.user.username + ' was deleted');
+                    });
+                }
+            });
+        });
+        
+        // Save the new image
+        file.mv(dirpath + filename, (err) => {
             if (err) {
                 console.error(err);
                 res.status(500);
@@ -57,7 +83,7 @@ const postHouseholdImage = (req, res) => {
                             res.send('Error saving URL');
                             return;
                         }
-                        console.log('Image URL for user' + req.session.user.username + ' updated');
+                        console.log('Image URL for user ' + req.session.user.username + ' updated');
                     });
                 });
 
