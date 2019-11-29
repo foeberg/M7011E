@@ -1,12 +1,12 @@
-var express = require('express');
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var cors = require('cors');
-var fileUpload = require('express-fileupload');
-var Simulator = require('./simulator/');
-var { Household } = require('./models/');
+const express = require('express');
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
+const { Household } = require('./models');
+const routes = require('./routes');
 
 mongoose.connect('mongodb://localhost/M7011E', {useNewUrlParser: true});
 
@@ -15,9 +15,6 @@ db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
     console.log('Connected to database!');
 });
-
-const sim = new Simulator();
-sim.start();
 
 var app = express();
 
@@ -39,6 +36,8 @@ app.use(session({
 }));
 
 app.use(fileUpload());
+
+app.use('/simulator', routes.simulatorRoutes);
 
 var server = app.listen(8081, function () {
     var host = server.address().address;
@@ -66,36 +65,6 @@ var ensureLoggedIn = (req, res, next) => {
         next();
     }
 };
- 
-app.get('/simulator/wind', function (req, res) {
-     res.send(sim.getWind().toString());
-     return;
-});
- 
-app.get('/simulator/householdConsumption/', ensureLoggedIn, function (req, res) {
-    let household = sim.getHouseholds().find(h => h.id == req.session.user._id);
-    res.send(household.getConsumption().toString());
-    return;
-});
- 
-app.get('/simulator/electricityPrice/', function (req, res) {
-    res.send(sim.getElectricityPrice().toString());
-    return;
-});
-
-app.get('/simulator/', function (req, res) {
-    var wind = sim.getWind();
-    var households = sim.getHouseholds();
-    var totalConsumption = 0;
-    for(var i = 0; i < households.length; i++) {
-        totalConsumption += households[i].getConsumption();
-    }
-    var electricityPrice = sim.getElectricityPrice();
-
-    string = "Wind: " + wind + "\n Total consumption: " + totalConsumption + "\n Price: " + electricityPrice;
-    res.send(string);
-    return;
-});
 
 app.route('/signup')
     .get((req, res) => {
