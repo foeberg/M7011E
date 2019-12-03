@@ -21,15 +21,15 @@ var householdSchema = new Schema({
         default: ''
     },
     sellRatio: {
-        type: mongoose.Types.Decimal128,
+        type: Number,
         default: 0.3
     },
     buyRatio: {
-        type: mongoose.Types.Decimal128,
+        type: Number,
         default: 0.3
     },
     buffer: {
-        type: mongoose.Types.Decimal128,
+        type: Number,
         default: 0.0
     }
 });

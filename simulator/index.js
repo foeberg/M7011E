@@ -131,16 +131,15 @@ class HouseholdClass {
         // Update the buffer, based on the save and buy ratio, and the net production.
 
         // If the net production is below zero, decrease the buffer according the the buyRatio
-        if(oldProduction - this.getConsumption() < 0) {
-            this.buffer = this.buffer - (this.getConsumption() - oldProduction)*(1 - this.buyRatio);
-
-            if(this.buffer < 0) {
-                this.buffer = 0;
+        if(oldProduction - this.currentConsumption < 0.0) {
+            this.buffer = Number(this.buffer - (this.currentConsumption - oldProduction) * (1.0 - this.buyRatio));
+            if(this.buffer < 0.0) {
+                this.buffer = 0.0;
             }
         } 
         // If the net production is above zero, increase the buffer according the the sellRatio
-        else if(oldProduction - this.getConsumption() > 0) {
-            this.buffer = this.buffer + (this.oldProduction - this.getConsumption)*(1 - this.sellRatio);
+        else if(oldProduction - this.currentConsumption > 0) {
+            this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.sellRatio));
         }
 
         // Update buffer in database
