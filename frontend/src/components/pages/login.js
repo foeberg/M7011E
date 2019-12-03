@@ -32,7 +32,7 @@ export class Login extends Component{
       })
       .catch(function (error) {
         if(error.response.status === 400){
-        document.getElementById("errorMessage").innerHTML = "Wrong username or password";
+          document.getElementById("errorMessage").innerHTML = "Wrong username or password";
         }
       });
     }

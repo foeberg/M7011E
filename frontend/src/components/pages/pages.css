@@ -18,6 +18,10 @@
     color: red;
 }
 
+.message {
+    color: black;
+}
+
 /*input fields for login/register*/
 .loginInput {
     width: 50%;
