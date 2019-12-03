@@ -15,3 +15,4 @@
 | 2019-11-28  | 1.5       | Fixed more bugs relating to merging frontend and backend, removed specific error messages when trying to log in (Wrong username, Wrong password => Wrong username or password) |
 | 2019-11-29  | 1.5       | Completely refactored the back end, moved routes in index.js to separate routes and controller files |
 | 2019-11-29  | 1       | Modified the api call to upload household images, now overwrites the previously uploaded image, no matter which fileformat |
+| 2019-12-03  | 3       | Implemented system for household buffers, increasing or decreasing every hour dependent on consumption, production and the sell/buy ratios. Added api call to recieve buffer value for household. |
