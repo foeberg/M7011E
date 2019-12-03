@@ -3,10 +3,11 @@ import './pages.css';
 import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
 import axios from 'axios';
+import $ from 'jquery';
 
 export class Register extends Component{
   state = {
-    household: '',
+    lastname: '',
     createUsername: '',
     createPassword: '',
     errors: {}
@@ -17,17 +18,22 @@ export class Register extends Component{
   handleClick =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
-      console.log(this.state.household + this.state.createUsername + this.state.createPassword)
       axios.post('http://localhost:8081/signup', {
-        lastname: this.state.household,
+        lastname: this.state.lastname,
         username: this.state.createUsername,
         password: this.state.createPassword
       })
       .then(function (response) {
-        console.log(response);
+        document.getElementById("message").innerHTML = "User created";
+        $("#message").show();
+        $("#message").css("color", "green");
+        setTimeout(function() { $("#message").hide(); }, 5000);
       })
       .catch(function (error) {
-        console.log(error);
+        document.getElementById("message").innerHTML = "Username already exist";
+        $("#message").show();
+        $("#message").css("color", "red");
+        setTimeout(function() { $("#message").hide(); }, 5000);
       });
     }else{
     
@@ -35,7 +41,7 @@ export class Register extends Component{
   };
 
   handleValidation(){
-    let household = this.state.household;
+    let lastname = this.state.lastname;
     let username = this.state.createUsername;
     let password = this.state.createPassword;
     let errors = {};
@@ -50,9 +56,9 @@ export class Register extends Component{
       errors["createPassword"] = "Password can not be empty";
     }
 
-    if(!household){
+    if(!lastname){
       formIsValid = false;
-      errors["household"] = "Household can not be empty";
+      errors["lastname"] = "Lastname can not be empty";
     }
 
     this.setState({errors: errors});
@@ -65,9 +71,10 @@ export class Register extends Component{
           <div className="loginRegisterContainer">
               <h1>Register</h1>
               <form>
-                <LoginRegisterInput type={"text"} value ={this.state.household} name={"household"} title={"Household"} errors={this.state.errors} onChange={this.onChange}/> 
+                <LoginRegisterInput type={"text"} value ={this.state.lastname} name={"lastname"} title={"Lastname"} errors={this.state.errors} onChange={this.onChange}/> 
                 <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
                 <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
+                <div id="message" className="message" hidden = {true}></div>
               <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.handleClick(event)}/>
               </form>
               <Link className="link" to="/">Back to sign in page</Link>
