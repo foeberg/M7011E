@@ -37,52 +37,42 @@ export class Prosumer extends Component{
             .then((res) => {
                 currentComponent.setState({ wind: Math.round(res.data * 100)/100,
                     production: Math.round(res.data * 100)/100 })
-                console.log(res.data);	
             });
             axios
             .get('http://localhost:8081/simulator/electricityPrice')
             .then((res) => {
-                currentComponent.setState({ price: Math.round(res.data * 100)/100 })
-                console.log(res.data);	
+                currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
             });
             axios
             .get('http://localhost:8081/householdImage')
             .then((response) => {
                 currentComponent.setState({ imageName: response.data})
-                console.log(response.data);	
             })
             .catch((error) =>{
-                console.log("image " + error.response.data);
                 history.push('/');
             });
             axios
             .get('http://localhost:8081/simulator/householdConsumption/')
             .then((response) => {
                 currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
-                console.log(response.data);	
             })
             .catch((error) =>{
-                console.log("image " + error);
                 history.push('/');
             });
             axios
             .get('http://localhost:8081/sellRatio')
             .then((response) => {
-                currentComponent.setState({ soldToMarket: response.data*100})
-                console.log(response.data);	
+                currentComponent.setState({ soldToMarket: Math.round(response.data*100)})
             })
             .catch((error) =>{
-                console.log("image " + error);
                 history.push('/');
             });
             axios
             .get('http://localhost:8081/buyRatio')
             .then((response) => {
-                currentComponent.setState({ buyFromMarket: response.data*100, loading: false})
-                console.log(response.data);	
+                currentComponent.setState({ buyFromMarket: Math.round(response.data*100), loading: false})
             })
             .catch((error) =>{
-                console.log("image " + error);
                 history.push('/');
             });
             currentComponent.interval = setInterval(() => {
@@ -90,23 +80,19 @@ export class Prosumer extends Component{
                     .get('http://localhost:8081/simulator/wind')
                     .then((res) => {
                         currentComponent.setState({ wind: Math.round(res.data * 100)/100,
-                            production: Math.round(res.data * 100)/100 })
-                        console.log(res.data);	
+                            production: Math.round(res.data * 100)/100 })	
                     });
                 axios
                     .get('http://localhost:8081/simulator/electricityPrice')
                     .then((res) => {
                         currentComponent.setState({ price: Math.round(res.data * 100)/100 })
-                        console.log(res.data);	
                     });
                 axios
                     .get('http://localhost:8081/simulator/householdConsumption/')
                     .then((response) => {
                         currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
-                        console.log(response.data);	
                     })
                     .catch((error) =>{
-                        console.log("image " + error);
                         history.push('/');
                     });
                 }, 10000);
@@ -156,12 +142,15 @@ export class Prosumer extends Component{
             });
             axios.post("http://localhost:8081/sellRatio", {sellRatio: this.state.soldToMarket/100})
             .then(function (response) {
-                console.log(response);
+                document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
                 setTimeout(function() { $("#appliedSell").hide(); }, 2000);
             })
             .catch(function (error) {
-                console.log(error);
+                document.getElementById("appliedSell").innerHTML = "Could not save changes";
+                $("#appliedSell").show();
+                $("#appliedSell").css("color", "red");
+                setTimeout(function() { $("#appliedSell").hide(); }, 2000);
             });
         }
         /*when user want to change ratio of buying from market, send new value to server*/
@@ -171,12 +160,15 @@ export class Prosumer extends Component{
             });
             axios.post("http://localhost:8081/buyRatio", {buyRatio: this.state.buyFromMarket/100})
             .then(function (response) {
-                console.log(response);
+                document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();
                 setTimeout(function() { $("#appliedBuy").hide(); }, 2000);
             })
             .catch(function (error) {
-                console.log(error);
+                document.getElementById("appliedBuy").innerHTML = "Could not save changes";
+                $("#appliedBuy").show();
+                $("#appliedBuy").css("color", "red");
+                setTimeout(function() { $("#appliedBuy").hide(); }, 2000);
             });
         }
 
@@ -208,20 +200,20 @@ export class Prosumer extends Component{
                             <div className="ratioContainer">
                                 <h3>Excessive production</h3>
                                 <h4>Sell to market:</h4>
-                                <InputRange  maxValue={100} minValue={0} value={this.state.soldToMarket} onChange={value => this.setState({ soldToMarket: value, disableSellButton: false})} />
+                                <InputRange  maxValue={100} minValue={0} value={this.state.soldToMarket} onChange={value => this.setState({ soldToMarket: Math.round(value), disableSellButton: false})} />
                                 <p>{this.state.soldToMarket}% sold to market</p>
                                 <p>{100-this.state.soldToMarket}% sent to buffer</p>
                                 <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableSellButton} onClick={this.sellToMarketHandler}/>
-                                <div id="appliedSell" className="appliedSellBuy" hidden={true}>Saved changes</div>
+                                <div id="appliedSell" className="appliedSellBuy" hidden={true}></div>
                             </div>
                             <div className="ratioContainer">
                                 <h3>Under-production</h3>
                                 <h4>Buy from market:</h4>
-                                <InputRange  maxValue={100} minValue={0} value={this.state.buyFromMarket} onChange={value => this.setState({ buyFromMarket: value, disableBuyButton: false })} />
+                                <InputRange  maxValue={100} minValue={0} value={this.state.buyFromMarket} onChange={value => this.setState({ buyFromMarket: Math.round(value), disableBuyButton: false })} />
                                 <p>{this.state.buyFromMarket}% bought from market</p>
                                 <p>{100-this.state.buyFromMarket}% taken from buffer</p>
                                 <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableBuyButton} onClick={this.buyFromMarketHandler}/>
-                                <div id="appliedBuy" className="appliedSellBuy" hidden={true}>Saved changes</div>
+                                <div id="appliedBuy" className="appliedSellBuy" hidden={true}></div>
                             </div>
                         </div>  
                     </div>

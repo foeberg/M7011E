@@ -8,6 +8,7 @@ import Prosumer from './components/pages/prosumer';
 import PageNotFound from './components/pages/pageNotFound';
 import './App.css';
 import axios from 'axios';
+import history from './history';
 
 class App extends Component {
 
@@ -20,7 +21,13 @@ class App extends Component {
 		});
 	}
 	logOut =() => {
-
+		axios.defaults.withCredentials = true;
+		axios
+		.post('http://localhost:8081/logout')
+		.then((res) => {
+			console.log(res.data);
+			history.push('/');	
+		});
 	}
 	
 	render() {
