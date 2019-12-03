@@ -18,4 +18,6 @@ router.post('/sellRatio', ensureLoggedIn, apiController.postSellRatio);
 router.get('/buyRatio', ensureLoggedIn, apiController.getBuyRatio);
 router.post('/buyRatio', ensureLoggedIn, apiController.postBuyRatio);
 
+router.get('/householdBuffer/', ensureLoggedIn, apiController.getHouseholdBuffer);
+
 module.exports = router;

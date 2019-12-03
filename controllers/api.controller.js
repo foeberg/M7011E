@@ -188,11 +188,27 @@ const postBuyRatio = (req, res) => {
     });
 };
 
+const getHouseholdBuffer = (req, res) => {
+    Household.findOne({ username: req.session.user.username }, (err, user) => {
+        if(err) {
+            console.error(err);
+            res.status(500);
+            res.send('error getting buffer');
+            return;
+        } else {
+            res.status(200);
+            res.send(user.buffer.toString());
+            return;
+        }
+    });
+};
+
 module.exports = {
     getHouseholdImage,
     postHouseholdImage,
     getSellRatio,
     postSellRatio,
     getBuyRatio,
-    postBuyRatio
+    postBuyRatio,
+    getHouseholdBuffer
 };
