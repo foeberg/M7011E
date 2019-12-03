@@ -27,6 +27,7 @@
 | 2019-12-02  | 3       |  trying to get authentication to work on frontend |
 | 2019-12-03  | 1       |  trying to get authentication to work on frontend |
 | 2019-12-03  | 0,5     | logout function in frontend  |
+| 2019-12-03  | 0,5     | get household buffer from backend and displaying it in frontend  |
 
 
 
