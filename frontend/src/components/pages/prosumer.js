@@ -46,7 +46,15 @@ export class Prosumer extends Component{
             axios
             .get('http://localhost:8081/householdImage')
             .then((response) => {
-                currentComponent.setState({ imageName: response.data})
+                currentComponent.setState({ imageName: response.data, loading: false})
+            })
+            .catch((error) =>{
+                history.push('/');
+            });
+            axios
+            .get('http://localhost:8081/householdBuffer')
+            .then((response) => {
+                currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
             })
             .catch((error) =>{
                 history.push('/');
@@ -76,6 +84,14 @@ export class Prosumer extends Component{
                 history.push('/');
             });
             currentComponent.interval = setInterval(() => {
+                axios
+                .get('http://localhost:8081/householdBuffer')
+                .then((response) => {
+                    currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
+                })
+                .catch((error) =>{
+                    history.push('/');
+                });
                 axios
                     .get('http://localhost:8081/simulator/wind')
                     .then((res) => {
@@ -144,6 +160,7 @@ export class Prosumer extends Component{
             .then(function (response) {
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
+                $("#appliedSell").css("color", "green");
                 setTimeout(function() { $("#appliedSell").hide(); }, 2000);
             })
             .catch(function (error) {
@@ -162,6 +179,7 @@ export class Prosumer extends Component{
             .then(function (response) {
                 document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();
+                $("#appliedBuy").css("color", "green");
                 setTimeout(function() { $("#appliedBuy").hide(); }, 2000);
             })
             .catch(function (error) {
