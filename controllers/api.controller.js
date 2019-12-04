@@ -38,26 +38,18 @@ const postHouseholdImage = (req, res) => {
         let dirpath = './frontend/src/householdImages/';
 
         // If a picture associated with the user already exists, remove it
-        fs.readdir(dirpath, (err, files) => {
-            if(err) {
-                console.error(err);
-                res.status(500);
-                res.send('Error uploading image');
-                return;
+        fs.readdirSync(dirpath).forEach((f) => {
+            if(f.includes(req.session.user._id)) {
+                fs.unlink(dirpath + f, (err) => {
+                    if(err) {
+                        console.error(err);
+                        res.status(500);
+                        res.send('Error uploading image');
+                        return;
+                    }
+                    console.log('Image for user ' + req.session.user.username + ' was deleted');
+                });
             }
-            files.forEach((f) => {
-                if(f.includes(req.session.user._id)) {
-                    fs.unlink(dirpath + f, (err) => {
-                        if(err) {
-                            console.error(err);
-                            res.status(500);
-                            res.send('Error uploading image');
-                            return;
-                        }
-                        console.log('Image for user ' + req.session.user.username + ' was deleted');
-                    });
-                }
-            });
         });
         
         // Save the new image
