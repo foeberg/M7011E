@@ -5,6 +5,7 @@ import Header from './components/layouts/header';
 import Login from './components/pages/login';
 import Register from './components/pages/register';
 import Prosumer from './components/pages/prosumer';
+import Manager from './components/pages/manager';
 import PageNotFound from './components/pages/pageNotFound';
 import './App.css';
 import axios from 'axios';
@@ -39,7 +40,8 @@ class App extends Component {
 						<Route exact path='/' component={Login}/>
 						<Route path='/register' component={Register} />
 						<Route path ='/prosumer' render={(props)=> 
-						<Prosumer logOut={this.logOut} />}/> 
+						<Prosumer logOut={this.logOut} />}/>
+						<Route path='/manager' component={Manager} /> 
 						<Route component={PageNotFound}/>
 					</Switch>				
 				</div>

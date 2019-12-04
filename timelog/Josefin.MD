@@ -23,11 +23,13 @@
 | 2019-11-27  | 0.5     | connecting frontend to backend: sell and buy ratio  |
 | 2019-11-28  | 1,5     | connected uploading image in frontend to backend and fixed error message for wrong password/username when logging in  |
 | 2019-11-28  | 0,5     | error handling for image upload frontend  |
-| 2019-11-29  | 2       |  trying to get authentication to work on frontend |
-| 2019-12-02  | 3       |  trying to get authentication to work on frontend |
-| 2019-12-03  | 1       |  trying to get authentication to work on frontend |
+| 2019-11-29  | 2       | trying to get authentication to work on frontend |
+| 2019-12-02  | 3       | trying to get authentication to work on frontend |
+| 2019-12-03  | 1       | trying to get authentication to work on frontend |
 | 2019-12-03  | 0,5     | logout function in frontend  |
 | 2019-12-03  | 0,5     | get household buffer from backend and displaying it in frontend  |
+| 2019-12-04  | 2,5     | made a drawing of the architecture, fixed bugs |
+| 2019-12-04  | 4       | creating UI for manager page |
 
 
 

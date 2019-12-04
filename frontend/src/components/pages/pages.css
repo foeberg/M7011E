@@ -82,6 +82,12 @@ input[type=password]:focus {
     flex-direction: column;
 }
 
+/*display child elements in columns, no flip to rows when screen decreases*/
+.flexboxColumnNoFlip {
+    display: flex;
+    flex-direction: column;
+}
+
 /*white box containing household info on prosumer page*/
 .householdInfoBox {
     flex: 1 1 15%;
@@ -167,6 +173,7 @@ input[type=password]:focus {
 
 .imageContainer {
     background-color: #fff;
+    height: auto;
     width: 100%;
     border-radius: 8px;
     margin: auto;
@@ -208,6 +215,8 @@ input[type=password]:focus {
 
 /*send button for image upload*/
 .sendButton {
+    width: 50%;
+    margin: auto;
     background-color: #777474;
     color: white;
     border: 2px solid #777474;
@@ -221,13 +230,84 @@ input[type=password]:focus {
     cursor: pointer;
 }
 
+#choose{
+    width:50%;
+    margin: 0.6em auto;
+    overflow: hidden;
+}
+
+/*manager page*/
+.coalPowerPlantBox {
+    flex: 1 1 30%;
+    height: 80%;
+    background-color: #fff;
+    border-radius: 8px;
+    margin: 0.5em;
+    margin-top: 2.0em;
+    padding: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+.profileBox {
+    flex: 1 1 70%;
+    background-color: #fff;
+    height: auto;
+    border-radius: 8px;
+    margin: 0.5em;
+    margin-top: 2.0em;
+    padding: 0.5em;
+    font-family: Arial, Helvetica, sans-serif;
+    box-shadow: 5px 10px 18px #6D6B6B;
+}
+
+.profileContent {
+    flex: 1 1 100%;
+    padding: 1.0em;
+    text-align: left;
+    border-left: 1px solid #6D6B6B;
+}
+
+/*button for deleting user*/
+.deleteButton {
+    width: 30%;
+    margin: auto;
+    background-color: #873232;
+    color: white;
+    border: 2px solid #873232;
+    border-radius: 4px;
+    outline: none;
+}
+
+.deleteButton:hover {
+    background-color: #841616;
+    border: 2px solid #841616;
+    cursor: pointer;
+}
+
+/*button for updating user*/
+.updateUserButton {
+    width: 30%;
+    margin: 0.5em auto;
+    background-color: #777474;
+    color: white;
+    border: 2px solid #777474;
+    border-radius: 4px;
+    outline: none;
+}
+
+.updateUserButton:hover {
+    background-color: #C1BCBB;
+    border: 2px solid #C1BCBB;
+    cursor: pointer;
+}
+
+
 
 /*Make page responsive when browser window is smaller*/
 @media all and (max-width: 1000px) {
     .flexboxRow {
         display: flex;
         flex-direction: column;
-        flex-wrap: wrap;
     }
 
     .flexboxColumn {
@@ -263,6 +343,10 @@ input[type=password]:focus {
 
     .loginRegisterContainer {
         width: 80%;
+    }
+    .profileContent {
+        border-left: 0px;
+        border-top: 1px solid #6D6B6B;
     }
 }    
 
