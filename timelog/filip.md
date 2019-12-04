@@ -16,3 +16,4 @@
 | 2019-11-29  | 1.5       | Completely refactored the back end, moved routes in index.js to separate routes and controller files |
 | 2019-11-29  | 1       | Modified the api call to upload household images, now overwrites the previously uploaded image, no matter which fileformat |
 | 2019-12-03  | 3       | Implemented system for household buffers, increasing or decreasing every hour dependent on consumption, production and the sell/buy ratios. Added api call to recieve buffer value for household. |
+| 2019-12-04  | 2.5       | Made sketches of the architecture, wrote small text about the security. Fixed some bugs |
