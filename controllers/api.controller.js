@@ -103,7 +103,7 @@ const getSellRatio = (req, res) => {
 };
 
 const postSellRatio = (req, res) => {
-    if(!req.body.sellRatio) {
+    if(req.body.sellRatio == null || req.body.sellRatio === '') {
         res.status(400);
         res.send('sellRatio field not provided');
         return;
@@ -149,7 +149,7 @@ const getBuyRatio = (req, res) => {
 };
 
 const postBuyRatio = (req, res) => {
-    if(!req.body.buyRatio) {
+    if(req.body.buyRatio == null || req.body.buyRatio === '') {
         res.status(400);
         res.send('buyRatio field not provided');
         return;
