@@ -30,6 +30,7 @@
 | 2019-12-03  | 0,5     | get household buffer from backend and displaying it in frontend  |
 | 2019-12-04  | 2,5     | made a drawing of the architecture, fixed bugs |
 | 2019-12-04  | 4       | creating UI for manager page |
+| 2019-12-05  | 7       | creating UI for manager page and dividing recurring components into separate components to be able to reuse them (frontend) |
 
 
 
