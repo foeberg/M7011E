@@ -60,6 +60,20 @@ class Simulator {
         return this.households;
     }
 
+    addHousehold(household) {
+        let newHousehold = new HouseholdClass(
+            household._id,
+            household.sellRatio,
+            household.buyRatio,
+            household.buffer,
+            this.consumptionDistribution,
+            this.dateObj,
+            household
+        );
+
+        this.households.push(newHousehold);
+    }
+
     getElectricityPrice() {
         var totalConsumption = 0;
         for(var i = 0; i < this.households.length; i++) {
@@ -149,7 +163,6 @@ class HouseholdClass {
                 console.error(err);
                 return;
             }
-            console.log('Buffer for ' + household.lastname + ' updated.');
         });
 
         // Get new value from the consumption distribution

@@ -1,4 +1,5 @@
 const { Household } = require('../models');
+const { sim } = require('./simulator.controller');
 const bcrypt = require('bcrypt');
 
 const signup = (req, res) => {
@@ -17,8 +18,12 @@ const signup = (req, res) => {
             return;
         } else {
             console.log("New household " + c.lastname + " saved.");
+
+            // Create session, i.e log in after registering
             req.session.user = c;
 
+            // Add the new household to the simulator
+            sim.addHousehold(c);
             res.status(200).send('User created');
             return;
         }

@@ -22,5 +22,6 @@ const getElectricityPrice = (req, res) => {
 module.exports = {
     getWind,
     getHouseholdConsumption,
-    getElectricityPrice
+    getElectricityPrice,
+    sim
 }
