@@ -46,6 +46,9 @@ class Simulator {
         // Update the date in the database
         this.dateObj.date = this.date;
 
+        // Without this, the .save() only works the first time..
+        this.dateObj.markModified('date');
+
         this.dateObj.save(function (err, c) {
             if (err) return console.error(err);
             console.log("date saved.");
@@ -92,7 +95,16 @@ class Simulator {
     async start() {
         // Find the date the database should start up at from the database
         await Simdate.findOne(function(err, date) {
-            if (err) return console.error(err);
+            if (err) {
+                console.error(err);
+                return;
+            }
+            // If a date doesn't exist in the database, insert a starting date.
+            if(!date) {
+                this.date = new Date('2020-01-01T12:00:00.000+00:00');
+                this.dateObj = new Simdate({date: this.date});
+                return;
+            }
             this.date = new Date(date.date);
             this.dateObj = date;
         }.bind(this)).exec();
@@ -102,13 +114,7 @@ class Simulator {
             if (err) return console.error(err);
 
             for(var i = 0; i < households.length; i++) {
-                this.households[i] = new HouseholdClass(households[i]._id,
-                                                        households[i].sellRatio,
-                                                        households[i].buyRatio,
-                                                        households[i].buffer,
-                                                        this.consumptionDistribution,
-                                                        this.dateObj,
-                                                        households[i]);
+                this.addHousehold(households[i]);
             }
         }.bind(this)).exec();
 
