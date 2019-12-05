@@ -22,11 +22,15 @@ var householdSchema = new Schema({
     },
     sellRatio: {
         type: Number,
-        default: 0.3
+        default: 0.3,
+        min: 0.0,
+        max: 1.0
     },
     buyRatio: {
         type: Number,
-        default: 0.3
+        default: 0.3,
+        min: 0.0,
+        max: 1.0
     },
     buffer: {
         type: Number,
