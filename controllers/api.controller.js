@@ -66,22 +66,21 @@ const postHouseholdImage = (req, res) => {
                         res.status(500);
                         res.send('Error getting image');
                         return;
-                    }
+                    } else {
                     household.imageURL = filename;
                     household.save((err) => {
                         if(err) {
                             console.error(err);
-                            res.status(500);
-                            res.send('Error saving URL');
+                                res.status(500).send('Error saving URL');
                             return;
-                        }
+                            } else {
                         console.log('Image URL for user ' + req.session.user.username + ' updated');
+                                res.status(200).send('File uploaded!');
+                                return;
+                            }
                     });
+                    }
                 });
-
-                res.status(200);
-                res.send('File uploaded!');
-                return;
             }
         });
     }
@@ -115,20 +114,18 @@ const postSellRatio = (req, res) => {
             res.send('error setting sell ratio');
             return;
         } else {
-            user.sellRatio = req.body.sellRatio;
-            user.save((err) => {
+            household.sellRatio = req.body.sellRatio;
+            household.save((err) => {
                 if(err) {
                     console.error(err);
-                    res.status(500);
-                    res.send('error saving sell ratio');
+                    res.status(500).send('Error saving sell ratio');
+                    return;
+                } else {
+                    console.log('SellRatio for household "' + req.session.user.username + '" updated');
+                    res.status(200).send('Sellratio updated');
                     return;
                 }
-                console.log('SellRatio for user "' + req.session.user.username + '" updated');
             });
-
-            res.status(200);
-            res.send('Sellratio updated');
-            return;
         }
     });
 };
@@ -161,21 +158,18 @@ const postBuyRatio = (req, res) => {
             res.send('error setting buy ratio');
             return;
         } else {
-            user.buyRatio = req.body.buyRatio;
-            user.save((err) => {
+            household.buyRatio = req.body.buyRatio;
+            household.save((err) => {
                 if(err) {
                     console.error(err);
-                    res.status(500);
-                    res.send('error saving buy ratio');
+                    res.status(500).send('Error saving buy ratio');
+                    return;
+                } else {
+                    console.log('BuyRatio for household "' + req.session.user.username + '" updated');
+                    res.status(200).send('Buyratio updated');
                     return;
                 }
-                console.log('BuyRatio for user "' + req.session.user.username + '" updated');
             });
-            
-
-            res.status(200);
-            res.send('Buyratio updated');
-            return;
         }
     });
 };
