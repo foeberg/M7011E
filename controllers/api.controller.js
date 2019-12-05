@@ -2,7 +2,7 @@ const { Household } = require('../models');
 const fs = require('fs');
 
 const getHouseholdImage = (req, res) => {
-    Household.findOne({ _id: req.session.user._id }, (err, household) => {
+    Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
             console.error(err);
             res.status(500).send('Error getting image URL');
@@ -58,7 +58,7 @@ const postHouseholdImage = (req, res) => {
                 res.status(500).send('Error uploading image');
                 return;
             } else {
-                Household.findOne({ _id: req.session.user._id }, (err, household) => {
+                Household.findOne({ username: req.session.user.username }, (err, household) => {
                     if(err) {
                         console.error(err);
                         res.status(500).send('Error getting image');

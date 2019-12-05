@@ -17,3 +17,6 @@
 | 2019-11-29  | 1       | Modified the api call to upload household images, now overwrites the previously uploaded image, no matter which fileformat |
 | 2019-12-03  | 3       | Implemented system for household buffers, increasing or decreasing every hour dependent on consumption, production and the sell/buy ratios. Added api call to recieve buffer value for household. |
 | 2019-12-04  | 2.5       | Made sketches of the architecture, wrote small text about the security. Fixed some bugs |
+| 2019-12-05  | 5       | Troubleshooting and fixing bugs. Checkup meeting with Karan. Updated simulator so that newly registered users gets added right away. Rewrote some of the responses in the API to a better format. Planned and added new tasks in backlog for manager part of assignment |
+| 2019-12-05  | 1       | Split up households table into a user and a households table, this to be able to separate users based on role later on (Managers and prosumers, only prosumers have households) |
+

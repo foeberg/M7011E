@@ -65,7 +65,7 @@ class Simulator {
 
     addHousehold(household) {
         let newHousehold = new HouseholdClass(
-            household._id,
+            household.username,
             household.sellRatio,
             household.buyRatio,
             household.buffer,
@@ -129,8 +129,8 @@ class Simulator {
 }
 
 class HouseholdClass {
-    constructor(id, sellRatio, buyRatio, buffer, distribution, dateObj, householdObj) {
-        this.id = id;
+    constructor(username, sellRatio, buyRatio, buffer, distribution, dateObj, householdObj) {
+        this.username = username;
         this.sellRatio = sellRatio;
         this.buyRatio = buyRatio;
         this.buffer = buffer;
@@ -176,7 +176,7 @@ class HouseholdClass {
 
         // Save the consumption in database, for over time statistic purposes.
         var currConsumption = new Consumption({
-            householdId: this.id,
+            householdUsername: this.username,
             consumption: this.currentConsumption,
             timestamp: this.date
         });

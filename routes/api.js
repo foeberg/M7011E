@@ -1,6 +1,6 @@
 const express = require('express');
 const { authController, apiController } = require('../controllers');
-const { ensureLoggedIn, ensureNotLoggedIn } = require('../utils');
+const { ensureLoggedInProsumer, ensureLoggedIn, ensureNotLoggedIn } = require('../utils');
 const router = express.Router();
 
 router.post('/signup', authController.signup);
@@ -9,15 +9,15 @@ router.post('/login', ensureNotLoggedIn, authController.login);
 
 router.post('/logout', ensureLoggedIn, authController.logout);
 
-router.get('/householdImage', ensureLoggedIn, apiController.getHouseholdImage);
-router.post('/householdImage', ensureLoggedIn, apiController.postHouseholdImage);
+router.get('/householdImage', ensureLoggedInProsumer, apiController.getHouseholdImage);
+router.post('/householdImage', ensureLoggedInProsumer, apiController.postHouseholdImage);
 
-router.get('/sellRatio', ensureLoggedIn, apiController.getSellRatio);
-router.post('/sellRatio', ensureLoggedIn, apiController.postSellRatio);
+router.get('/sellRatio', ensureLoggedInProsumer, apiController.getSellRatio);
+router.post('/sellRatio', ensureLoggedInProsumer, apiController.postSellRatio);
 
-router.get('/buyRatio', ensureLoggedIn, apiController.getBuyRatio);
-router.post('/buyRatio', ensureLoggedIn, apiController.postBuyRatio);
+router.get('/buyRatio', ensureLoggedInProsumer, apiController.getBuyRatio);
+router.post('/buyRatio', ensureLoggedInProsumer, apiController.postBuyRatio);
 
-router.get('/householdBuffer/', ensureLoggedIn, apiController.getHouseholdBuffer);
+router.get('/householdBuffer/', ensureLoggedInProsumer, apiController.getHouseholdBuffer);
 
 module.exports = router;

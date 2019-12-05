@@ -9,7 +9,7 @@ const getWind = (req, res) => {
 };
 
 const getHouseholdConsumption = (req, res) => {
-    let household = sim.getHouseholds().find(h => h.id == req.session.user._id);
+    let household = sim.getHouseholds().find(h => h.username === req.session.user.username);
     res.send(household.getConsumption().toString());
     return;
 };
