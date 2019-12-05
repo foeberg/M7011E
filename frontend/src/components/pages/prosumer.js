@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
 import './pages.css';
-import InputRange from 'react-input-range';
-import 'react-input-range/lib/css/index.css';
 import ElectricityData from '../electricityData';
 import PriceBufferInfoBox from '../priceBufferInfoBox';
+import RangeSliders from '../rangeSliders';
 import Image from '../image';
 import axios from 'axios';
 import $ from 'jquery';
@@ -15,8 +14,6 @@ export class Prosumer extends Component{
             buyFromMarket: 0,
             name: "Andersson",
             consumption: 0,
-            disableSellButton: true,
-            disableBuyButton: true,
             imageName: "placeholder.jpg",
             price: 0,
             wind: 0,
@@ -24,63 +21,96 @@ export class Prosumer extends Component{
             production: 0,
             loading: true
         }
-
+        async getData(){
+            let currentComponent = this;
+            axios.defaults.withCredentials = true;
+            console.log("inne")
+            await Promise.all([
+                axios
+                .get('http://localhost:8081/simulator/wind')
+                .then((res) => {
+                    console.log(res.data)
+                    currentComponent.setState({ wind: Math.round(res.data * 100)/100,
+                        production: Math.round(res.data * 100)/100 })
+                }),
+                axios
+                .get('http://localhost:8081/simulator/electricityPrice')
+                .then((res) => {
+                    currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
+                }),
+                axios
+                .get('http://localhost:8081/householdImage')
+                .then((response) => {
+                    currentComponent.setState({ imageName: response.data})
+                    console.log(response.data)
+                    console.log(response)
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        console.log(error.response.data)
+                        console.log(error.response)
+                        history.push('/');
+                    }
+                    console.log(error.response.data)
+                    console.log(error.response)
+                }),
+                axios
+                .get('http://localhost:8081/householdBuffer')
+                .then((response) => {
+                    currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        console.log(error.response.data)
+                        console.log(error.response)
+                        history.push('/');
+                    }
+                }),
+                axios
+                .get('http://localhost:8081/simulator/householdConsumption/')
+                .then((response) => {
+                    currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                    console.log(response.data)
+                    console.log(response)
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        console.log(error.response.data)
+                        console.log(error.response)
+                        history.push('/');
+                    }
+                }),
+                axios
+                .get('http://localhost:8081/sellRatio')
+                .then((response) => {
+                    currentComponent.setState({ soldToMarket: Math.round(response.data*100)})
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        console.log(error.response.data)
+                        console.log(error.response)
+                        history.push('/');
+                    }
+                }),
+                axios
+                .get('http://localhost:8081/buyRatio')
+                .then((response) => {
+                    currentComponent.setState({ buyFromMarket: Math.round(response.data*100)})
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        console.log(error.response.data)
+                        console.log(error.response)
+                        history.push('/');
+                    }
+                })]);
+                this.setState({loading: false})
+        }
         /*get data from server*/
         componentDidMount() {
             let currentComponent = this;
-            //currentComponent.setState({loading: true});
             axios.defaults.withCredentials = true;
-            axios
-            .get('http://localhost:8081/simulator/wind')
-            .then((res) => {
-                currentComponent.setState({ wind: Math.round(res.data * 100)/100,
-                    production: Math.round(res.data * 100)/100 })
-            });
-            axios
-            .get('http://localhost:8081/simulator/electricityPrice')
-            .then((res) => {
-                currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
-            });
-            axios
-            .get('http://localhost:8081/householdImage')
-            .then((response) => {
-                currentComponent.setState({ imageName: response.data, loading: false})
-            })
-            .catch((error) =>{
-                history.push('/');
-            });
-            axios
-            .get('http://localhost:8081/householdBuffer')
-            .then((response) => {
-                currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
-            })
-            .catch((error) =>{
-                history.push('/');
-            });
-            axios
-            .get('http://localhost:8081/simulator/householdConsumption/')
-            .then((response) => {
-                currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
-            })
-            .catch((error) =>{
-                history.push('/');
-            });
-            axios
-            .get('http://localhost:8081/sellRatio')
-            .then((response) => {
-                currentComponent.setState({ soldToMarket: Math.round(response.data*100)})
-            })
-            .catch((error) =>{
-                history.push('/');
-            });
-            axios
-            .get('http://localhost:8081/buyRatio')
-            .then((response) => {
-                currentComponent.setState({ buyFromMarket: Math.round(response.data*100), loading: false})
-            })
-            .catch((error) =>{
-                history.push('/');
-            });
+            this.getData();
             currentComponent.interval = setInterval(() => {
                 axios
                 .get('http://localhost:8081/householdBuffer')
@@ -118,12 +148,10 @@ export class Prosumer extends Component{
 
         
         /*when user want to change ratio of selling to market, send new value to server*/
-        sellToMarketHandler = () => {
-            this.setState({
-                disableSellButton: true
-            });
-            axios.post("http://localhost:8081/sellRatio", {sellRatio: this.state.soldToMarket/100})
+        sellToMarketHandler = (rangeValue) => {
+            axios.post("http://localhost:8081/sellRatio", {sellRatio: rangeValue/100})
             .then(function (response) {
+                console.log(response)
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
                 $("#appliedSell").css("color", "green");
@@ -137,11 +165,8 @@ export class Prosumer extends Component{
             });
         }
         /*when user want to change ratio of buying from market, send new value to server*/
-        buyFromMarketHandler = () => {
-            this.setState({
-                disableBuyButton: true
-            });
-            axios.post("http://localhost:8081/buyRatio", {buyRatio: this.state.buyFromMarket/100})
+        buyFromMarketHandler = (rangeValue) => {
+            axios.post("http://localhost:8081/buyRatio", {buyRatio: rangeValue/100})
             .then(function (response) {
                 document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();
@@ -180,21 +205,11 @@ export class Prosumer extends Component{
                         <div className="flexboxRow">
                             <div className="ratioContainer">
                                 <h3>Excessive production</h3>
-                                <h4>Sell to market:</h4>
-                                <InputRange  maxValue={100} minValue={0} value={this.state.soldToMarket} onChange={value => this.setState({ soldToMarket: Math.round(value), disableSellButton: false})} />
-                                <p>{this.state.soldToMarket}% sold to market</p>
-                                <p>{100-this.state.soldToMarket}% sent to buffer</p>
-                                <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableSellButton} onClick={this.sellToMarketHandler}/>
-                                <div id="appliedSell" className="appliedSellBuy" hidden={true}></div>
+                                <RangeSliders title={"Sell to market"} id={"appliedSell"} value={this.state.soldToMarket} message={"% sold to market"} secondMessage={"% sent to buffer"} hidden={false} applyHandler={this.sellToMarketHandler}/>
                             </div>
                             <div className="ratioContainer">
                                 <h3>Under-production</h3>
-                                <h4>Buy from market:</h4>
-                                <InputRange  maxValue={100} minValue={0} value={this.state.buyFromMarket} onChange={value => this.setState({ buyFromMarket: Math.round(value), disableBuyButton: false })} />
-                                <p>{this.state.buyFromMarket}% bought from market</p>
-                                <p>{100-this.state.buyFromMarket}% taken from buffer</p>
-                                <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableBuyButton} onClick={this.buyFromMarketHandler}/>
-                                <div id="appliedBuy" className="appliedSellBuy" hidden={true}></div>
+                                <RangeSliders title={"Buy from market"} id={"appliedBuy"}  value={this.state.buyFromMarket} message={"% bought from market"} secondMessage={"% taken from buffer"} hidden={false} applyHandler={this.buyFromMarketHandler}/>
                             </div>
                         </div>  
                     </div>
