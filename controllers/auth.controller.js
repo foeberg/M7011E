@@ -13,15 +13,13 @@ const signup = (req, res) => {
     newHousehold.save(function (err, c) {
         if (err) {
             console.error(err);
-            res.status(500);
-            res.send('error creating user');
+            res.status(500).send('Error creating user');
             return;
         } else {
             console.log("New household " + c.lastname + " saved.");
             req.session.user = c;
 
-            res.status(200);
-            res.send('User created');
+            res.status(200).send('User created');
             return;
         }
     });
@@ -31,24 +29,20 @@ const login = (req, res) => {
     Household.findOne({ username: req.body.username }, (err, user) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error logging in');
+            res.status(500).send('Error logging in');
             return;
         } else {
             if(!user) {
-                res.status(400);
-                res.send();
+                res.status(400).send();
                 return;
             }
             if(bcrypt.compareSync(req.body.password, user.password)) {
                 req.session.user = user;
 
-                res.status(200);
-                res.send('Logged in');
+                res.status(200).send('Logged in');
                 return;
             } else {
-                res.status(400);
-                res.send();
+                res.status(400).send();
                 return;
             }
         }
@@ -59,12 +53,10 @@ const logout = (req, res) => {
     req.session.destroy((err) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('Error logging out');
+            res.status(500).send('Error logging out');
             return;
         } else {
-            res.status(200);
-            res.send('Logged out');
+            res.status(200).send('Logged out');
             return;
         }
     });

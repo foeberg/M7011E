@@ -5,14 +5,15 @@ const getHouseholdImage = (req, res) => {
     Household.findOne({ _id: req.session.user._id }, (err, household) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('Error getting image URL');
+            res.status(500).send('Error getting image URL');
             return;
         } else {
             if(household.imageURL === ""){
                 res.send('placeholder.jpg');
+                return;
             } else {
                 res.send(household.imageURL);
+                return;
             }
         }
     });
@@ -20,15 +21,13 @@ const getHouseholdImage = (req, res) => {
 
 const postHouseholdImage = (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
-        res.status(400);
-        res.send('No files were uploaded');
+        res.status(400).send('No files were uploaded');
         return;
     } else {
         let file = req.files.file;
 
         if(!file.mimetype.includes('image')) {
-            res.status(400);
-            res.send('Invalid image format');
+            res.status(400).send('Invalid image format');
             return;
         }
 
@@ -43,11 +42,11 @@ const postHouseholdImage = (req, res) => {
                 fs.unlink(dirpath + f, (err) => {
                     if(err) {
                         console.error(err);
-                        res.status(500);
-                        res.send('Error uploading image');
+                        res.status(500).send('Error uploading image');
                         return;
+                    } else {
+                        console.log('Image for user ' + req.session.user.username + ' was deleted');
                     }
-                    console.log('Image for user ' + req.session.user.username + ' was deleted');
                 });
             }
         });
@@ -56,29 +55,27 @@ const postHouseholdImage = (req, res) => {
         file.mv(dirpath + filename, (err) => {
             if (err) {
                 console.error(err);
-                res.status(500);
-                res.send('Error uploading image');
+                res.status(500).send('Error uploading image');
                 return;
             } else {
                 Household.findOne({ _id: req.session.user._id }, (err, household) => {
                     if(err) {
                         console.error(err);
-                        res.status(500);
-                        res.send('Error getting image');
+                        res.status(500).send('Error getting image');
                         return;
                     } else {
-                    household.imageURL = filename;
-                    household.save((err) => {
-                        if(err) {
-                            console.error(err);
+                        household.imageURL = filename;
+                        household.save((err) => {
+                            if(err) {
+                                console.error(err);
                                 res.status(500).send('Error saving URL');
-                            return;
+                                return;
                             } else {
-                        console.log('Image URL for user ' + req.session.user.username + ' updated');
+                                console.log('Image URL for user ' + req.session.user.username + ' updated');
                                 res.status(200).send('File uploaded!');
                                 return;
                             }
-                    });
+                        });
                     }
                 });
             }
@@ -87,15 +84,13 @@ const postHouseholdImage = (req, res) => {
 };
 
 const getSellRatio = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, user) => {
+    Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error getting sell ratio');
+            res.status(500).send('Error getting sell ratio');
             return;
         } else {
-            res.status(200);
-            res.send(user.sellRatio.toString());
+            res.status(200).send(household.sellRatio.toString());
             return;
         }
     });
@@ -103,15 +98,13 @@ const getSellRatio = (req, res) => {
 
 const postSellRatio = (req, res) => {
     if(req.body.sellRatio == null || req.body.sellRatio === '') {
-        res.status(400);
-        res.send('sellRatio field not provided');
+        res.status(400).send('sellRatio field not provided');
         return;
     }
-    Household.findOne({ username: req.session.user.username }, (err, user) => {
+    Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error setting sell ratio');
+            res.status(500).send('Error setting sell ratio');
             return;
         } else {
             household.sellRatio = req.body.sellRatio;
@@ -134,12 +127,10 @@ const getBuyRatio = (req, res) => {
     Household.findOne({ username: req.session.user.username }, (err, user) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error getting buy ratio');
+            res.status(500).send('Error getting buy ratio');
             return;
         } else {
-            res.status(200);
-            res.send(user.buyRatio.toString());
+            res.status(200).send(user.buyRatio.toString());
             return;
         }
     });
@@ -147,15 +138,13 @@ const getBuyRatio = (req, res) => {
 
 const postBuyRatio = (req, res) => {
     if(req.body.buyRatio == null || req.body.buyRatio === '') {
-        res.status(400);
-        res.send('buyRatio field not provided');
+        res.status(400).send('buyRatio field not provided');
         return;
     }
-    Household.findOne({ username: req.session.user.username }, (err, user) => {
+    Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error setting buy ratio');
+            res.status(500).send('Error setting buy ratio');
             return;
         } else {
             household.buyRatio = req.body.buyRatio;
@@ -175,15 +164,13 @@ const postBuyRatio = (req, res) => {
 };
 
 const getHouseholdBuffer = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, user) => {
+    Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
             console.error(err);
-            res.status(500);
-            res.send('error getting buffer');
+            res.status(500).send('Error getting buffer');
             return;
         } else {
-            res.status(200);
-            res.send(user.buffer.toString());
+            res.status(200).send(household.buffer.toString());
             return;
         }
     });
