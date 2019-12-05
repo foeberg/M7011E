@@ -138,7 +138,7 @@ class HouseholdClass {
             }
         } 
         // If the net production is above zero, increase the buffer according the the sellRatio
-        else if(oldProduction - this.currentConsumption > 0) {
+        else if(oldProduction - this.currentConsumption > 0.0) {
             this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.sellRatio));
         }
 
