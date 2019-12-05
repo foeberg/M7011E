@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import LoginRegisterInput from '../loginRegisterInput';
 import axios from 'axios';
 import $ from 'jquery';
+import history from '../../history';
 
 export class Register extends Component{
   state = {
@@ -24,10 +25,12 @@ export class Register extends Component{
         password: this.state.createPassword
       })
       .then(function (response) {
+        console.log(response)
         document.getElementById("message").innerHTML = "User created";
         $("#message").show();
         $("#message").css("color", "green");
         setTimeout(function() { $("#message").hide(); }, 5000);
+        history.push('/prosumer');
       })
       .catch(function (error) {
         document.getElementById("message").innerHTML = "Username already exist";
@@ -35,8 +38,6 @@ export class Register extends Component{
         $("#message").css("color", "red");
         setTimeout(function() { $("#message").hide(); }, 5000);
       });
-    }else{
-    
     }
   };
 
@@ -75,7 +76,7 @@ export class Register extends Component{
                 <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
                 <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
                 <div id="message" className="message" hidden = {true}></div>
-              <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.handleClick(event)}/>
+                <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.handleClick(event)}/>
               </form>
               <Link className="link" to="/">Back to sign in page</Link>
           </div>    
