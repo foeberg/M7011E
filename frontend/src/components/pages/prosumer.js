@@ -19,17 +19,16 @@ export class Prosumer extends Component{
             wind: 0,
             buffer: 0,
             production: 0,
-            loading: true
+            loading: true,
+            error: false,
         }
         async getData(){
             let currentComponent = this;
             axios.defaults.withCredentials = true;
-            console.log("inne")
             await Promise.all([
                 axios
                 .get('http://localhost:8081/simulator/wind')
-                .then((res) => {
-                    console.log(res.data)
+                .then((res) => {    
                     currentComponent.setState({ wind: Math.round(res.data * 100)/100,
                         production: Math.round(res.data * 100)/100 })
                 }),
@@ -42,17 +41,11 @@ export class Prosumer extends Component{
                 .get('http://localhost:8081/householdImage')
                 .then((response) => {
                     currentComponent.setState({ imageName: response.data})
-                    console.log(response.data)
-                    console.log(response)
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
-                        console.log(error.response.data)
-                        console.log(error.response)
-                        history.push('/');
+                        currentComponent.setState({error: true});
                     }
-                    console.log(error.response.data)
-                    console.log(error.response)
                 }),
                 axios
                 .get('http://localhost:8081/householdBuffer')
@@ -61,23 +54,17 @@ export class Prosumer extends Component{
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
-                        console.log(error.response.data)
-                        console.log(error.response)
-                        history.push('/');
+                        currentComponent.setState({error: true});
                     }
                 }),
                 axios
                 .get('http://localhost:8081/simulator/householdConsumption/')
                 .then((response) => {
                     currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
-                    console.log(response.data)
-                    console.log(response)
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
-                        console.log(error.response.data)
-                        console.log(error.response)
-                        history.push('/');
+                        currentComponent.setState({error: true});
                     }
                 }),
                 axios
@@ -87,9 +74,7 @@ export class Prosumer extends Component{
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
-                        console.log(error.response.data)
-                        console.log(error.response)
-                        history.push('/');
+                        currentComponent.setState({error: true});
                     }
                 }),
                 axios
@@ -99,12 +84,14 @@ export class Prosumer extends Component{
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
-                        console.log(error.response.data)
-                        console.log(error.response)
+                        currentComponent.setState({error: true});
+                    }
+                })]).then(function(){
+                    if(!currentComponent.state.error){currentComponent.setState({loading: false})
+                    }else{
                         history.push('/');
                     }
-                })]);
-                this.setState({loading: false})
+                });
         }
         /*get data from server*/
         componentDidMount() {
@@ -118,7 +105,9 @@ export class Prosumer extends Component{
                     currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                 })
                 .catch((error) =>{
-                    history.push('/');
+                    if(error.response.status=== 400){
+                        history.push('/');
+                    }
                 });
                 axios
                     .get('http://localhost:8081/simulator/wind')
@@ -137,7 +126,9 @@ export class Prosumer extends Component{
                         currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
                     })
                     .catch((error) =>{
-                        history.push('/');
+                        if(error.response.status=== 400){
+                            history.push('/');
+                        }
                     });
                 }, 10000);
           }
@@ -151,7 +142,6 @@ export class Prosumer extends Component{
         sellToMarketHandler = (rangeValue) => {
             axios.post("http://localhost:8081/sellRatio", {sellRatio: rangeValue/100})
             .then(function (response) {
-                console.log(response)
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
                 $("#appliedSell").css("color", "green");

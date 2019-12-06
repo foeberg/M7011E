@@ -18,7 +18,6 @@ class App extends Component {
 		axios
 		.get('http://localhost:8081/simulator/wind')
 		.then((res) => {
-			console.log(res.data);	
 		});
 	}
 	logOut =() => {

@@ -25,7 +25,6 @@ export class Login extends Component{
         password: this.state.password
       })
       .then(function (response) {
-        console.log(response);
         if(response.status === 200){
           history.push('/prosumer');
         }    
