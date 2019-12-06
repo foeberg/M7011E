@@ -10,7 +10,7 @@ export class RangeSliders extends Component {
     }
 
     onClick = (e) => {
-        this.setState({disableButton: true});
+        this.setState({disableButton: true})
         this.props.applyHandler(this.state.rangeValue);
       }
 

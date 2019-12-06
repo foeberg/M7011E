@@ -17,7 +17,7 @@ export class Profile extends Component {
     
   render() {
     return (
-        <div className="profileBox">
+        <div className="profileBox" hidden={this.props.profile}>
             <h1>Profile</h1>
             <div className="flexboxRow">
                 <div style={{width: "60%", padding: "1.0em", margin: "auto"}} >   

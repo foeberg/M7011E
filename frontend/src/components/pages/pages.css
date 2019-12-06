@@ -243,13 +243,31 @@ input[type=password]:focus {
 }
 
 /*manager page*/
+.menu {
+    background-color: #5E5E5E;
+    width: 100%;
+}
+
+.menuLink {
+    background-color: #5E5E5E;
+    color: white;
+    border: 1px solid #5E5E5E;
+    text-decoration: none;
+    font-size: 1.3em;
+    margin: 0.3em;
+    outline: none;
+}
+
+.menuLink:hover {
+    color: #C1BCBB;
+    cursor: pointer;
+}
 .coalPowerPlantBox {
     flex: 1 1 30%;
     height: 80%;
     background-color: #fff;
     border-radius: 8px;
     margin: 0.5em;
-    margin-top: 2.0em;
     padding: 0.5em;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 5px 10px 18px #6D6B6B;
@@ -260,7 +278,6 @@ input[type=password]:focus {
     background-color: #fff;
     border-radius: 8px;
     margin: 0.5em;
-    margin-top: 2.0em;
     padding: 0.5em;
     font-family: Arial, Helvetica, sans-serif;
     box-shadow: 5px 10px 18px #6D6B6B;
@@ -379,6 +396,9 @@ input[type=password]:focus {
         width: 80%;
         border-left: 0px;
         border-top: 1px solid #6D6B6B;
+    }
+    .coalPowerPlantBox {
+        width: 94%
     }
 }    
 
