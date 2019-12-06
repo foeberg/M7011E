@@ -31,7 +31,7 @@
 | 2019-12-04  | 2,5     | made a drawing of the architecture, fixed bugs |
 | 2019-12-04  | 4       | creating GUI for manager page |
 | 2019-12-05  | 7       | creating GUI for manager page and dividing recurring components into separate components to be able to reuse them (frontend) |
-| 2019-12-06  | 2,5     | creating GUI for manager page |
+| 2019-12-06  | 4       | creating GUI for manager page |
 
 
 
