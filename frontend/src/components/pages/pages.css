@@ -94,6 +94,13 @@ input[type=password]:focus {
     flex-direction: row;
 }
 
+/*children not same height*/
+.flexboxRowStart {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+}
+
 /*white box containing household info on prosumer page*/
 .householdInfoBox {
     flex: 1 1 15%;
@@ -325,6 +332,7 @@ input[type=password]:focus {
     cursor: pointer;
 }
 
+/*button for exit page*/
 .exitButton {
     width: 40px;
     margin: 0.5em;
@@ -342,6 +350,23 @@ input[type=password]:focus {
     cursor: pointer;
 }
 
+/*button for blocking prosumer*/
+.blockButton {
+    width: 10%;
+    margin: 0.5em;
+    background-color: green;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+}
+
+.blockButton:hover {
+    background-color: #004C03;
+    border: none;
+    cursor: pointer;
+}
+
 /*coal power plant on/running/off*/
 .dot {
     height: 10px;
@@ -350,6 +375,9 @@ input[type=password]:focus {
     border-radius: 50%;
     display: inline-block;
   }
+.prosumersList {
+    font-size: 1.0em;
+}
 
 /*Make page responsive when browser window is smaller*/
 @media all and (max-width: 1000px) {
@@ -397,8 +425,11 @@ input[type=password]:focus {
         border-left: 0px;
         border-top: 1px solid #6D6B6B;
     }
-    .coalPowerPlantBox {
-        width: 94%
+
+    .flexboxRowStart {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
     }
 }    
 

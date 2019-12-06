@@ -31,7 +31,7 @@ export class Manager extends Component{
         <div className="menu">
             <input type="button" value="Profile" className="menuLink" onClick={() => {this.enterProfile()}}/><input type="button" value="Prosumers" className="menuLink" onClick={() => {this.enterProsumers()}}/><input type="button" value="Log out" className="menuLink" onClick={() => {this.props.logOut()}}/>
         </div>
-        <div className="flexboxRow" style={{alignItems: "flex-start"}}>
+        <div className="flexboxRowStart">
             <CoalPowerPlant demand={this.state.demand} bufferRate={this.state.bufferRate} status={this.state.status} production={this.state.production} productionRate={this.state.productionRate}/>
             <ProsumerList profile={this.state.profile}/>
             <Profile profile={this.state.profile} imageName={this.state.imageName} email={this.state.email} username={this.state.username} name={this.state.name}/>

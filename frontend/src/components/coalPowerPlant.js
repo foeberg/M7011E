@@ -68,7 +68,7 @@ export class CoalPowerPlant extends Component {
     return (
         <div className="coalPowerPlantBox">
             <h1>Coal Power plant</h1><br/>
-            <div style={{margin: "1.0em"}}><b>Status:</b> {this.state.status}<span className="dot" style={this.dotStyle()}/></div><br/><button type="submit" className="sendButton" style={{float: "none", margin: "1.0em"}} onClick={()=>{alert("hej")}}>{this.startStop() + " production"}</button>
+            <div style={{margin: "1.0em"}}><b>Status:</b> {this.state.status} <span className="dot" style={this.dotStyle()}/></div><br/><button type="submit" className="sendButton" style={{float: "none", margin: "1.0em"}} onClick={()=>{alert("hej")}}>{this.startStop() + " production"}</button>
             <div className="flexboxRowNoFlip" style={{borderTop: "1px solid #6D6B6B"}}>
                 <ElectricityData title={"Market demand:"} value={this.props.demand}/>
                 <ElectricityData title={"Producing:"} value={this.props.production}/>

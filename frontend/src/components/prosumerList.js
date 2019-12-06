@@ -11,7 +11,7 @@ export class ProsumerList extends Component {
     return (
         <div className="profileBox" hidden={!this.props.profile}>
             <h1>Prosumers</h1>
-            <ProsumerItem prosumers={this.state.prosumers} />  
+            <ProsumerItem prosumers={this.state.prosumers}/>     
         </div>
     )
   }
