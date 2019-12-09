@@ -27,8 +27,20 @@ const ensureLoggedInProsumer = (req, res, next) => {
     }
 };
 
+const ensureLoggedInManager = (req, res, next) => {
+    if(!req.session.user) {
+        res.status(400).send('Not logged in');
+        return;
+    } else if(req.session.user.role !== 'manager') {
+        res.status(400).send('Not logged in as manager');
+    } else {
+        next();
+    }
+};
+
 module.exports = {
     ensureNotLoggedIn,
     ensureLoggedIn,
-    ensureLoggedInProsumer
+    ensureLoggedInProsumer,
+    ensureLoggedInManager
 }

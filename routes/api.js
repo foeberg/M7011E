@@ -1,6 +1,6 @@
 const express = require('express');
 const { authController, apiController } = require('../controllers');
-const { ensureLoggedInProsumer, ensureLoggedIn, ensureNotLoggedIn } = require('../utils');
+const { ensureLoggedInManager, ensureLoggedInProsumer, ensureLoggedIn, ensureNotLoggedIn } = require('../utils');
 const router = express.Router();
 
 router.post('/signup', authController.signup);
@@ -19,5 +19,7 @@ router.get('/buyRatio', ensureLoggedInProsumer, apiController.getBuyRatio);
 router.post('/buyRatio', ensureLoggedInProsumer, apiController.postBuyRatio);
 
 router.get('/householdBuffer/', ensureLoggedInProsumer, apiController.getHouseholdBuffer);
+
+router.get('/activeSessions/', ensureLoggedInManager, apiController.getActiveSessions);
 
 module.exports = router;

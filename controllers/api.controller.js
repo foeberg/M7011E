@@ -1,4 +1,5 @@
 const { Household } = require('../models');
+const sessionStore = require('../utils/sessionstore');
 const fs = require('fs');
 
 const getHouseholdImage = (req, res) => {
@@ -176,6 +177,10 @@ const getHouseholdBuffer = (req, res) => {
     });
 };
 
+const getActiveSessions = (req, res) => {
+    res.send(sessionStore.getActiveSessions());
+};
+
 module.exports = {
     getHouseholdImage,
     postHouseholdImage,
@@ -183,5 +188,6 @@ module.exports = {
     postSellRatio,
     getBuyRatio,
     postBuyRatio,
-    getHouseholdBuffer
+    getHouseholdBuffer,
+    getActiveSessions
 };
