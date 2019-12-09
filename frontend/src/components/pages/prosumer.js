@@ -48,7 +48,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/householdBuffer')
+                .get('http://localhost:8081/simulator/householdBuffer')
                 .then((response) => {
                     currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                 })
@@ -68,7 +68,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/sellRatio')
+                .get('http://localhost:8081/simulator/sellRatio')
                 .then((response) => {
                     currentComponent.setState({ soldToMarket: Math.round(response.data*100)})
                 })
@@ -78,7 +78,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/buyRatio')
+                .get('http://localhost:8081/simulator/buyRatio')
                 .then((response) => {
                     currentComponent.setState({ buyFromMarket: Math.round(response.data*100)})
                 })
@@ -100,7 +100,7 @@ export class Prosumer extends Component{
             this.getData();
             currentComponent.interval = setInterval(() => {
                 axios
-                .get('http://localhost:8081/householdBuffer')
+                .get('http://localhost:8081/simulator/householdBuffer')
                 .then((response) => {
                     currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                 })
@@ -140,7 +140,7 @@ export class Prosumer extends Component{
         
         /*when user want to change ratio of selling to market, send new value to server*/
         sellToMarketHandler = (rangeValue) => {
-            axios.post("http://localhost:8081/sellRatio", {sellRatio: rangeValue/100})
+            axios.post("http://localhost:8081/simulator/sellRatio", {sellRatio: rangeValue/100})
             .then(function (response) {
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
@@ -156,7 +156,7 @@ export class Prosumer extends Component{
         }
         /*when user want to change ratio of buying from market, send new value to server*/
         buyFromMarketHandler = (rangeValue) => {
-            axios.post("http://localhost:8081/buyRatio", {buyRatio: rangeValue/100})
+            axios.post("http://localhost:8081/simulator/buyRatio", {buyRatio: rangeValue/100})
             .then(function (response) {
                 document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();

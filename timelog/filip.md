@@ -19,4 +19,6 @@
 | 2019-12-04  | 2.5       | Made sketches of the architecture, wrote small text about the security. Fixed some bugs |
 | 2019-12-05  | 5       | Troubleshooting and fixing bugs. Checkup meeting with Karan. Updated simulator so that newly registered users gets added right away. Rewrote some of the responses in the API to a better format. Planned and added new tasks in backlog for manager part of assignment |
 | 2019-12-05  | 1       | Split up households table into a user and a households table, this to be able to separate users based on role later on (Managers and prosumers, only prosumers have households) |
+| 2019-12-09  | 2       | Implemented a basic datastructure (session store) to be able to track users that are logged in |
+| 2019-12-09  | 4       | Added powerplant to simulator and database, created api functions around it |
 
