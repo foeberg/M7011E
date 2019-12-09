@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import './pages.css';
-import Profile from '../profile';
+import ManagerProfile from '../managerProfile';
 import CoalPowerPlant from '../coalPowerPlant';
-import ProsumerList from '../prosumerList';
+import TableOfProsumers from '../tableOfProsumers';
 
 export class Manager extends Component{
     state = {
@@ -18,6 +18,7 @@ export class Manager extends Component{
         profile: false
     }
 
+    /*show either profile or table of prosumers */
     enterProfile = () => {
         this.setState({profile: false})
     }
@@ -33,8 +34,8 @@ export class Manager extends Component{
         </div>
         <div className="flexboxRowStart">
             <CoalPowerPlant demand={this.state.demand} bufferRate={this.state.bufferRate} status={this.state.status} production={this.state.production} productionRate={this.state.productionRate}/>
-            <ProsumerList profile={this.state.profile}/>
-            <Profile profile={this.state.profile} imageName={this.state.imageName} email={this.state.email} username={this.state.username} name={this.state.name}/>
+            <TableOfProsumers profile={this.state.profile}/>
+            <ManagerProfile profile={this.state.profile} imageName={this.state.imageName} email={this.state.email} username={this.state.username} name={this.state.name}/>
         </div>    
       </React.Fragment>
     )

@@ -7,10 +7,7 @@ export class Profile extends Component {
     state = {
         updateAccount: false,
     }
-    onChange = (e) => {
-        this.setState({ [e.target.name]: e.target.value });
-        document.getElementById("errorMessage").innerHTML = "";
-        }
+    /*show either update account or profile data */
     changeState = () => {
         this.setState({updateAccount: false})
     }      
@@ -23,7 +20,7 @@ export class Profile extends Component {
                 <div style={{width: "60%", padding: "1.0em", margin: "auto"}} >   
                     <Image source={this.props.imageName} alt={"Manager"}/>
                 </div>
-                <UpdateAccount updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name} onChange={this.onChange}/> 
+                <UpdateAccount updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name}/> 
                 <div className="profileContent" hidden={this.state.updateAccount}>
                     <p>Name: {this.props.name}</p>
                     <p>Username: {this.props.username}</p>

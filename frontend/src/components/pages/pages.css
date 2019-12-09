@@ -150,7 +150,6 @@ input[type=password]:focus {
     border-radius: 8px;
     display: flex;
     flex-direction: row;
-    flex-wrap: wrap;
     width: 100%;
     height: 30%;
     margin: auto;
@@ -162,6 +161,7 @@ input[type=password]:focus {
 .value {
     flex: 1 1 20%;
     padding-bottom: 1.0em;
+    overflow: hidden;
 }
 
 /*electricity data on prosumer page*/
@@ -235,6 +235,7 @@ input[type=password]:focus {
     border: 2px solid #777474;
     border-radius: 4px;
     outline: none;
+    overflow:hidden;
 }
 
 .sendButton:hover {
@@ -352,17 +353,38 @@ input[type=password]:focus {
 
 /*button for blocking prosumer*/
 .blockButton {
-    width: 10%;
+    width: 50%;
     margin: 0.5em;
+    padding: 2.5px;
     background-color: green;
     color: white;
     border: none;
     border-radius: 4px;
     outline: none;
+    overflow: hidden;
 }
 
 .blockButton:hover {
     background-color: #004C03;
+    border: none;
+    cursor: pointer;
+}
+
+/*button for viewing prosumers system*/
+.viewButton {
+    width: 50%;
+    margin: 0.5em;
+    padding: 2.5px;
+    background-color: #777474;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    overflow: hidden;
+}
+
+.viewButton:hover {
+    background-color: #C1BCBB;
     border: none;
     cursor: pointer;
 }
@@ -375,12 +397,99 @@ input[type=password]:focus {
     border-radius: 50%;
     display: inline-block;
   }
-.prosumersList {
-    font-size: 1.0em;
+
+/*table of prosumers*/
+#prosumers {
+    text-align: center;
+    border-collapse: collapse;
+    border: 3px solid #ddd;
+    width: 100%;
+    table-layout: fixed;
 }
 
+#prosumers td, #prosumers th {
+    border: 1px solid #ddd;
+    overflow: hidden;
+    word-wrap: break-word; 
+    padding: 3px;
+}
+
+#prosumers tr:nth-child(even){background-color: #f2f2f2;}
+
+#prosumers tr:hover {background-color: #ddd;}
+
+#prosumers th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: center;
+    background-color: #777474;
+    color: white;
+}
+
+/*info popup*/
+.popup {
+    background-color: white;
+    margin: 0.3em;
+    padding: 2.0em;
+    border-radius: 4px;
+    border: 1px solid #777474;
+}
+
+.infoButton {
+    background-color: white;
+    color: black;
+    margin: 0.5em;
+    width: 25px;
+    cursor: pointer;
+    border: 1px solid #000000;
+    border-radius: 50%;
+    font-weight: bolder;
+}
+
+/*View prosumers system modal*/
+/* The Modal (background) */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    padding-top: 2em; /* Location of the box */
+    left: 0;
+    top: 0;
+    width: 100%; 
+    height: 100%; 
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+  }
+  
+  /* Modal Content */
+  .modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    margin-top: 5em;
+    padding: 2em;
+    border: 1px solid #888;
+    width: 80%;
+    border-radius: 10px;
+  }
+  
+  /* The Close Button */
+  .close {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+  }
+
 /*Make page responsive when browser window is smaller*/
-@media all and (max-width: 1000px) {
+@media all and (max-width: 1024px) {
     .flexboxRow {
         display: flex;
         flex-direction: column;
@@ -398,7 +507,6 @@ input[type=password]:focus {
         flex-direction: column;
         width: 40%;
         height: 80%;
-        float:left;
         margin-top: 2.0em;
         font-family: Arial, Helvetica, sans-serif;
     }
@@ -431,6 +539,9 @@ input[type=password]:focus {
         flex-direction: column;
         align-items: stretch;
     }
+    .modal-content {
+        margin-top: 0em;
+      }
 }    
 
 
