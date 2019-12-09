@@ -84,99 +84,6 @@ const postHouseholdImage = (req, res) => {
     }
 };
 
-const getSellRatio = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, household) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error getting sell ratio');
-            return;
-        } else {
-            res.status(200).send(household.sellRatio.toString());
-            return;
-        }
-    });
-};
-
-const postSellRatio = (req, res) => {
-    if(req.body.sellRatio == null || req.body.sellRatio === '') {
-        res.status(400).send('sellRatio field not provided');
-        return;
-    }
-    Household.findOne({ username: req.session.user.username }, (err, household) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error setting sell ratio');
-            return;
-        } else {
-            household.sellRatio = req.body.sellRatio;
-            household.save((err) => {
-                if(err) {
-                    console.error(err);
-                    res.status(500).send('Error saving sell ratio');
-                    return;
-                } else {
-                    console.log('SellRatio for household "' + req.session.user.username + '" updated');
-                    res.status(200).send('Sellratio updated');
-                    return;
-                }
-            });
-        }
-    });
-};
-
-const getBuyRatio = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, user) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error getting buy ratio');
-            return;
-        } else {
-            res.status(200).send(user.buyRatio.toString());
-            return;
-        }
-    });
-};
-
-const postBuyRatio = (req, res) => {
-    if(req.body.buyRatio == null || req.body.buyRatio === '') {
-        res.status(400).send('buyRatio field not provided');
-        return;
-    }
-    Household.findOne({ username: req.session.user.username }, (err, household) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error setting buy ratio');
-            return;
-        } else {
-            household.buyRatio = req.body.buyRatio;
-            household.save((err) => {
-                if(err) {
-                    console.error(err);
-                    res.status(500).send('Error saving buy ratio');
-                    return;
-                } else {
-                    console.log('BuyRatio for household "' + req.session.user.username + '" updated');
-                    res.status(200).send('Buyratio updated');
-                    return;
-                }
-            });
-        }
-    });
-};
-
-const getHouseholdBuffer = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, household) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error getting buffer');
-            return;
-        } else {
-            res.status(200).send(household.buffer.toString());
-            return;
-        }
-    });
-};
-
 const getActiveSessions = (req, res) => {
     res.send(sessionStore.getActiveSessions());
 };
@@ -184,10 +91,5 @@ const getActiveSessions = (req, res) => {
 module.exports = {
     getHouseholdImage,
     postHouseholdImage,
-    getSellRatio,
-    postSellRatio,
-    getBuyRatio,
-    postBuyRatio,
-    getHouseholdBuffer,
     getActiveSessions
 };
