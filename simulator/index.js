@@ -1,5 +1,5 @@
 var gaussian = require('gaussian');
-var { Household, Consumption, Simdate } = require('../models/');
+var { Household, Powerplant, Consumption, Simdate } = require('../models/');
 
 class Simulator {
     constructor() {
@@ -17,6 +17,7 @@ class Simulator {
         this.consumptionDistribution = gaussian(2.85, 0.5*0.5);
 
         this.households = []; 
+        this.powerplant = null;
     }
 
     newDay() {
@@ -40,6 +41,9 @@ class Simulator {
             // to update the buffer.
             this.households[i].newHour(this.currentWind);
         }
+
+        // Call the corresponding newHour in the powerplant object
+        this.powerplant.newHour(this.households);
 
         this.currentWind = Math.abs(this.windHourDistribution.ppf(Math.random()));
 
@@ -80,7 +84,7 @@ class Simulator {
     getElectricityPrice() {
         var totalConsumption = 0;
         for(var i = 0; i < this.households.length; i++) {
-            totalConsumption += this.households[i].getConsumption();
+            totalConsumption += this.households[i].currentConsumption;
         }
 
         var price = totalConsumption - this.currentWind;
@@ -111,10 +115,29 @@ class Simulator {
 
         // Create a household object for each household in the database
         await Household.find(function (err, households) {
-            if (err) return console.error(err);
+            if (err) {
+                console.error(err);
+                return;
+            }
 
             for(var i = 0; i < households.length; i++) {
                 this.addHousehold(households[i]);
+            }
+        }.bind(this)).exec();
+
+        // Create a powerplant object for the powerplant
+        await Powerplant.findOne(function(err, plant) {
+            if (err) {
+                console.error(err);
+                return;
+            }
+            // If no powerplant exist in database, we create one
+            if(!plant) {
+                var plant = new Powerplant();
+            }
+            this.powerplant = new PowerplantClass(plant);
+            if(this.powerplant.getStatus() === 'Starting') {
+                this.powerplant.plant.status = 'Stopped';
             }
         }.bind(this)).exec();
 
@@ -141,13 +164,8 @@ class HouseholdClass {
         this.currentConsumption = this.distribution.ppf(Math.random());
     }
 
-    getConsumption() {
-        return this.currentConsumption;
-    }
-
     newHour(oldProduction) {
         this.date.setHours(this.date.getHours() + 1);
-
         // Update the buffer, based on the save and buy ratio, and the net production.
 
         // If the net production is below zero, decrease the buffer according the the buyRatio
@@ -186,6 +204,101 @@ class HouseholdClass {
             console.log(c._id + " saved.");
         });
     }
+}
+
+class PowerplantClass {
+    constructor(plant) {
+        this.plant = plant;
+
+        this.startupTimer;
+    }
+
+    start() {
+        // Return if already running
+        if(this.plant.status === 'Running') return;
+
+        this.plant.status = 'Starting';
+        // It takes an hour to start the powerplant
+        this.startupTimer = setTimeout(function() {
+            this.plant.status = 'Running';
+
+            this.plant.save((err, plant) => {
+                if(err) {
+                    console.error(err);
+                    return;
+                }
+            });
+        }.bind(this), 10000);
+    }
+
+    stop() {
+        if(this.plant.status === 'Stopped') return;
+
+        this.plant.status = 'Stopped';
+        this.plant.production = 0.0;
+        clearTimeout(this.startupTimer);
+
+        // Update database
+        this.plant.save((err, plant) => {
+            if(err) {
+                console.error(err);
+                return; 
+            }
+        });
+    }
+
+    getStatus() {
+        return this.plant.status;
+    }
+
+    getProduction() {
+        return this.plant.production;
+    }
+
+    setProduction(value) {
+        this.plant.production = value;
+    }
+
+    newHour(households) {
+        // Send energy to the buffer
+        this.plant.buffer += this.plant.production * this.plant.bufferRatio;
+
+        // The amount of energy sent to the market
+        let marketEnergy = this.plant.production * (1.0 - this.plant.bufferRatio);
+
+        // Sum up the total consumption of the market
+        let marketConsumption = 0;
+        households.forEach(household => {
+            marketConsumption += household.currentConsumption;
+        });
+
+        // If the plant is not running, the buffer supplies all the power.
+        if(this.plant.status !== 'Running') {
+            this.plant.buffer -= marketConsumption;
+
+            if(this.plant.buffer <= 0.0) {
+                this.plant.buffer = 0.0;
+            }
+        }
+        // If the plant sends less energy to the market than the market demand,
+        // we need to supply some energy from the buffer.
+        else if(marketEnergy - marketConsumption < 0) {
+            this.plant.buffer += (marketEnergy - marketConsumption);
+
+            if(this.plant.buffer <= 0.0) {
+                this.plant.buffer = 0.0;
+            }
+        }
+
+        // Save powerplant state to database
+        this.plant.save((err, plant) => {
+            if(err) {
+                console.error(err);
+                return;
+            }
+        });
+    }
+
 }
 
 module.exports = Simulator;

@@ -11,7 +11,7 @@ const getWind = (req, res) => {
 
 const getHouseholdConsumption = (req, res) => {
     let household = sim.getHouseholds().find(h => h.username === req.session.user.username);
-    res.send(household.getConsumption().toString());
+    res.send(household.currentConsumption.toString());
     return;
 };
 
@@ -120,9 +120,124 @@ const getHouseholdBuffer = (req, res) => {
         }
     });
 };
+
+const getPowerplantBuffer = (req, res) => {
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error getting powerplant buffer.');
+            return;
+        } else {
+            res.status(200).send(plant.buffer.toString());
+        }
+    });
+};
+
+const getBufferRatio = (req, res) => {
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error getting powerplant buffer ratio.');
+            return;
+        } else {
+            res.status(200).send(plant.bufferRatio.toString());
+        }
+    });
+};
+
+const setBufferRatio = (req, res) => {
+    if(req.body.bufferRatio == null || req.body.bufferRatio === '') {
+        res.status(400).send('bufferRatio field not provided');
+        return;
+    }
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error setting powerplant buffer ratio.');
+            return;
+        } else {
+            plant.bufferRatio = req.body.bufferRatio;
+            plant.save((err, h) => {
+                if(err) {
+                    console.error(err);
+                    res.status(500).send('Error saving powerplant buffer ratio.');
+                    return;
+                } else {
+                    // Update powerplant in simulator
+                    sim.powerplant.bufferRatio = h.bufferRatio;
+
+                    console.log('bufferRatio for powerplant updated');
+                    res.status(200).send('bufferRatio updated');
+                    return;
+                }
+            });
+        }
+    });
+};
+
+const startPowerplant = (req, res) => {
+    sim.powerplant.start();
+    res.status(200).send('Starting powerplant.');
+};
+
+const stopPowerplant = (req, res) => {
+    sim.powerplant.stop();
+    res.status(200).send('Stopping powerplant.');
+};
+
+const getPowerplantStatus = (req, res) => {
+    res.send(sim.powerplant.getStatus());
+};
+
+const getPowerplantProduction = (req, res) => {
+    res.send(sim.powerplant.getProduction().toString());
+};
+
+const setPowerplantProduction = (req, res) => {
+    if(req.body.production == null || req.body.production === '') {
+        res.status(400).send('production field not provided');
+        return;
+    }
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('error setting powerplant production');
+            return;
+        } else {
+            plant.production = req.body.production;
+            plant.save((err, p) => {
+                if(err) {
+                    console.error(err);
+                    return;
+                } else {
+                    // Update powerplant in simulator.
+                    sim.powerplant.setProduction(p.production);
+
+                    console.log('production for powerplant updated');
+                    res.status(200).send('production updated');
+                    return;
+                }
+            });
+        }
+    });
+};
+
 module.exports = {
     getWind,
     getHouseholdConsumption,
     getElectricityPrice,
+    getSellRatio,
+    postSellRatio,
+    getBuyRatio,
+    postBuyRatio,
+    getHouseholdBuffer,
+    getPowerplantBuffer,
+    getBufferRatio,
+    setBufferRatio,
+    startPowerplant,
+    stopPowerplant,
+    getPowerplantStatus,
+    getPowerplantProduction,
+    setPowerplantProduction,
     sim
-}
+};
