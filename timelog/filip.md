@@ -21,4 +21,5 @@
 | 2019-12-05  | 1       | Split up households table into a user and a households table, this to be able to separate users based on role later on (Managers and prosumers, only prosumers have households) |
 | 2019-12-09  | 2       | Implemented a basic datastructure (session store) to be able to track users that are logged in |
 | 2019-12-09  | 4       | Added powerplant to simulator and database, created api functions around it |
+| 2019-12-10  | 1       | Added a config file that contains database path, server and simulator parameters etc |
 
