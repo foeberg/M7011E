@@ -12,12 +12,14 @@ export class Login extends Component{
     errors: {},
   }
 
+  /*on input change => set state */
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
     document.getElementById("errorMessage").innerHTML = "";
   }
 
-  handleClick =(e) => {
+  /*when user submits form */
+  onSubmit =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
       axios.post('http://localhost:8081/login', {
@@ -37,6 +39,7 @@ export class Login extends Component{
     }
   };
 
+  /*validate forms */
   handleValidation(){
     let username = this.state.username;
     let password = this.state.password;
@@ -66,7 +69,7 @@ export class Login extends Component{
                 <LoginRegisterInput type={"text"} value ={this.state.username} name={"username"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
                 <LoginRegisterInput type={"password"} value ={this.state.password} name={"password"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
                 <div id="errorMessage" className="errorMsg"></div>
-                <input className="submitButton" type="submit" value="Login" onClick={(event) => this.handleClick(event)}/>
+                <input className="submitButton" type="submit" value="Login" onClick={(event) => this.onSubmit(event)}/>
                 </form>
                 <Link className="link" to="/register">Register new user</Link>
             </div>    

@@ -12,6 +12,13 @@ export class TableOfProsumers extends Component {
         buffer: 0
     }
 
+    componentDidMount() {
+        /*axios.defaults.withCredentials = true;
+        axios
+        .get('https://jsonplaceholder.typicode.com/todos?_limit=10')
+        .then((response) => this.setState({ prosumers: response.data }));*/
+    }
+
     /*change color on dot depending on online status */
     dotStyle = (status) => {
         if(status === "Online"){
@@ -21,9 +28,28 @@ export class TableOfProsumers extends Component {
 
     /*block prosumer from selling to the market for 10 sec */
     blockProsumer = (id) => {
+        console.log("inne");
         document.getElementById(id).innerHTML = "blocked";
+        document.getElementById(id).setAttribute("disabled","disabled");
         $("#"+id).css("background-color", "red");
-        setTimeout(function() { $("#"+id).css("background-color", "green"); document.getElementById(id).innerHTML = "block";}, 10000);
+        setTimeout(function() { 
+            $("#"+id).css("background-color", "green"); 
+            document.getElementById(id).innerHTML = "block"; 
+            document.getElementById(id).removeAttribute("disabled");
+        }, 10000);
+        /*axios.post("http://localhost:8081/", {id: id})
+            .then(function (response) {
+                document.getElementById(id).innerHTML = "blocked";
+                document.getElementById(id).setAttribute("disabled","disabled");
+                $("#"+id).css("background-color", "red");
+                setTimeout(function() { 
+                    $("#"+id).css("background-color", "green"); 
+                    document.getElementById(id).innerHTML = "block"; 
+                    document.getElementById(id).removeAttribute("disabled");
+                }, 10000);
+            })
+            .catch(function (error) {
+            });*/
     }
 
     /*tabel with all prosumers*/
@@ -55,12 +81,29 @@ export class TableOfProsumers extends Component {
     /*get data displayed on modal */
     getData = (id) => {
         let currentComponent = this;
-        console.log("get data " + id)
-        //axios.defaults.withCredentials = true;
+        /*axios.defaults.withCredentials = true;
+         axios
+            .get('http://localhost:8081/', { params: {id: id}})
+            .then((response) => {
+                currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                currentComponent.interval = setInterval(() => {
+                    axios
+                    .get('http://localhost:8081/',{ params: {id: id}})
+                    .then((response) => {    
+                        currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                    });
+                    }, 10000);
+            })
+            .catch((error) =>{
+                if(error.response.status === 400){
+                    history.push('/');
+                }
+            });
+        */
         currentComponent.interval = setInterval(() => {
             currentComponent.setState({production: this.state.production + 1,
                 consumption: this.state.consumption + 2, buffer: this.state.buffer + 1})
-            }, 1000);
+        }, 1000);
 
     }
 
@@ -75,7 +118,7 @@ export class TableOfProsumers extends Component {
   
   render() {
     return (
-        <div className="profileBox" hidden={!this.props.profile}>
+        <div className="profileBox" hidden={!this.props.showProsumers}>
             <h1>Prosumers</h1>
             <table id='prosumers'>
                <tbody>

@@ -33,6 +33,7 @@
 | 2019-12-05  | 7       | creating GUI for manager page and dividing recurring components into separate components to be able to reuse them (frontend) |
 | 2019-12-06  | 4       | creating GUI for manager page |
 | 2019-12-09  | 6       | creating GUI for manager page, table with prosumers |
+| 2019-12-10  | 3       | creating GUI for manager page, adding axios calls to get/post data, preparing for connecting frontend to backend |
 
 
 

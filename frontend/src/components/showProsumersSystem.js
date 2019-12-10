@@ -11,7 +11,7 @@ export class ShowProsumersSystem extends Component {
                 <div id="myModal" className="modal">
                     <div className="modal-content">
                         <span className="close" onClick={()=>{this.props.closeModal()}}>&times;</span>
-                        <h3 id="prosumersName"></h3>
+                        <h3 id="prosumersName">Name</h3>
                         <div className="displayValues">
                             <ElectricityData value={this.props.production} title={"Production"}/>
                             <ElectricityData value={this.props.consumption} title={"Consumption"}/>

@@ -10,17 +10,22 @@ export class Profile extends Component {
     /*show either update account or profile data */
     changeState = () => {
         this.setState({updateAccount: false})
-    }      
+    }
+    
+    /*update states*/
+    updateState = (name, username, email) => {
+        this.props.updateState(name,username, email);
+    }
     
   render() {
     return (
-        <div className="profileBox" hidden={this.props.profile}>
+        <div className="profileBox" hidden={this.props.showProsumers}>
             <h1>Profile</h1>
             <div className="flexboxRow">
                 <div style={{width: "60%", padding: "1.0em", margin: "auto"}} >   
                     <Image source={this.props.imageName} alt={"Manager"}/>
                 </div>
-                <UpdateAccount updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name}/> 
+                <UpdateAccount updateState={this.updateState} updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name}/> 
                 <div className="profileContent" hidden={this.state.updateAccount}>
                     <p>Name: {this.props.name}</p>
                     <p>Username: {this.props.username}</p>

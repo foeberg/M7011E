@@ -170,7 +170,7 @@ input[type=password]:focus {
     
 }
 
-/**/
+/*Ratio sliders*/
 .ratioContainer{
     flex: 1 1 20%;
     margin: 1.0em;
@@ -183,7 +183,7 @@ input[type=password]:focus {
     color: #368448;
 }
 
-
+/*uploaded image on prosumer/manager page*/
 .imageContainer {
     background-color: #fff;
     height: auto;

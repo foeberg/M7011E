@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './pages/pages.css';
 import LoginRegisterInput from './loginRegisterInput';
+import $ from 'jquery';
+import history from '../history';
 
 export class UpdateAccount extends Component {
     state = {
@@ -9,12 +11,16 @@ export class UpdateAccount extends Component {
         email: this.props.email,
         errors: {}
       }
- 
+    
+    /*On input change, set state*/
     onChange = (e) => this.setState({ [e.target.name]: e.target.value });
+    
     validateEmail =() =>{
-        var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        var re = /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.[A-Za-z]+$/;
         return re.test(String(this.state.email).toLowerCase());
-    }    
+    }
+    
+    /*Validate input*/
     handleValidation(){
         let name = this.state.name;
         let username = this.state.username;
@@ -43,37 +49,38 @@ export class UpdateAccount extends Component {
         this.setState({errors: errors});
         return formIsValid;
         }
-    handleClick =(e) => {
+
+    onSubmit =(e) => {
         e.preventDefault();
+        let currentComponent = this
+        let name = this.state.name
+        let username = this.state.username
+        let email = this.state.email
         if(this.handleValidation()){
-            console.log(this.state.username + this.state.email + this.state.name)
             this.props.changeState();
+            currentComponent.props.updateState(name, username, email);
             /*axios.post('http://localhost:8081/', {
-            name: this.state.name,
-            username: this.state.username,
-            email: this.state.email
+              name: this.state.name,
+              username: this.state.username,
+              email: this.state.email
             })
             .then(function (response) {
-            document.getElementById("message").innerHTML = "Account is updated";
-            $("#message").show();
-            $("#message").css("color", "green");
-            setTimeout(function() { $("#message").hide(); }, 5000);
+              currentComponent.props.updateState(name, username, email);
             })
             .catch(function (error) {
-            document.getElementById("message").innerHTML = "Couldn´t update";
-            $("#message").show();
-            $("#message").css("color", "red");
-            setTimeout(function() { $("#message").hide(); }, 5000);
+              document.getElementById("message").innerHTML = "Couldn´t update";
+              $("#message").show();
+              $("#message").css("color", "red");
+              setTimeout(function() { $("#message").hide(); }, 5000);
             });*/    
         }
         };
     deleteAccount = (e) =>{
         e.preventDefault();
         if (window.confirm("Do you want to delete this account?")) {
-            console.log("delete")
             /*axios.post('http://localhost:8081/')
             .then(function (response) {
-
+                history.push('/');
             })
             .catch(function (error) {
             document.getElementById("message").innerHTML = "Couldn´t delete account";
@@ -81,9 +88,7 @@ export class UpdateAccount extends Component {
             $("#message").css("color", "red");
             setTimeout(function() { $("#message").hide(); }, 5000);
             });*/  
-          } else {
-            console.log("no delete");
-          }  
+        } 
     } 
   render() {
     return (
@@ -94,7 +99,7 @@ export class UpdateAccount extends Component {
                 <LoginRegisterInput type={"text"} value ={this.state.username} name={"username"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
                 <LoginRegisterInput type={"text"} value ={this.state.email} name={"email"} title={"E-mail"} errors={this.state.errors} onChange={this.onChange}/>
                 <div id="message" className="message" hidden = {true}></div>
-                <input className="updateUserButton" type="submit" value="Update account" onClick={(event) => this.handleClick(event)}/>
+                <input className="updateUserButton" type="submit" value="Update account" onClick={(event) => this.onSubmit(event)}/>
                 <button type="submit" className="deleteButton" onClick={(event) => this.deleteAccount(event)}>Delete account</button>
             </form>
         </div>

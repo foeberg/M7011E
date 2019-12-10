@@ -14,9 +14,11 @@ export class Register extends Component{
     errors: {}
   } 
   
+  /*on user input, change state */
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
-  handleClick =(e) => {
+  /*on submit send data to server */
+  onSubmit =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
       axios.post('http://localhost:8081/signup', {
@@ -41,6 +43,7 @@ export class Register extends Component{
     }
   };
 
+  /*validate form */
   handleValidation(){
     let lastname = this.state.lastname;
     let username = this.state.createUsername;
@@ -76,7 +79,7 @@ export class Register extends Component{
                 <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
                 <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
                 <div id="message" className="message" hidden = {true}></div>
-                <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.handleClick(event)}/>
+                <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.onSubmit(event)}/>
               </form>
               <Link className="link" to="/">Back to sign in page</Link>
           </div>    

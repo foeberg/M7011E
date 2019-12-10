@@ -25,7 +25,6 @@ export class Image extends Component {
     let currentComponent = this;
     const fd = new FormData();
     fd.append("file", this.state.selectedFile, this.state.selectedFile.name);
-    console.log(fd)
     axios.post("http://localhost:8081/householdImage", fd)
         .then(function (response) {
             currentComponent.setState({

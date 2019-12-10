@@ -22,6 +22,7 @@ export class Prosumer extends Component{
             loading: true,
             error: false,
         }
+        
         async getData(){
             let currentComponent = this;
             axios.defaults.withCredentials = true;
