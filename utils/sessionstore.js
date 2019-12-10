@@ -1,7 +1,9 @@
+const config = require('../config.json');
+
 class SessionStore {
     constructor() {
         this.activeSessions = [];
-        this.expires = 86400000;
+        this.expires = config.session_max_age;
     }
 
     addUser(user) {

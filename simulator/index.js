@@ -1,5 +1,6 @@
-var gaussian = require('gaussian');
-var { Household, Powerplant, Consumption, Simdate } = require('../models/');
+const gaussian = require('gaussian');
+const { Household, Powerplant, Consumption, Simdate } = require('../models/');
+const config = require('../config.json');
 
 class Simulator {
     constructor() {
@@ -147,7 +148,7 @@ class Simulator {
         // Set the length of one hour in the simulation
         setInterval(function() {
             this.newHour();
-        }.bind(this), 10000);
+        }.bind(this), config.simulator_hour_length);
     }
 }
 
@@ -218,7 +219,7 @@ class PowerplantClass {
         if(this.plant.status === 'Running') return;
 
         this.plant.status = 'Starting';
-        // It takes an hour to start the powerplant
+        // It takes some time to start the powerplant
         this.startupTimer = setTimeout(function() {
             this.plant.status = 'Running';
 
@@ -228,7 +229,7 @@ class PowerplantClass {
                     return;
                 }
             });
-        }.bind(this), 10000);
+        }.bind(this), config.powerplant_startup_time);
     }
 
     stop() {

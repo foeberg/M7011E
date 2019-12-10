@@ -7,7 +7,9 @@ const fileUpload = require('express-fileupload');
 const routes = require('./routes');
 const db = mongoose.connection;
 
-mongoose.connect('mongodb://localhost/M7011E', {useNewUrlParser: true});
+const config = require('./config.json');
+
+mongoose.connect(config.db_path, {useNewUrlParser: true});
 
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function() {
@@ -17,7 +19,7 @@ db.once('open', function() {
 var app = express();
 
 app.use(cors({
-    origin: 'http://localhost:3000',
+    origin: config.cors_origin,
     credentials: true
 }));
 
@@ -30,7 +32,7 @@ app.use(session({
     secret: 'ji754gkl0+a',
     cookie: {
         // 24 hours
-        maxAge: 86400000
+        maxAge: config.session_max_age
     }
 }));
 
@@ -40,7 +42,7 @@ app.use('/simulator', routes.simulatorRoutes);
 
 app.use('/', routes.apiRoutes);
 
-var server = app.listen(8081, function () {
+var server = app.listen(config.server_port, function () {
     var host = server.address().address;
     var port = server.address().port;
     
