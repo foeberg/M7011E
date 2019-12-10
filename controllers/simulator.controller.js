@@ -1,4 +1,4 @@
-const { Household, Powerplant } = require('../models');
+const { User, Household, Powerplant } = require('../models');
 const Simulator = require('../simulator/');
 const sim = new Simulator();
 
@@ -13,6 +13,40 @@ const getHouseholdConsumption = (req, res) => {
     let household = sim.getHouseholds().find(h => h.username === req.session.user.username);
     res.send(household.currentConsumption.toString());
     return;
+};
+
+const getProsumer = (req, res) => {
+    let simHousehold = sim.getHouseholds().find(h => h.username === req.params.username);
+
+    if(!simHousehold) {
+        res.status(400).send('Prosumer not found');
+        return;
+    }
+
+    User.findOne({ username: req.params.username }, (err, user) => {
+        if(err) {
+            res.status(500).send('Error getting prosumer');
+            return;
+        } else {
+            if(user.role !== 'prosumer') {
+                res.status(400).send('User is not a prosumer.');
+                return;
+            } else {
+                let data = {
+                    username: user.username,
+                    lastname: user.lastname,
+                    production: sim.getWind(),
+                    consumption: simHousehold.currentConsumption,
+                    sellRatio: simHousehold.sellRatio,
+                    buyRatio: simHousehold.buyRatio,
+                    buffer: simHousehold.buffer
+                };
+                res.status(200).send(data);
+                return;
+            }
+
+        }
+    });
 };
 
 const getElectricityPrice = (req, res) => {
@@ -226,6 +260,7 @@ module.exports = {
     getWind,
     getHouseholdConsumption,
     getElectricityPrice,
+    getProsumer,
     getSellRatio,
     postSellRatio,
     getBuyRatio,
