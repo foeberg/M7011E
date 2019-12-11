@@ -15,6 +15,11 @@ const getHouseholdConsumption = (req, res) => {
     return;
 };
 
+const getHouseholdProduction = (req, res) => {
+    res.send(sim.getHouseholdProduction().toString());
+    return;
+};
+
 const getProsumer = (req, res) => {
     let simHousehold = sim.getHouseholds().find(h => h.username === req.params.username);
 
@@ -36,7 +41,7 @@ const getProsumer = (req, res) => {
                 let data = {
                     username: user.username,
                     lastname: user.lastname,
-                    production: sim.getWind(),
+                    production: sim.getHouseholdProduction(),
                     consumption: simHousehold.currentConsumption,
                     sellRatio: simHousehold.sellRatio,
                     buyRatio: simHousehold.buyRatio,
@@ -273,6 +278,7 @@ const getBlackouts = (req, res) => {
 module.exports = {
     getWind,
     getHouseholdConsumption,
+    getHouseholdProduction,
     getElectricityPrice,
     getProsumer,
     getSellRatio,

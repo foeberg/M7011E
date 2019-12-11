@@ -40,11 +40,11 @@ class Simulator {
         for(var i = 0; i < this.households.length; i++) {
             // Send the old windspeed, since it currently also acts as the production of a household, and is needed
             // to update the buffer.
-            this.households[i].newHour(this.currentWind);
+            this.households[i].newHour(this.getHouseholdProduction());
         }
 
         // Call the corresponding newHour in the powerplant object
-        this.powerplant.newHour(this.households, this.currentWind);
+        this.powerplant.newHour(this.households, this.getHouseholdProduction());
 
         this.currentWind = Math.abs(this.windHourDistribution.ppf(Math.random()));
 
@@ -66,6 +66,10 @@ class Simulator {
 
     getHouseholds() {
         return this.households;
+    }
+
+    getHouseholdProduction() {
+        return this.currentWind * 0.2;
     }
 
     addHousehold(household) {

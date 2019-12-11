@@ -7,6 +7,8 @@ router.get('/wind', simulatorController.getWind);
 
 router.get('/householdConsumption', ensureLoggedInProsumer, simulatorController.getHouseholdConsumption);
 
+router.get('/householdProduction', ensureLoggedInProsumer, simulatorController.getHouseholdProduction);
+
 router.get('/prosumer/:username', ensureLoggedInManager, simulatorController.getProsumer);
 
 router.get('/electricityPrice', simulatorController.getElectricityPrice);
