@@ -16,6 +16,7 @@
 /*error message when wrong input*/
 .errorMsg {
     color: red;
+    margin: 1.0em;
 }
 
 .message {

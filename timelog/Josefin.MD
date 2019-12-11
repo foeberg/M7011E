@@ -34,7 +34,8 @@
 | 2019-12-06  | 4       | creating GUI for manager page |
 | 2019-12-09  | 6       | creating GUI for manager page, table with prosumers |
 | 2019-12-10  | 3       | creating GUI for manager page, adding axios calls to get/post data, preparing for connecting frontend to backend |
-
+| 2019-12-10  | 1       | report |
+| 2019-12-11  | 1,5     | added input form for price on manager page |
 
 
 

@@ -17,6 +17,8 @@ export class Manager extends Component{
         productionRate: 30,
         bufferRate: 30,
         demand: 2322,
+        modelledPrice: 22,
+        price: 33,
         showProsumers: false,
         error: false,
         loading: false
@@ -88,6 +90,11 @@ export class Manager extends Component{
         this.setState({name: name, username: username, email: email})
     }
 
+    /*update price*/
+    updatePrice = (price) => {
+      this.setState({price: price})
+    }
+
   render() {
     if(this.state.loading){
       return(<div></div>)
@@ -98,7 +105,7 @@ export class Manager extends Component{
               <input type="button" value="Profile" className="menuLink" onClick={() => {this.enterProfile()}}/><input type="button" value="Prosumers" className="menuLink" onClick={() => {this.enterProsumers()}}/><input type="button" value="Log out" className="menuLink" onClick={() => {this.props.logOut()}}/>
           </div>
           <div className="flexboxRowStart">
-              <CoalPowerPlant demand={this.state.demand} bufferRate={this.state.bufferRate} status={this.state.status} production={this.state.production} productionRate={this.state.productionRate}/>
+              <CoalPowerPlant updatePrice={this.updatePrice} price={this.state.price} modelledPrice={this.state.modelledPrice} demand={this.state.demand} bufferRate={this.state.bufferRate} status={this.state.status} production={this.state.production} productionRate={this.state.productionRate}/>
               <TableOfProsumers showProsumers={this.state.showProsumers}/>
               <ManagerProfile updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} email={this.state.email} username={this.state.username} name={this.state.name}/>
           </div>    

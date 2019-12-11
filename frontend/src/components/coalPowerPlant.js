@@ -2,12 +2,66 @@ import React, { Component } from 'react';
 import './pages/pages.css';
 import ElectricityData from './electricityData';
 import RangeSliders from './rangeSliders';
+import LoginRegisterInput from './loginRegisterInput';
+import $ from 'jquery';
 
 export class CoalPowerPlant extends Component {
     state = {
         status: this.props.status,
         productionRate: this.props.productionRate,
-        bufferRate: this.props.bufferRate
+        bufferRate: this.props.bufferRate,
+        price: this.props.price,
+        errors: {}
+    }
+
+    /*on input change => set state */
+    onChange = (e) => {
+        this.setState({ [e.target.name]: e.target.value, errors: {} });
+
+    }
+
+    /*when user submits form */
+    onSubmit =(e) => {
+        e.preventDefault();
+        if(this.handleValidation()){
+            /*axios.post('http://localhost:8081/setPrice', {
+                price: this.state.price,
+            })
+            .then(function (response) {
+                if(response.status === 200){
+                    this.props.updatePrice(this.state.price);
+                    document.getElementById("errorMess").innerHTML = "Price updated";
+                    $("#errorMess").show();
+                    $("#errorMess").css("color", "green");
+                    setTimeout(function() { $("#errorMess").hide(); }, 5000);
+                }    
+            })
+            .catch(function (error) {
+                document.getElementById("errorMess").innerHTML = "Couldn't update price";
+                $("#errorMess").show();
+                $("#errorMess").css("color", "red");
+                setTimeout(function() { $("#errorMess").hide(); }, 5000);
+            });*/
+        }
+    }
+
+    /*validate form */
+    handleValidation(){
+        let price = this.state.price;
+        let errors = {};
+        let formIsValid = true;
+
+        if(!price){
+        formIsValid = false;
+        errors["price"] = "Field can not be empty";
+        }
+        if(isNaN(price)){
+        formIsValid = false;
+        errors["price"] = "Input not valid";
+        }
+
+        this.setState({errors: errors});
+        return formIsValid;
     }
 
     /*style for production dot */
@@ -98,10 +152,22 @@ export class CoalPowerPlant extends Component {
         <div className="coalPowerPlantBox">
             <h1>Coal Power plant</h1><br/>
             <div style={{margin: "1.0em"}}><b>Status:</b> {this.state.status} <span className="dot" style={this.dotStyle()}/></div><br/><button type="submit" className="sendButton" style={{float: "none", margin: "1.0em"}} onClick={()=>{this.startStopProduction()}}>{this.startStop() + " production"}</button>
-            <div className="flexboxRowNoFlip" style={{borderTop: "1px solid #6D6B6B"}}>
-                <ElectricityData title={"Market demand:"} value={this.props.demand}/>
-                <ElectricityData title={"Producing:"} value={this.props.production}/>
-            </div>
+                <div className="flexboxRowNoFlip" style={{borderTop: "1px solid #6D6B6B"}}>
+                    <ElectricityData title={"Producing:"} value={this.props.production}/>
+                    <ElectricityData title={"Market demand:"} value={this.props.demand}/>
+                </div>
+                <div style={{borderTop: "1px solid #6D6B6B", borderBottom: "1px solid #6D6B6B", paddingBottom: "1.0em"}}>
+                    <h2>Electricity price</h2>
+                    <div className="flexboxRowNoFlip">
+                        <ElectricityData title={"Modelled price:"} value={this.props.modelledPrice}/>
+                        <ElectricityData title={"Current price:"} value={this.props.price}/>
+                    </div>
+                    <form>
+                        <LoginRegisterInput type={"text"} value ={this.state.price} name={"price"} title={"Set market price"} errors={this.state.errors} onChange={this.onChange}/>
+                        <input className="sendButton" type="submit" value="Submit" style={{width: "15%"}} onClick={(event) => this.onSubmit(event)}/>
+                        <div id="errorMess" className="errorMsg"></div>
+                    </form>
+                </div>     
             <div hidden={this.producing()}>    
                 <div className="ratioContainer">
                     <RangeSliders title={"Production rate"} id={"appliedProductionRate"}  value={this.state.productionRate} message={"% production rate"} secondMessage={""} hidden={true} applyHandler={this.applyProductionRate}/>
