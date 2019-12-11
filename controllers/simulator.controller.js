@@ -25,6 +25,7 @@ const getProsumer = (req, res) => {
 
     User.findOne({ username: req.params.username }, (err, user) => {
         if(err) {
+            console.error(err);
             res.status(500).send('Error getting prosumer');
             return;
         } else {
