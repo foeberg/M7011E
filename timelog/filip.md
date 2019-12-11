@@ -22,4 +22,7 @@
 | 2019-12-09  | 2       | Implemented a basic datastructure (session store) to be able to track users that are logged in |
 | 2019-12-09  | 4       | Added powerplant to simulator and database, created api functions around it |
 | 2019-12-10  | 1       | Added a config file that contains database path, server and simulator parameters etc |
+| 2019-12-10  | 1       | Implemented api endpoint that returns all data about a prosumer |
+| 2019-12-10  | 0.5     | Started implementing api endpoints to get and edit User data |
+| 2019-12-11  | 0.5     | Finished implementing api endpoints to get and edit User data |
 

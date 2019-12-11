@@ -65,7 +65,7 @@ const login = (req, res) => {
                 res.status(200).send('Logged in');
                 return;
             } else {
-                res.status(400).send();
+                res.status(400).send('Incorrect username or password');
                 return;
             }
         }

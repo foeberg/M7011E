@@ -14,4 +14,7 @@ router.post('/householdImage', ensureLoggedInProsumer, apiController.postHouseho
 
 router.get('/activeSessions', ensureLoggedInManager, apiController.getActiveSessions);
 
+router.get('/user', ensureLoggedIn, apiController.getUser);
+router.post('/user', ensureLoggedIn, apiController.updateUser);
+
 module.exports = router;
