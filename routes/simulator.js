@@ -15,6 +15,9 @@ router.get('/prosumer/:username', ensureLoggedInManager, simulatorController.get
 
 router.get('/electricityPrice', simulatorController.getElectricityPrice);
 
+router.get('/managerElectricityPrice', simulatorController.getManagerElectricityPrice);
+router.post('/managerElectricityPrice', ensureLoggedInManager, simulatorController.setManagerElectricityPrice);
+
 router.get('/sellRatio', ensureLoggedInProsumer, simulatorController.getSellRatio);
 router.post('/sellRatio', ensureLoggedInProsumer, simulatorController.postSellRatio);
 

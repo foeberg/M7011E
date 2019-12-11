@@ -21,6 +21,10 @@ var powerplantSchema = new Schema({
     buffer: {
         type: Number,
         default: 0.0
+    },
+    electricityPrice: {
+        type: Number,
+        default: 0
     }
 });
 

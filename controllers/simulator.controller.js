@@ -78,6 +78,45 @@ const getElectricityPrice = (req, res) => {
     return;
 };
 
+const getManagerElectricityPrice = (req, res) => {
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.send(500).send('Error getting manager electricity price.');
+            return;
+        } else {
+            res.send(plant.electricityPrice.toString());
+            return;
+        }
+    });
+};
+
+const setManagerElectricityPrice = (req, res) => {
+    if(req.body.electricityPrice == null || req.body.electricityPrice === '') {
+        res.status(400).send('electricityPrice field not provided');
+        return;
+    }
+    Powerplant.findOne((err, plant) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error setting manager electricity price');
+            return;
+        } else {
+            plant.electricityPrice = req.body.electricityPrice;
+
+            plant.save((err) => {
+                if(err) {
+                    console.error(err);
+                    res.status(500).send('Error saving manager electricity price.');
+                    return;
+                } else {
+                    res.status(200).send('Saved manager electricity price.');
+                }
+            })
+        }
+    });
+};
+
 const getSellRatio = (req, res) => {
     Household.findOne({ username: req.session.user.username }, (err, household) => {
         if(err) {
@@ -307,6 +346,8 @@ module.exports = {
     getHouseholdConsumption,
     getHouseholdProduction,
     getElectricityPrice,
+    getManagerElectricityPrice,
+    setManagerElectricityPrice,
     getProsumer,
     getSellRatio,
     postSellRatio,
