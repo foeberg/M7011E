@@ -19,6 +19,10 @@ var userSchema = new Schema({
     role: {
         type: String,
         default: 'prosumer'
+    },
+    imageURL: {
+        type: String,
+        default: ''
     }
 });
 

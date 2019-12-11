@@ -8,10 +8,6 @@ var householdSchema = new Schema({
         unique: true,
         dropDups: true
     },
-    imageURL: {
-        type: String,
-        default: ''
-    },
     sellRatio: {
         type: Number,
         default: 0.3,

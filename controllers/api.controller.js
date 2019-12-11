@@ -3,25 +3,29 @@ const sessionStore = require('../utils/sessionstore');
 const bcrypt = require('bcrypt');
 const fs = require('fs');
 
-const getHouseholdImage = (req, res) => {
-    Household.findOne({ username: req.session.user.username }, (err, household) => {
+const getProfileImage = (req, res) => {
+    User.findOne({ username: req.session.user.username }, (err, user) => {
         if(err) {
             console.error(err);
             res.status(500).send('Error getting image URL');
             return;
         } else {
-            if(household.imageURL === ""){
-                res.send('placeholder.jpg');
+            if(user.imageURL === ''){
+                if(user.role === 'manager') {
+                    res.send('placeholderManager.jpg');
+                } else {
+                    res.send('placeholder.jpg');
+                }
                 return;
             } else {
-                res.send(household.imageURL);
+                res.send(user.imageURL);
                 return;
             }
         }
     });
 };
 
-const postHouseholdImage = (req, res) => {
+const postProfileImage = (req, res) => {
     if (!req.files || Object.keys(req.files).length === 0) {
         res.status(400).send('No files were uploaded');
         return;
@@ -60,14 +64,14 @@ const postHouseholdImage = (req, res) => {
                 res.status(500).send('Error uploading image');
                 return;
             } else {
-                Household.findOne({ username: req.session.user.username }, (err, household) => {
+                User.findOne({ username: req.session.user.username }, (err, user) => {
                     if(err) {
                         console.error(err);
                         res.status(500).send('Error getting image');
                         return;
                     } else {
-                        household.imageURL = filename;
-                        household.save((err) => {
+                        user.imageURL = filename;
+                        user.save((err) => {
                             if(err) {
                                 console.error(err);
                                 res.status(500).send('Error saving URL');
@@ -191,8 +195,8 @@ const deleteUser = (req, res) => {
 };
 
 module.exports = {
-    getHouseholdImage,
-    postHouseholdImage,
+    getProfileImage,
+    postProfileImage,
     getProsumers,
     getUser,
     updateUser,

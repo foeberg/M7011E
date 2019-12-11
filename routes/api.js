@@ -9,8 +9,8 @@ router.post('/login', ensureNotLoggedIn, authController.login);
 
 router.post('/logout', ensureLoggedIn, authController.logout);
 
-router.get('/householdImage', ensureLoggedInProsumer, apiController.getHouseholdImage);
-router.post('/householdImage', ensureLoggedInProsumer, apiController.postHouseholdImage);
+router.get('/profileImage', ensureLoggedIn, apiController.getProfileImage);
+router.post('/profileImage', ensureLoggedIn, apiController.postProfileImage);
 
 router.get('/prosumers', ensureLoggedInManager, apiController.getProsumers);
 
