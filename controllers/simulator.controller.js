@@ -257,6 +257,19 @@ const setPowerplantProduction = (req, res) => {
     });
 };
 
+const getBlackouts = (req, res) => {
+    let blackouts = [];
+    let households = sim.getHouseholds();
+    households.forEach(household => {
+        if(household.blackout) {
+            blackouts.push({
+                username: household.username
+            });
+        }
+    });
+    res.status(200).send(blackouts);
+};
+
 module.exports = {
     getWind,
     getHouseholdConsumption,
@@ -275,5 +288,6 @@ module.exports = {
     getPowerplantStatus,
     getPowerplantProduction,
     setPowerplantProduction,
+    getBlackouts,
     sim
 };

@@ -44,7 +44,7 @@ class Simulator {
         }
 
         // Call the corresponding newHour in the powerplant object
-        this.powerplant.newHour(this.households);
+        this.powerplant.newHour(this.households, this.currentWind);
 
         this.currentWind = Math.abs(this.windHourDistribution.ppf(Math.random()));
 
@@ -163,19 +163,26 @@ class HouseholdClass {
 
         this.date = new Date(dateObj.date);
         this.currentConsumption = this.distribution.ppf(Math.random());
+
+        this.blackout = false;
     }
 
     newHour(oldProduction) {
+        this.blackout = false;
         this.date.setHours(this.date.getHours() + 1);
         // Update the buffer, based on the save and buy ratio, and the net production.
 
         // If the net production is below zero, decrease the buffer according the the buyRatio
         if(oldProduction - this.currentConsumption < 0.0) {
             this.buffer = Number(this.buffer - (this.currentConsumption - oldProduction) * (1.0 - this.buyRatio));
+
+            // If the buffer couldn't provide enough energy, household gets a blackout
             if(this.buffer < 0.0) {
                 this.buffer = 0.0;
+                this.blackout = true;
             }
         } 
+
         // If the net production is above zero, increase the buffer according the the sellRatio
         else if(oldProduction - this.currentConsumption > 0.0) {
             this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.sellRatio));
@@ -183,7 +190,7 @@ class HouseholdClass {
 
         // Update buffer in database
         this.householdObj.buffer = this.buffer;
-        this.householdObj.save((err, household) => {
+        this.householdObj.save((err) => {
             if(err) {
                 console.error(err);
                 return;
@@ -260,39 +267,51 @@ class PowerplantClass {
         this.plant.production = value;
     }
 
-    newHour(households) {
+    newHour(households, householdProduction) {
         // Send energy to the buffer
         this.plant.buffer += this.plant.production * this.plant.bufferRatio;
 
-        // The amount of energy sent to the market
+        // The amount of energy sent to the market by the powerplant
         let marketEnergy = this.plant.production * (1.0 - this.plant.bufferRatio);
 
-        // Sum up the total consumption of the market
-        let marketConsumption = 0;
         households.forEach(household => {
-            marketConsumption += household.currentConsumption;
+            household.blackout = false;
+
+            // First check if the household has a positive net production
+            let netProduction = householdProduction - household.currentConsumption;
+            if(netProduction > 0.0) {
+                // If so, add the amount they're selling to marketEnergy
+                marketEnergy += netProduction * household.sellRatio;
+            } else {
+                // If not, subtract the amount the household is buying from the market from marketEnergy
+                let buyAmount = (household.currentConsumption - householdProduction) * household.buyRatio;
+                
+                // If the household buys more than the market can provide, take the rest from the plant buffer.
+                if(buyAmount > marketEnergy) {
+                    buyAmount -= marketEnergy;
+                    marketEnergy = 0;
+                    // If the buffer can't provide the rest of the energy, take from the house buffer.
+                    if(buyAmount > this.plant.buffer) {
+                        buyAmount -= this.plant.buffer;
+                        this.plant.buffer = 0;
+                        // If the house buffer can't provide the rest of the energy, the house gets a blackout
+                        if(buyAmount > household.buffer) {
+                            household.buffer = 0;
+                            household.blackout = true;
+                        } else {
+                            household.buffer -= buyAmount;
+                        }
+                    } else {
+                        this.plant.buffer -= buyAmount;
+                    }
+                } else {
+                    marketEnergy -= buyAmount;
+                }
+            }
         });
 
-        // If the plant is not running, the buffer supplies all the power.
-        if(this.plant.status !== 'Running') {
-            this.plant.buffer -= marketConsumption;
-
-            if(this.plant.buffer <= 0.0) {
-                this.plant.buffer = 0.0;
-            }
-        }
-        // If the plant sends less energy to the market than the market demand,
-        // we need to supply some energy from the buffer.
-        else if(marketEnergy - marketConsumption < 0) {
-            this.plant.buffer += (marketEnergy - marketConsumption);
-
-            if(this.plant.buffer <= 0.0) {
-                this.plant.buffer = 0.0;
-            }
-        }
-
         // Save powerplant state to database
-        this.plant.save((err, plant) => {
+        this.plant.save((err) => {
             if(err) {
                 console.error(err);
                 return;

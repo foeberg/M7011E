@@ -33,4 +33,6 @@ router.get('/powerplant/status', ensureLoggedInManager, simulatorController.getP
 router.get('/powerplant/production', ensureLoggedInManager, simulatorController.getPowerplantProduction);
 router.post('/powerplant/production', ensureLoggedInManager, simulatorController.setPowerplantProduction);
 
+router.get('/blackouts', ensureLoggedInManager, simulatorController.getBlackouts);
+
 module.exports = router;

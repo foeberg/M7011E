@@ -25,4 +25,6 @@
 | 2019-12-10  | 1       | Implemented api endpoint that returns all data about a prosumer |
 | 2019-12-10  | 0.5     | Started implementing api endpoints to get and edit User data |
 | 2019-12-11  | 0.5     | Finished implementing api endpoints to get and edit User data |
-
+| 2019-12-11  | 0.5     | Implemented delete user |
+| 2019-12-11  | 2.5     | Implemented blackouts to simulator |
+| 2019-12-11  | 0.5     | Changed name of /activeSessions call to /prosumers, now includes users that are offline |
