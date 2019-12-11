@@ -85,8 +85,33 @@ const postHouseholdImage = (req, res) => {
     }
 };
 
-const getActiveSessions = (req, res) => {
-    res.send(sessionStore.getActiveSessions());
+const getProsumers = (req, res) => {
+    let online = sessionStore.getActiveSessions();
+    let list = [];
+    User.find({ role: 'prosumer' }, (err, users) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error getting prosumers');
+            return;
+        } else {
+            users.forEach(user => {
+                if(online.includes(user.username)) {
+                    list.push({
+                        status: 'online',
+                        username: user.username,
+                        lastname: user.lastname
+                    });
+                } else {
+                    list.push({
+                        status: 'offline',
+                        username: user.username,
+                        lastname: user.lastname
+                    });
+                }
+            });
+            res.status(200).send(list);
+        }
+    });
 };
 
 const getUser = (req, res) => {
@@ -168,7 +193,7 @@ const deleteUser = (req, res) => {
 module.exports = {
     getHouseholdImage,
     postHouseholdImage,
-    getActiveSessions,
+    getProsumers,
     getUser,
     updateUser,
     deleteUser

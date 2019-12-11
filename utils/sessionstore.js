@@ -7,10 +7,7 @@ class SessionStore {
     }
 
     addUser(user) {
-        this.activeSessions.push({
-            username: user.username,
-            role: user.role
-        });
+        this.activeSessions.push(user.username);
 
         // Remove session when expired
         setTimeout(function(user) {
@@ -20,7 +17,7 @@ class SessionStore {
 
     removeUser(user) {
         let filtered = this.activeSessions.filter((session) => {
-            return session.username !== user.username;
+            return session !== user.username;
         });
         this.activeSessions = filtered;
     }

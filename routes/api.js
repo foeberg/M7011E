@@ -12,7 +12,7 @@ router.post('/logout', ensureLoggedIn, authController.logout);
 router.get('/householdImage', ensureLoggedInProsumer, apiController.getHouseholdImage);
 router.post('/householdImage', ensureLoggedInProsumer, apiController.postHouseholdImage);
 
-router.get('/activeSessions', ensureLoggedInManager, apiController.getActiveSessions);
+router.get('/prosumers', ensureLoggedInManager, apiController.getProsumers);
 
 router.get('/user', ensureLoggedIn, apiController.getUser);
 router.post('/user', ensureLoggedIn, apiController.updateUser);
