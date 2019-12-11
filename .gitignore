@@ -2,3 +2,4 @@ node_modules/
 frontend/src/householdImages/*
 !frontend/src/householdImages/.gitkeep
 !frontend/src/householdImages/placeholder.jpg
+!frontend/src/householdImages/placeholderManager.jpg
