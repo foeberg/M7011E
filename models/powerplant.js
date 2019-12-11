@@ -9,7 +9,7 @@ var powerplantSchema = new Schema({
     production: {
         type: Number,
         min: 0.0,
-        max: 1000.0,
+        max: 1.0,
         default: 0.0
     },
     bufferRatio: {

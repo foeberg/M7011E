@@ -1,5 +1,6 @@
 const { User, Household, Powerplant } = require('../models');
 const Simulator = require('../simulator/');
+const config = require('../config.json');
 const sim = new Simulator();
 
 sim.start();
@@ -247,7 +248,11 @@ const getPowerplantStatus = (req, res) => {
 };
 
 const getPowerplantProduction = (req, res) => {
-    res.send(sim.powerplant.getProduction().toString());
+    let produtionRatio = sim.powerplant.getProduction();
+    res.send({
+        ratio: produtionRatio,
+        value: config.powerplant_max_production * productionRatio
+    });
 };
 
 const setPowerplantProduction = (req, res) => {
@@ -261,6 +266,10 @@ const setPowerplantProduction = (req, res) => {
             res.status(500).send('error setting powerplant production');
             return;
         } else {
+            if(plant.status === 'Stopped') {
+                res.status(400).send('Powerplant is not running.');
+                return;
+            }
             plant.production = req.body.production;
             plant.save((err, p) => {
                 if(err) {
