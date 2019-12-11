@@ -248,7 +248,7 @@ const getPowerplantStatus = (req, res) => {
 };
 
 const getPowerplantProduction = (req, res) => {
-    let produtionRatio = sim.powerplant.getProduction();
+    let productionRatio = sim.powerplant.getProduction();
     res.send({
         ratio: produtionRatio,
         value: config.powerplant_max_production * productionRatio
