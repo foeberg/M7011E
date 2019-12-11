@@ -9,6 +9,23 @@ const getWind = (req, res) => {
     return;
 };
 
+const getMarketDemand = (req, res) => {
+    let households = sim.getHouseholds();
+    let marketDemand = 0;
+    let production = sim.getHouseholdProduction();
+    households.forEach(household => {
+        let consumption = household.currentConsumption;
+        let householdDemand = 0;
+        let netConsumption = consumption - production;
+        if(netConsumption > 0) {
+            householdDemand = netConsumption * household.buyRatio;
+        }
+        marketDemand += householdDemand;
+    });
+    res.send(marketDemand.toString());
+    return;
+};
+
 const getHouseholdConsumption = (req, res) => {
     let household = sim.getHouseholds().find(h => h.username === req.session.user.username);
     res.send(household.currentConsumption.toString());
@@ -277,6 +294,7 @@ const getBlackouts = (req, res) => {
 
 module.exports = {
     getWind,
+    getMarketDemand,
     getHouseholdConsumption,
     getHouseholdProduction,
     getElectricityPrice,

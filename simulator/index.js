@@ -176,7 +176,7 @@ class HouseholdClass {
         this.date.setHours(this.date.getHours() + 1);
         // Update the buffer, based on the save and buy ratio, and the net production.
 
-        // If the net production is below zero, decrease the buffer according the the buyRatio
+        // If the net production is below zero, decrease the buffer according to the buyRatio
         if(oldProduction - this.currentConsumption < 0.0) {
             this.buffer = Number(this.buffer - (this.currentConsumption - oldProduction) * (1.0 - this.buyRatio));
 

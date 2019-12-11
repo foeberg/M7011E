@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get('/wind', simulatorController.getWind);
 
+router.get('/marketDemand', ensureLoggedInManager, simulatorController.getMarketDemand);
+
 router.get('/householdConsumption', ensureLoggedInProsumer, simulatorController.getHouseholdConsumption);
 
 router.get('/householdProduction', ensureLoggedInProsumer, simulatorController.getHouseholdProduction);
