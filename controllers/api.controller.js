@@ -98,7 +98,8 @@ const getUser = (req, res) => {
         } else {
             let data = {
                 username: user.username,
-                lastname: user.lastname
+                lastname: user.lastname,
+                role: user.role
             };
             res.status(200).send(data);
             return;
@@ -137,10 +138,38 @@ const updateUser = (req, res) => {
     });
 };
 
+// Only supports deleting managers as of now, since the requirements only stated this
+const deleteUser = (req, res) => {
+    User.deleteOne({ username: req.session.user.username }, (err) => {
+        if(err) {
+            console.error(err);
+            res.status(500).send('Error deleting user.');
+            return;
+        } else {
+            console.log('User ' + req.session.user.username + ' deleted');
+
+            // Destroy the session belonging to the user
+            let user = req.session.user;
+            req.session.destroy((err) => {
+                if(err) {
+                    console.error(err);
+                    res.status(500).send('Error logging out');
+                    return;
+                } else {
+                    sessionStore.removeUser(user);
+                    res.status(200).send('User deleted.');
+                    return;
+                }
+            });
+        }
+    });
+};
+
 module.exports = {
     getHouseholdImage,
     postHouseholdImage,
     getActiveSessions,
     getUser,
-    updateUser
+    updateUser,
+    deleteUser
 };
