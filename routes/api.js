@@ -16,5 +16,6 @@ router.get('/activeSessions', ensureLoggedInManager, apiController.getActiveSess
 
 router.get('/user', ensureLoggedIn, apiController.getUser);
 router.post('/user', ensureLoggedIn, apiController.updateUser);
+router.delete('/user', ensureLoggedInManager, apiController.deleteUser);
 
 module.exports = router;
