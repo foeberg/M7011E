@@ -168,6 +168,7 @@ class HouseholdClass {
         this.date = new Date(dateObj.date);
         this.currentConsumption = this.distribution.ppf(Math.random());
 
+        this.blocked = false;
         this.blackout = false;
     }
 
@@ -189,7 +190,7 @@ class HouseholdClass {
 
         // If the net production is above zero, increase the buffer according the the sellRatio
         else if(oldProduction - this.currentConsumption > 0.0) {
-            this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.sellRatio));
+            this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.getSellRatio()));
         }
 
         // Update buffer in database
@@ -215,6 +216,23 @@ class HouseholdClass {
             if (err) return console.error(err);
             console.log(c._id + " saved.");
         });
+    }
+
+    getSellRatio() {
+        // If a manager has blocked the household from selling to market, the sellratio is 0
+        if(this.blocked) {
+            return 0.0;
+        } else {
+            return this.sellRatio;
+        }
+    }
+
+    sellBlock(time) {
+        this.blocked = true;
+
+        setTimeout(function() {
+            this.blocked = false;
+        }.bind(this), time*1000);
     }
 }
 
@@ -285,7 +303,7 @@ class PowerplantClass {
             let netProduction = householdProduction - household.currentConsumption;
             if(netProduction > 0.0) {
                 // If so, add the amount they're selling to marketEnergy
-                marketEnergy += netProduction * household.sellRatio;
+                marketEnergy += netProduction * household.getSellRatio();
             } else {
                 // If not, subtract the amount the household is buying from the market from marketEnergy
                 let buyAmount = (household.currentConsumption - householdProduction) * household.buyRatio;

@@ -28,3 +28,5 @@
 | 2019-12-11  | 0.5     | Implemented delete user |
 | 2019-12-11  | 2.5     | Implemented blackouts to simulator |
 | 2019-12-11  | 0.5     | Changed name of /activeSessions call to /prosumers, now includes users that are offline |
+| 2019-12-11  | 2       | Other fixes to connect to the frontend, added functionality to store and change the managers electricity price, added endpoint to get marked demand. |
+| 2019-12-12  | 1       | Implemented blocking functionality so that a prosumer can be blocked from selling to market. |

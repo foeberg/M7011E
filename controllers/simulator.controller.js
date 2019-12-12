@@ -63,7 +63,9 @@ const getProsumer = (req, res) => {
                     consumption: simHousehold.currentConsumption,
                     sellRatio: simHousehold.sellRatio,
                     buyRatio: simHousehold.buyRatio,
-                    buffer: simHousehold.buffer
+                    buffer: simHousehold.buffer,
+                    blackout: simHousehold.blackout,
+                    blocked: simHousehold.blocked
                 };
                 res.status(200).send(data);
                 return;
@@ -340,6 +342,33 @@ const getBlackouts = (req, res) => {
     res.status(200).send(blackouts);
 };
 
+const blockSelling = (req, res) => {
+    if(req.body.time == null || req.body.time === '') {
+        res.status(400).send('Blocking time not provided');
+        return;
+    }
+    if(isNaN(req.body.time)) {
+        res.status(400).send('Invalid format of time.');
+        return;
+    }
+
+    let household = sim.getHouseholds().find(h => h.username === req.params.username);
+    if(!household) {
+        res.status(400).send('User not found.');
+        return;
+    } else {
+        // If user is already blocked, return error
+        if(household.blocked) {
+            res.status(400).send('User already blocked.');
+            return;
+        } else {
+            household.sellBlock(req.body.time);
+            res.status(200).send('User blocked.');
+            return;
+        }
+    }
+};
+
 module.exports = {
     getWind,
     getMarketDemand,
@@ -363,5 +392,6 @@ module.exports = {
     getPowerplantProduction,
     setPowerplantProduction,
     getBlackouts,
+    blockSelling,
     sim
 };

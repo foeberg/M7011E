@@ -42,4 +42,6 @@ router.post('/powerplant/production', ensureLoggedInManager, simulatorController
 
 router.get('/blackouts', ensureLoggedInManager, simulatorController.getBlackouts);
 
+router.post('/blockSelling/:username', ensureLoggedInManager, simulatorController.blockSelling);
+
 module.exports = router;
