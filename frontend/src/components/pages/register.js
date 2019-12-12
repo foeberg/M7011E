@@ -11,9 +11,25 @@ export class Register extends Component{
     lastname: '',
     createUsername: '',
     createPassword: '',
-    errors: {}
+    errors: {},
+    loading: true
   } 
   
+  componentDidMount(){
+    axios.defaults.withCredentials = true;
+		axios
+		.get('http://localhost:8081/user')
+		.then((res) => {
+			if(res.data.role === "prosumer"){
+				history.push('/prosumer')
+			}else if(res.data.role === "manager"){
+				history.push('/manager')
+			}
+		})
+		.catch((error) =>{
+      this.setState({loading: false})
+		});
+  }
   /*on user input, change state */
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 
@@ -70,21 +86,25 @@ export class Register extends Component{
     }
 
   render() {
-    return (
-      <React.Fragment>
-          <div className="loginRegisterContainer">
-              <h1>Register</h1>
-              <form>
-                <LoginRegisterInput type={"text"} value ={this.state.lastname} name={"lastname"} title={"Lastname"} errors={this.state.errors} onChange={this.onChange}/> 
-                <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
-                <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
-                <div id="message" className="message" hidden = {true}></div>
-                <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.onSubmit(event)}/>
-              </form>
-              <Link className="link" to="/">Back to sign in page</Link>
-          </div>    
-      </React.Fragment>
-    )
+    if(this.state.loading){
+      return(<div></div>)
+    }else{
+      return (
+        <React.Fragment>
+            <div className="loginRegisterContainer">
+                <h1>Register</h1>
+                <form>
+                  <LoginRegisterInput type={"text"} value ={this.state.lastname} name={"lastname"} title={"Lastname"} errors={this.state.errors} onChange={this.onChange}/> 
+                  <LoginRegisterInput type={"text"} value ={this.state.createUsername} name={"createUsername"} title={"Username"} errors={this.state.errors} onChange={this.onChange}/>
+                  <LoginRegisterInput type={"password"} value ={this.state.createPassword} name={"createPassword"} title={"Password"} errors={this.state.errors} onChange={this.onChange}/>
+                  <div id="message" className="message" hidden = {true}></div>
+                  <input className="submitButton" type="submit" value="Submit" onClick={(event) => this.onSubmit(event)}/>
+                </form>
+                <Link className="link" to="/">Back to sign in page</Link>
+            </div>    
+        </React.Fragment>
+      )
+    }  
   }
 }
 

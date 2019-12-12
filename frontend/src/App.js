@@ -15,11 +15,8 @@ class App extends Component {
 
 	componentDidMount() {
 		axios.defaults.withCredentials = true;
-		axios
-		.get('http://localhost:8081/simulator/wind')
-		.then((res) => {
-		});
 	}
+
 	logOut =() => {
 		axios.defaults.withCredentials = true;
 		axios
@@ -36,10 +33,12 @@ class App extends Component {
 				<div className='App'>
 					<Header/>
 					<Switch>
-						<Route exact path='/' component={Login}/>
-						<Route path='/register' component={Register} />
+						<Route exact path='/' render={(props)=> 
+							<Login/>}/>
+						<Route path='/register' render={(props)=> 
+							<Register/>}/>
 						<Route path ='/prosumer' render={(props)=> 
-							<Prosumer logOut={this.logOut} />}/>
+							<Prosumer logOut={this.logOut}/>}/>
 						<Route path ='/manager' render={(props)=> 
 							<Manager logOut={this.logOut} />}/>
 						<Route component={PageNotFound}/>

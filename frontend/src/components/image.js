@@ -25,7 +25,7 @@ export class Image extends Component {
     let currentComponent = this;
     const fd = new FormData();
     fd.append("file", this.state.selectedFile, this.state.selectedFile.name);
-    axios.post("http://localhost:8081/householdImage", fd)
+    axios.post("http://localhost:8081/profileImage", fd)
         .then(function (response) {
             currentComponent.setState({
                 selectedFile: null,
@@ -34,7 +34,9 @@ export class Image extends Component {
             document.getElementById("choose").innerHTML = "Choose image";
         })
         .catch(function (error) {
+            console.log(error)
             $("#errorMess").show();
+            document.getElementById("errorMess").innerHTML= "Could not upload image";
             setTimeout(function() { $("#errorMess").hide(); }, 2000);
             currentComponent.setState({
                 selectedFile: null,
@@ -52,7 +54,7 @@ export class Image extends Component {
           <input type="file" name="file" id="file" className="inputfile" onInput={this.fileSelectedHandler}/>
           <label htmlFor="file" id="choose" >Choose image</label>
           <input className="sendButton" type="button" value="Upload" disabled = {this.state.disableInputButton} onClick={this.fileUploadHandler}/>
-          <div id="errorMess" className="errorMsg" hidden={true}>Invalid image format</div>
+          <div id="errorMess" className="errorMsg" hidden={true}></div>
         </div>  
       </div>
     )

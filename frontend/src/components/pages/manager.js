@@ -9,73 +9,55 @@ import history from '../../history';
 export class Manager extends Component{
     state = {
         imageName: "placeholderManager.jpg",
-        name: "Andersson",
-        username: "jossan",
-        email: "jossan@gmail.com",
-        status: "Running",
-        production: 938,
-        productionRate: 30,
-        bufferRate: 30,
-        demand: 2322,
-        modelledPrice: 22,
-        price: 33,
+        lastname: "",
+        username: "",
         showProsumers: false,
         error: false,
-        loading: false
+        loading: true
     }
 
     async getData(){
       let currentComponent = this;
-      axios.defaults.withCredentials = true;
       await Promise.all([
-          axios
-          .get('http://localhost:8081/production')
-          .then((res) => {    
-              currentComponent.setState({production: Math.round(res.data * 100)/100 })
-          }),
-          axios
-          .get('http://localhost:8081/demand')
-          .then((res) => {
-              currentComponent.setState({ demand: Math.round(res.data * 100)/100 })	
-          }),
-          axios
-          .get('http://localhost:8081/householdImage')
-          .then((response) => {
-              currentComponent.setState({ imageName: response.data})
-          })
-          .catch((error) =>{
-              if(error.response.status=== 400){
-                  currentComponent.setState({error: true});
-              }
-          })]).then(function(){
-              if(!currentComponent.state.error){currentComponent.setState({loading: false})
-              }else{
+            axios
+            .get('http://localhost:8081/profileImage')
+            .then((response) => {
+                currentComponent.setState({ imageName: response.data})
+            })
+            .catch((error) =>{
+                if(error.response.status=== 400){
+                    currentComponent.setState({error: true});
+                }
+            })]).then(function(){
+              if(currentComponent.state.error){
                   history.push('/');
               }
           });
     }
-    /*get data from server*/
-    /*componentDidMount() {
+    
+    componentDidMount() {
       let currentComponent = this;
       axios.defaults.withCredentials = true;
-      this.getData();
-      currentComponent.interval = setInterval(() => {
-          axios
-          .get('http://localhost:8081/production')
-          .then((res) => {    
-              currentComponent.setState({production: Math.round(res.data * 100)/100 })
-          });
-          axios
-          .get('http://localhost:8081/demand')
-          .then((res) => {
-              currentComponent.setState({ demand: Math.round(res.data * 100)/100 })	
-          });
-          }, 10000);
+      axios
+      .get('http://localhost:8081/user')
+      .then((res) => {
+        if(res.data.role === "prosumer"){
+          history.push('/prosumer')
+        }else{
+          currentComponent.setState({loading: false, username: res.data.username, lastname: res.data.lastname})
+          currentComponent.getData();
+        }  
+      })
+      .catch((error) =>{
+          if(error.response.status=== 400){
+              history.push('/');
+          }
+      });
       }
   
     componentWillUnmount() {
       clearInterval(this.interval);
-    }*/
+    }
 
     /*show either profile or table of prosumers */
     enterProfile = () => {
@@ -86,13 +68,8 @@ export class Manager extends Component{
     }
 
     /*update states*/
-    updateState = (name, username, email) => {
-        this.setState({name: name, username: username, email: email})
-    }
-
-    /*update price*/
-    updatePrice = (price) => {
-      this.setState({price: price})
+    updateState = (lastname, password) => {
+        this.setState({lastname: lastname, password: password})
     }
 
   render() {
@@ -105,9 +82,9 @@ export class Manager extends Component{
               <input type="button" value="Profile" className="menuLink" onClick={() => {this.enterProfile()}}/><input type="button" value="Prosumers" className="menuLink" onClick={() => {this.enterProsumers()}}/><input type="button" value="Log out" className="menuLink" onClick={() => {this.props.logOut()}}/>
           </div>
           <div className="flexboxRowStart">
-              <CoalPowerPlant updatePrice={this.updatePrice} price={this.state.price} modelledPrice={this.state.modelledPrice} demand={this.state.demand} bufferRate={this.state.bufferRate} status={this.state.status} production={this.state.production} productionRate={this.state.productionRate}/>
+              <CoalPowerPlant/>
               <TableOfProsumers showProsumers={this.state.showProsumers}/>
-              <ManagerProfile updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} email={this.state.email} username={this.state.username} name={this.state.name}/>
+              <ManagerProfile updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} lastname={this.state.lastname} username={this.state.username}/>
           </div>    
         </React.Fragment>
       )

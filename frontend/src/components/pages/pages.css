@@ -121,7 +121,7 @@ input[type=password]:focus {
 .mainInfoBox {
     flex: 1 1 50%;
     background-color: #fff;
-    height: 600px;
+    height: auto;
     border-radius: 8px;
     float: left;
     margin: 0.5em;
@@ -179,7 +179,7 @@ input[type=password]:focus {
 }
 
 .appliedSellBuy {
-    margin: 1.0em;
+    margin-bottom: 2.0em;
     font-size: 0.9em;
     color: #368448;
 }
@@ -231,6 +231,7 @@ input[type=password]:focus {
 .sendButton {
     width: 50%;
     margin: auto;
+    margin-bottom: 0.5em;
     background-color: #777474;
     color: white;
     border: 2px solid #777474;
@@ -352,6 +353,10 @@ input[type=password]:focus {
     cursor: pointer;
 }
 
+.rangeSliders {
+    margin: 1.0em;
+}
+
 /*button for blocking prosumer*/
 .blockButton {
     width: 50%;
@@ -445,6 +450,11 @@ input[type=password]:focus {
     border: 1px solid #000000;
     border-radius: 50%;
     font-weight: bolder;
+}
+
+#blockProsumer {
+    width: 80%;
+    margin: auto;
 }
 
 /*View prosumers system modal*/

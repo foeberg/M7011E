@@ -12,7 +12,8 @@ export class Prosumer extends Component{
         state = {
             soldToMarket: 0,
             buyFromMarket: 0,
-            name: "Andersson",
+            name: "",
+            username: "",
             consumption: 0,
             imageName: "placeholder.jpg",
             price: 0,
@@ -25,21 +26,19 @@ export class Prosumer extends Component{
         
         async getData(){
             let currentComponent = this;
-            axios.defaults.withCredentials = true;
             await Promise.all([
                 axios
                 .get('http://localhost:8081/simulator/wind')
                 .then((res) => {    
-                    currentComponent.setState({ wind: Math.round(res.data * 100)/100,
-                        production: Math.round(res.data * 100)/100 })
-                }),
+                    currentComponent.setState({ wind: Math.round(res.data * 100)/100
+                })}),
                 axios
-                .get('http://localhost:8081/simulator/electricityPrice')
+                .get('http://localhost:8081/simulator/managerElectricityPrice')
                 .then((res) => {
                     currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
                 }),
                 axios
-                .get('http://localhost:8081/householdImage')
+                .get('http://localhost:8081/profileImage')
                 .then((response) => {
                     currentComponent.setState({ imageName: response.data})
                 })
@@ -62,6 +61,16 @@ export class Prosumer extends Component{
                 .get('http://localhost:8081/simulator/householdConsumption/')
                 .then((response) => {
                     currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                })
+                .catch((error) =>{
+                    if(error.response.status=== 400){
+                        currentComponent.setState({error: true});
+                    }
+                }),
+                axios
+                .get('http://localhost:8081/simulator/householdProduction/')
+                .then((response) => {
+                    currentComponent.setState({ production: Math.round(response.data * 100)/100 })
                 })
                 .catch((error) =>{
                     if(error.response.status=== 400){
@@ -93,55 +102,77 @@ export class Prosumer extends Component{
                         history.push('/');
                     }
                 });
-        }
-        /*get data from server*/
-        componentDidMount() {
-            let currentComponent = this;
-            axios.defaults.withCredentials = true;
-            this.getData();
-            currentComponent.interval = setInterval(() => {
-                axios
-                .get('http://localhost:8081/simulator/householdBuffer')
-                .then((response) => {
-                    currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
-                })
-                .catch((error) =>{
-                    if(error.response.status=== 400){
-                        history.push('/');
-                    }
-                });
-                axios
-                    .get('http://localhost:8081/simulator/wind')
-                    .then((res) => {
-                        currentComponent.setState({ wind: Math.round(res.data * 100)/100,
-                            production: Math.round(res.data * 100)/100 })	
-                    });
-                axios
-                    .get('http://localhost:8081/simulator/electricityPrice')
-                    .then((res) => {
-                        currentComponent.setState({ price: Math.round(res.data * 100)/100 })
-                    });
-                axios
-                    .get('http://localhost:8081/simulator/householdConsumption/')
+                currentComponent.interval = setInterval(() => {
+                    axios
+                    .get('http://localhost:8081/simulator/householdBuffer')
                     .then((response) => {
-                        currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                        currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                     })
                     .catch((error) =>{
                         if(error.response.status=== 400){
                             history.push('/');
                         }
                     });
-                }, 10000);
+                    axios
+                        .get('http://localhost:8081/simulator/wind')
+                        .then((res) => {
+                            currentComponent.setState({ wind: Math.round(res.data * 100)/100})	
+                        });
+                    axios
+                        .get('http://localhost:8081/simulator/managerElectricityPrice')
+                        .then((res) => {
+                            currentComponent.setState({ price: Math.round(res.data * 100)/100 })
+                        });
+                    axios
+                        .get('http://localhost:8081/simulator/householdConsumption/')
+                        .then((response) => {
+                            currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
+                        })
+                        .catch((error) =>{
+                            if(error.response.status=== 400){
+                                history.push('/');
+                            }
+                        });
+                    axios
+                    .get('http://localhost:8081/simulator/householdProduction/')
+                    .then((response) => {
+                        currentComponent.setState({ production: Math.round(response.data * 100)/100 })
+                    })
+                    .catch((error) =>{
+                        if(error.response.status=== 400){
+                            currentComponent.setState({error: true});
+                        }
+                    });
+                    }, 10000);
+        }
+        /*get data from server*/
+        componentDidMount() {
+            let currentComponent = this;
+            axios.defaults.withCredentials = true;
+            axios
+            .get('http://localhost:8081/user')
+            .then((res) => {
+                if(res.data.role === "manager"){
+                    history.push('/manager')
+                }else{
+                currentComponent.setState({loading: false, username: res.data.username, name: res.data.lastname})
+                currentComponent.getData();
+                }  
+            })
+            .catch((error) =>{
+                if(error.response.status=== 400){
+                    history.push('/');
+                }
+            });
           }
         
           componentWillUnmount() {
             clearInterval(this.interval);
         }
-
         
         /*when user want to change ratio of selling to market, send new value to server*/
-        sellToMarketHandler = (rangeValue) => {
-            axios.post("http://localhost:8081/simulator/sellRatio", {sellRatio: rangeValue/100})
+        sellToMarketHandler = () => {
+            axios.post("http://localhost:8081/simulator/sellRatio", {sellRatio: this.state.soldToMarket/100})
             .then(function (response) {
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
@@ -156,8 +187,8 @@ export class Prosumer extends Component{
             });
         }
         /*when user want to change ratio of buying from market, send new value to server*/
-        buyFromMarketHandler = (rangeValue) => {
-            axios.post("http://localhost:8081/simulator/buyRatio", {buyRatio: rangeValue/100})
+        buyFromMarketHandler = () => {
+            axios.post("http://localhost:8081/simulator/buyRatio", {buyRatio: this.state.buyFromMarket/100})
             .then(function (response) {
                 document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();
@@ -171,6 +202,12 @@ export class Prosumer extends Component{
                 setTimeout(function() { $("#appliedBuy").hide(); }, 2000);
             });
         }
+    updateSellRange =(value)=>{
+        this.setState({ soldToMarket: Math.round(value)})
+    }
+    updateBuyRange =(value)=>{
+        this.setState({ buyFromMarket: Math.round(value)})
+    }
 
   render() {
       if(this.state.loading){
@@ -181,32 +218,32 @@ export class Prosumer extends Component{
                 <div className="flexboxRow">
                     <div className="householdInfoBox">
                         <h1>Household </h1>
-                        <h3>{this.state.name} 
-                        <input className="sendButton" type="button" value="Log out" onClick={this.props.logOut}/></h3><br/>
+                        <h3>{this.state.name}</h3>
+                        <input className="sendButton" style={{marginBottom: "0.5em"}} type="button" value="Log out" onClick={this.props.logOut}/><br/>
                         <Image source={this.state.imageName} alt={"Household"}/>
                     </div> 
                     <div className="mainInfoBox">
                         <h1>Monitoring panel</h1>
                         <div className="displayValues">
-                            <ElectricityData value={this.state.wind} title={"Wind"}/>
-                            <ElectricityData value={this.state.production} title={"Production"}/>
-                            <ElectricityData value={this.state.consumption} title={"Consumption"}/>
-                            <ElectricityData value={Math.round((this.state.production - this.state.consumption) * 100)/100} title={"Net Production"}/>
+                            <ElectricityData unit={"m/s"} value={this.state.wind} title={"Wind"}/>
+                            <ElectricityData unit={"kWh"} value={this.state.production} title={"Production"}/>
+                            <ElectricityData unit={"kWh"} value={this.state.consumption} title={"Consumption"}/>
+                            <ElectricityData unit={"kWh"} value={Math.round((this.state.production - this.state.consumption) * 100)/100} title={"Net Production"}/>
                         </div>
                         <div className="flexboxRow">
                             <div className="ratioContainer">
                                 <h3>Excessive production</h3>
-                                <RangeSliders title={"Sell to market"} id={"appliedSell"} value={this.state.soldToMarket} message={"% sold to market"} secondMessage={"% sent to buffer"} hidden={false} applyHandler={this.sellToMarketHandler}/>
+                                <RangeSliders minValue={0} maxValue={100} updateRange={this.updateSellRange} title={"Sell to market"} id={"appliedSell"} value={this.state.soldToMarket} message={"% sold to market"} secondMessage={"% sent to buffer"} hidden={false} applyHandler={this.sellToMarketHandler}/>
                             </div>
                             <div className="ratioContainer">
                                 <h3>Under-production</h3>
-                                <RangeSliders title={"Buy from market"} id={"appliedBuy"}  value={this.state.buyFromMarket} message={"% bought from market"} secondMessage={"% taken from buffer"} hidden={false} applyHandler={this.buyFromMarketHandler}/>
+                                <RangeSliders minValue={0} maxValue={100} updateRange={this.updateBuyRange} title={"Buy from market"} id={"appliedBuy"}  value={this.state.buyFromMarket} message={"% bought from market"} secondMessage={"% taken from buffer"} hidden={false} applyHandler={this.buyFromMarketHandler}/>
                             </div>
                         </div>  
                     </div>
                 <div className="flexboxColumn"> 
-                    <PriceBufferInfoBox title={"Market"} value={this.state.price} text={"Current electricity price:"}/>
-                    <PriceBufferInfoBox title={"Buffer"} value={this.state.buffer} text={"Your current buffer:"}/>
+                    <PriceBufferInfoBox title={"Market"} unit={"kr"} value={this.state.price} text={"Current electricity price:"}/>
+                    <PriceBufferInfoBox title={"Buffer"} unit={"kWh"} value={this.state.buffer} text={"Your current buffer:"}/>
                 </div>    
             </div>      
             </React.Fragment>

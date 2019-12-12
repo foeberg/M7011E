@@ -27,10 +27,10 @@ export class Profile extends Component {
                 </div>
                 <UpdateAccount updateState={this.updateState} updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name}/> 
                 <div className="profileContent" hidden={this.state.updateAccount}>
-                    <p>Name: {this.props.name}</p>
+                    <p>Lastname: {this.props.lastname}</p>
                     <p>Username: {this.props.username}</p>
-                    <p>E-mail: {this.props.email}</p>
                     <button type="submit" className="updateUserButton" onClick={() => {this.setState({updateAccount: true})}}>Update account</button>
+                    <div id="updatedUser" hidden={true}/>
                 </div>       
             </div>    
         </div>

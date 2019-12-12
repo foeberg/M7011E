@@ -334,9 +334,9 @@ const getBlackouts = (req, res) => {
     let households = sim.getHouseholds();
     households.forEach(household => {
         if(household.blackout) {
-            blackouts.push({
-                username: household.username
-            });
+            blackouts.push(
+                household.username
+            );
         }
     });
     res.status(200).send(blackouts);

@@ -6,22 +6,22 @@ import 'react-input-range/lib/css/index.css';
 export class RangeSliders extends Component {
     state = {
         disableButton: true,
-        rangeValue: this.props.value
     }
+
 
     onClick = (e) => {
         this.setState({disableButton: true})
-        this.props.applyHandler(this.state.rangeValue);
-      }
+        this.props.applyHandler();
+      } 
 
   render() {
     return (
-        <div>
+        <div className="rangeSliders">
             <h4>{this.props.title}:</h4>
-            <InputRange  maxValue={100} minValue={0} value={this.state.rangeValue} onChange={value => this.setState({ rangeValue: Math.round(value), disableButton: false})} />
-            <p>{this.state.rangeValue + this.props.message}</p>
-            <p hidden={this.props.hidden}>{100-this.state.rangeValue + this.props.secondMessage}</p>
-            <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableButton} onClick={this.onClick}/>
+            <InputRange  maxValue={this.props.maxValue} minValue={this.props.minValue} value={this.props.value} onChange={value => {this.props.updateRange(value); this.setState({disableButton: false})}} />
+            <p>{this.props.value + this.props.message}</p>
+            <p hidden={this.props.hidden}>{100-this.props.value + this.props.secondMessage}</p>
+            <input className="sendButton" type="button" value="Save changes" disabled = {this.state.disableButton} onClick={(e)=>{this.onClick()}}/>
             <div id={this.props.id} className="appliedSellBuy" hidden={true}></div>
         </div>
     )

@@ -7,7 +7,7 @@ export class ElectricityData extends Component {
     return (
         <div className="value">
             <h4>{this.props.title}</h4>
-            <div className="data">{this.props.value}</div>
+            <div className="data">{this.props.value} {this.props.unit}</div>
         </div>
     )
   }
