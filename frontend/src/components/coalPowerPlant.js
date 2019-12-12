@@ -8,6 +8,8 @@ import axios from 'axios';
 import history from '../history';
 
 export class CoalPowerPlant extends Component {
+    /*Renders coal power plant */
+
     state = {
         production: 0,
         productionRate: 0,
@@ -20,7 +22,8 @@ export class CoalPowerPlant extends Component {
         buffer: 0,
         errors: {}
     }
-      
+    
+    /*Get data for coal power plant */
     componentDidMount() {
         let currentComponent = this;
         axios.defaults.withCredentials = true;
@@ -259,6 +262,7 @@ export class CoalPowerPlant extends Component {
         });
     }
 
+    /*update range states */
     updateProductionRate =(value)=>{
         this.setState({ productionRate: Math.round(value)})
     }

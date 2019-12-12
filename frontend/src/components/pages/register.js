@@ -15,6 +15,7 @@ export class Register extends Component{
     loading: true
   } 
   
+  /*check if user is logged in */
   componentDidMount(){
     axios.defaults.withCredentials = true;
 		axios
@@ -30,6 +31,7 @@ export class Register extends Component{
       this.setState({loading: false})
 		});
   }
+  
   /*on user input, change state */
   onChange = (e) => this.setState({ [e.target.name]: e.target.value });
 

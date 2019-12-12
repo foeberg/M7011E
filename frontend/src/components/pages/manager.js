@@ -12,29 +12,10 @@ export class Manager extends Component{
         lastname: "",
         username: "",
         showProsumers: false,
-        error: false,
         loading: true
     }
 
-    async getData(){
-      let currentComponent = this;
-      await Promise.all([
-            axios
-            .get('http://localhost:8081/profileImage')
-            .then((response) => {
-                currentComponent.setState({ imageName: response.data})
-            })
-            .catch((error) =>{
-                if(error.response.status=== 400){
-                    currentComponent.setState({error: true});
-                }
-            })]).then(function(){
-              if(currentComponent.state.error){
-                  history.push('/');
-              }
-          });
-    }
-    
+    /*Check if user is logged in as manager */
     componentDidMount() {
       let currentComponent = this;
       axios.defaults.withCredentials = true;
@@ -54,7 +35,22 @@ export class Manager extends Component{
           }
       });
       }
-  
+
+    /*get manager data */
+    getData(){
+      let currentComponent = this;
+          axios
+          .get('http://localhost:8081/profileImage')
+          .then((response) => {
+              currentComponent.setState({ imageName: response.data})
+          })
+          .catch((error) =>{
+              if(error.response.status === 400){
+                history.push('/');
+              }
+          })
+    }
+    
     componentWillUnmount() {
       clearInterval(this.interval);
     }

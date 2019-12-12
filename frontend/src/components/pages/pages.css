@@ -1,4 +1,9 @@
-/*Style for login/register page*/
+/*
+*
+*Style for login/register page
+*
+*
+*/
 
 
 /*white box containing login/register forms*/
@@ -69,7 +74,12 @@ input[type=password]:focus {
     color: #82646E;
 }
 
-/*Style for prosumer/manager page*/
+/*
+*
+*Style for prosumer/manager page
+*
+*
+*/
 
 /*display child elements in rows*/
 .flexboxRow {

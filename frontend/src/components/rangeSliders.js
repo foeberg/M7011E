@@ -4,15 +4,16 @@ import InputRange from 'react-input-range';
 import 'react-input-range/lib/css/index.css';
 
 export class RangeSliders extends Component {
+    /*Renders an input range with a heading and a submit button */
+
     state = {
         disableButton: true,
     }
 
-
     onClick = (e) => {
         this.setState({disableButton: true})
         this.props.applyHandler();
-      } 
+    } 
 
   render() {
     return (

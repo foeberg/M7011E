@@ -3,7 +3,9 @@ import './pages/pages.css';
 import Image from './image';
 import UpdateAccount from './updateAccount';
 
-export class Profile extends Component {
+export class ManagerProfile extends Component {
+    /*Renders a profile page for the manager */
+
     state = {
         updateAccount: false,
     }
@@ -38,4 +40,4 @@ export class Profile extends Component {
   }
 }
 
-export default Profile
+export default ManagerProfile

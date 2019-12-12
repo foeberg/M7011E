@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './pages/pages.css';
 
 export class ElectricityData extends Component {
+  /*Renders electricity data with a heading */
 
   render() {
     return (

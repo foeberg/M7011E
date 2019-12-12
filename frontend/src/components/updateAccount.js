@@ -6,6 +6,8 @@ import history from '../history';
 import axios from 'axios';
 
 export class UpdateAccount extends Component {
+  /*Renders an update account page for manager */
+
     state = {
         lastname: "",
         password: "",
@@ -35,7 +37,8 @@ export class UpdateAccount extends Component {
         this.setState({errors: errors});
         return formIsValid;
         }
-
+    
+    /*update user */
     onSubmit =(e) => {
         e.preventDefault();
         let currentComponent = this
@@ -64,6 +67,8 @@ export class UpdateAccount extends Component {
             });    
         }
         };
+
+    /*delete manager account */    
     deleteAccount = (e) =>{
         e.preventDefault();
         if (window.confirm("Do you want to delete this account?")) {

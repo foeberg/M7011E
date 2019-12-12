@@ -12,6 +12,8 @@ export class Login extends Component{
     errors: {},
     loading: true
   }
+
+  /*check if user is logged in */
   componentDidMount() {
     axios.defaults.withCredentials = true;
 		axios
@@ -26,14 +28,15 @@ export class Login extends Component{
 		.catch((error) =>{
       this.setState({loading: false})
 		});
-	}
+  }
+  
   /*on input change => set state */
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value });
     document.getElementById("errorMessage").innerHTML = "";
   }
 
-  /*when user submits form */
+  /*when user submits form with username and password */
   onSubmit =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
@@ -55,7 +58,7 @@ export class Login extends Component{
     }
   };
 
-  /*validate forms */
+  /*validate forms, empty input not accepted*/
   handleValidation(){
     let username = this.state.username;
     let password = this.state.password;

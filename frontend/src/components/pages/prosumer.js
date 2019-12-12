@@ -24,6 +24,28 @@ export class Prosumer extends Component{
             error: false,
         }
         
+        /*Check if user is logged in as prosumer */
+        componentDidMount() {
+            let currentComponent = this;
+            axios.defaults.withCredentials = true;
+            axios
+            .get('http://localhost:8081/user')
+            .then((res) => {
+                if(res.data.role === "manager"){
+                    history.push('/manager')
+                }else{
+                currentComponent.setState({loading: false, username: res.data.username, name: res.data.lastname})
+                currentComponent.getData();
+                }  
+            })
+            .catch((error) =>{
+                if(error.response.status=== 400){
+                    history.push('/');
+                }
+            });
+          }
+
+        /*Get data for prosumers page*/
         async getData(){
             let currentComponent = this;
             await Promise.all([
@@ -145,28 +167,8 @@ export class Prosumer extends Component{
                     });
                     }, 10000);
         }
-        /*get data from server*/
-        componentDidMount() {
-            let currentComponent = this;
-            axios.defaults.withCredentials = true;
-            axios
-            .get('http://localhost:8081/user')
-            .then((res) => {
-                if(res.data.role === "manager"){
-                    history.push('/manager')
-                }else{
-                currentComponent.setState({loading: false, username: res.data.username, name: res.data.lastname})
-                currentComponent.getData();
-                }  
-            })
-            .catch((error) =>{
-                if(error.response.status=== 400){
-                    history.push('/');
-                }
-            });
-          }
         
-          componentWillUnmount() {
+        componentWillUnmount() {
             clearInterval(this.interval);
         }
         
@@ -202,6 +204,8 @@ export class Prosumer extends Component{
                 setTimeout(function() { $("#appliedBuy").hide(); }, 2000);
             });
         }
+
+    /*update range states */    
     updateSellRange =(value)=>{
         this.setState({ soldToMarket: Math.round(value)})
     }

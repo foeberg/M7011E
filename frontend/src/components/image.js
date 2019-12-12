@@ -4,6 +4,8 @@ import axios from 'axios';
 import $ from 'jquery';
 
 export class Image extends Component {
+  /*Renders profile image and functionality for uploading a new image */
+
   state={
     selectedFile: null,
     disableInputButton: true

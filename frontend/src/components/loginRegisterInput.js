@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import './pages/pages.css';
 
 export class LoginRegisterInput extends Component {
+  /*Renders an input field with a heading and space for error messages */
 
   render() {
     return (

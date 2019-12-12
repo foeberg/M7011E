@@ -17,6 +17,7 @@ class App extends Component {
 		axios.defaults.withCredentials = true;
 	}
 
+	/*logout user */
 	logOut =() => {
 		axios.defaults.withCredentials = true;
 		axios
@@ -33,10 +34,8 @@ class App extends Component {
 				<div className='App'>
 					<Header/>
 					<Switch>
-						<Route exact path='/' render={(props)=> 
-							<Login/>}/>
-						<Route path='/register' render={(props)=> 
-							<Register/>}/>
+						<Route exact path='/' component={Login}/>
+						<Route path='/register' component={Register}/>
 						<Route path ='/prosumer' render={(props)=> 
 							<Prosumer logOut={this.logOut}/>}/>
 						<Route path ='/manager' render={(props)=> 

@@ -6,6 +6,8 @@ import axios from 'axios';
 import history from '../history';
 
 export class TableOfProsumers extends Component {
+    /*Renders a table of all prosumers (Manager page) */
+
     state = {
         prosumers: [],
         blackouts: [],
@@ -18,6 +20,7 @@ export class TableOfProsumers extends Component {
         username: ""
     }
 
+    /*get info about prosumers */
     componentDidMount() {
         axios.defaults.withCredentials = true;
         axios
@@ -62,6 +65,7 @@ export class TableOfProsumers extends Component {
         clearInterval(this.interval);
     }
 
+    /*Check if there is a blackout */
     checkForBlackout = () => {
         if(this.state.blackouts.length){
             document.getElementById("blackouts").innerHTML = "BLACK-OUT!!"
@@ -82,7 +86,8 @@ export class TableOfProsumers extends Component {
             return {background: "green"}
         }return {background: "red"}      
     }
-    /*tabel with all prosumers*/
+
+    /*table with all prosumers*/
     renderTableData() {
         return this.state.prosumers.map((prosumer, index) => {
            const { username, lastname, status} = prosumer //destructuring
@@ -100,6 +105,8 @@ export class TableOfProsumers extends Component {
             )
         })
      }
+
+    /*block prosumer from selling to the market for x seconds */ 
     applyBlockProsumer = () => {
         const fd = new FormData();
         let currentComponent = this;
@@ -125,11 +132,12 @@ export class TableOfProsumers extends Component {
             });
     }
 
+    /*update range sliders */
     updateTimeRange =(value)=>{
         this.setState({ time: Math.round(value)})
     }
 
-    // When the user clicks the "view" button, open the modal 
+    /* When the user clicks the "view" button, open the modal */
     openModal = (username, lastname) => {
         var modal = document.getElementById("myModal");
         document.getElementById("prosumersName").innerHTML= lastname + "'s system";
