@@ -290,11 +290,12 @@ class PowerplantClass {
     }
 
     newHour(households, householdProduction) {
+        let plantProduction = this.plant.production * config.powerplant_max_production;
         // Send energy to the buffer
-        this.plant.buffer += this.plant.production * this.plant.bufferRatio;
+        this.plant.buffer += plantProduction * this.plant.bufferRatio;
 
         // The amount of energy sent to the market by the powerplant
-        let marketEnergy = this.plant.production * (1.0 - this.plant.bufferRatio);
+        let marketEnergy = plantProduction * (1.0 - this.plant.bufferRatio);
 
         households.forEach(household => {
             household.blackout = false;

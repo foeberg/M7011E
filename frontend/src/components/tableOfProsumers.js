@@ -82,7 +82,7 @@ export class TableOfProsumers extends Component {
 
     /*change color on dot depending on online status */
     dotStyle = (status) => {
-        if(status === "Online"){
+        if(status === "online"){
             return {background: "green"}
         }return {background: "red"}      
     }
