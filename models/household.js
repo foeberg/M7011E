@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const config = require('../config.json');
 
 var householdSchema = new Schema({
     username: {
@@ -22,7 +23,9 @@ var householdSchema = new Schema({
     },
     buffer: {
         type: Number,
-        default: 0.0
+        default: 0.0,
+        min: 0.0,
+        max: config.household_buffer_cap
     }
 });
 

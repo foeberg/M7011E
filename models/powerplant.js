@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const config = require('../config.json');
 
 var powerplantSchema = new Schema({
     status: {
@@ -20,7 +21,9 @@ var powerplantSchema = new Schema({
     },
     buffer: {
         type: Number,
-        default: 0.0
+        default: 0.0,
+        min: 0.0,
+        max: config.powerplant_buffer_cap
     },
     electricityPrice: {
         type: Number,

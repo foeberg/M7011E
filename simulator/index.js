@@ -193,6 +193,10 @@ class HouseholdClass {
             this.buffer = Number(this.buffer + (oldProduction - this.currentConsumption)*(1.0 - this.getSellRatio()));
         }
 
+        if(this.buffer > config.household_buffer_cap) {
+            this.buffer = config.household_buffer_cap;
+        }
+
         // Update buffer in database
         this.householdObj.buffer = this.buffer;
         this.householdObj.save((err) => {
@@ -293,6 +297,10 @@ class PowerplantClass {
         let plantProduction = this.plant.production * config.powerplant_max_production;
         // Send energy to the buffer
         this.plant.buffer += plantProduction * this.plant.bufferRatio;
+
+        if(this.plant.buffer > config.powerplant_buffer_cap) {
+            this.plant.buffer = config.powerplant_buffer_cap;
+        }
 
         // The amount of energy sent to the market by the powerplant
         let marketEnergy = plantProduction * (1.0 - this.plant.bufferRatio);
