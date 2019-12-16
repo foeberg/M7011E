@@ -40,6 +40,7 @@
 | 2019-12-12  | 6       | connecting frontend to backend manager page |
 | 2019-12-12  | 3       | black-outs, block prosumer on frontend |
 | 2019-12-12  | 0.5     | commenting and cleaning up code on frontend |
+| 2019-12-16  | 4.5     | publish project on ludd server |
 
 
 
