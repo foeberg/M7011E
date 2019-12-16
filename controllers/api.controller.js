@@ -40,7 +40,7 @@ const postProfileImage = (req, res) => {
         // Splits for example 'image/png' into 'image', 'png'. Takes the second element to get the filetype
         let filetype = file.mimetype.split('/')[1];
         let filename = req.session.user._id + '.' + filetype;
-        let dirpath = './frontend/src/householdImages/';
+        let dirpath = './householdImages/';
 
         // If a picture associated with the user already exists, remove it
         fs.readdirSync(dirpath).forEach((f) => {

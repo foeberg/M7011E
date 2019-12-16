@@ -52,7 +52,7 @@ export class Image extends Component {
     return (
       <div className="imageContainer">
         <div className="flexboxColumnNoFlip">
-          <img className="image" src={require("../householdImages/" + this.props.source)} alt={this.props.alt} />
+          <img className="image" src={"http://localhost:8081/householdImages/" + this.props.source} alt={this.props.alt} />
           <input type="file" name="file" id="file" className="inputfile" onInput={this.fileSelectedHandler}/>
           <label htmlFor="file" id="choose" >Choose image</label>
           <input className="sendButton" type="button" value="Upload" disabled = {this.state.disableInputButton} onClick={this.fileUploadHandler}/>

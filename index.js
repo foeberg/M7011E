@@ -25,6 +25,8 @@ app.use(cors({
     credentials: true
 }));
 
+app.use('/householdImages', express.static('householdImages'));
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
