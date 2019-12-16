@@ -17,7 +17,7 @@ export class Login extends Component{
   componentDidMount() {
     axios.defaults.withCredentials = true;
 		axios
-		.get('http://localhost:8081/api/user')
+		.get('/user')
 		.then((res) => {
 			if(res.data.role === "prosumer"){
 				history.push('/prosumer')
@@ -40,7 +40,7 @@ export class Login extends Component{
   onSubmit =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
-      axios.post('http://localhost:8081/login', {
+      axios.post('/login', {
         username: this.state.username,
         password: this.state.password
       })

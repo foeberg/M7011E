@@ -45,7 +45,7 @@ export class UpdateAccount extends Component {
         let lastname = this.state.lastname
         let password = this.state.password
         if(this.handleValidation()){
-            axios.post('http://localhost:8081/user', {
+            axios.post('/user', {
               lastname: lastname,
               password: password
             })
@@ -72,7 +72,7 @@ export class UpdateAccount extends Component {
     deleteAccount = (e) =>{
         e.preventDefault();
         if (window.confirm("Do you want to delete this account?")) {
-            axios.delete('http://localhost:8081/user')
+            axios.delete('/user')
             .then(function (response) {
                 console.log(response)
                 history.push('/');

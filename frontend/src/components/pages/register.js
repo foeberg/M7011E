@@ -19,7 +19,7 @@ export class Register extends Component{
   componentDidMount(){
     axios.defaults.withCredentials = true;
 		axios
-		.get('http://localhost:8081/user')
+		.get('/user')
 		.then((res) => {
 			if(res.data.role === "prosumer"){
 				history.push('/prosumer')
@@ -39,7 +39,7 @@ export class Register extends Component{
   onSubmit =(e) => {
     e.preventDefault();
     if(this.handleValidation()){
-      axios.post('http://localhost:8081/signup', {
+      axios.post('/signup', {
         lastname: this.state.lastname,
         username: this.state.createUsername,
         password: this.state.createPassword

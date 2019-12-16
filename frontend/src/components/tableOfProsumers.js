@@ -24,7 +24,7 @@ export class TableOfProsumers extends Component {
     componentDidMount() {
         axios.defaults.withCredentials = true;
         axios
-        .get('http://localhost:8081/prosumers')
+        .get('/prosumers')
         .then((response) => {
             this.setState({ prosumers: response.data })
         })
@@ -35,7 +35,7 @@ export class TableOfProsumers extends Component {
         })
         this.checkForBlackout();
         axios
-        .get('http://localhost:8081/simulator/blackouts')
+        .get('/simulator/blackouts')
         .then((response) => {
             console.log(response)
             this.setState({blackouts: response.data})
@@ -48,7 +48,7 @@ export class TableOfProsumers extends Component {
         })
         this.interval = setInterval(() => {
             axios
-            .get('http://localhost:8081/simulator/blackouts')
+            .get('/simulator/blackouts')
             .then((response) => {
                 this.setState({blackouts: response.data})
                 this.checkForBlackout();
@@ -111,7 +111,7 @@ export class TableOfProsumers extends Component {
         const fd = new FormData();
         let currentComponent = this;
         fd.append("time", this.state.time);
-        axios.post("http://localhost:8081/simulator/blockSelling/" + currentComponent.state.username, fd)
+        axios.post("/simulator/blockSelling/" + currentComponent.state.username, fd)
             .then(function (response) {
                 console.log(response)
                 document.getElementById("blocked").innerHTML = currentComponent.state.username + " is blocked for " + currentComponent.state.time + " seconds";
@@ -151,7 +151,7 @@ export class TableOfProsumers extends Component {
         let currentComponent = this;
         axios.defaults.withCredentials = true;
         axios
-        .get('http://localhost:8081/simulator/prosumer/'+ username)
+        .get('/simulator/prosumer/'+ username)
         .then((response) => {
             currentComponent.setState({ consumption: Math.round(response.data.consumption * 100)/100,
             production: Math.round(response.data.production * 100)/100,
@@ -161,7 +161,7 @@ export class TableOfProsumers extends Component {
             username: username})
             currentComponent.interval = setInterval(() => {
                 axios
-                .get('http://localhost:8081/simulator/prosumer/'+ username)
+                .get('/simulator/prosumer/'+ username)
                 .then((response) => {    
                     currentComponent.setState({ consumption: Math.round(response.data.consumption * 100)/100,
                         production: Math.round(response.data.production * 100)/100,

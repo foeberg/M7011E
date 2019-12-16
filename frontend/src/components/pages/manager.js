@@ -20,7 +20,7 @@ export class Manager extends Component{
       let currentComponent = this;
       axios.defaults.withCredentials = true;
       axios
-      .get('http://localhost:8081/user')
+      .get('/user')
       .then((res) => {
         if(res.data.role === "prosumer"){
           history.push('/prosumer')
@@ -40,7 +40,7 @@ export class Manager extends Component{
     getData(){
       let currentComponent = this;
           axios
-          .get('http://localhost:8081/profileImage')
+          .get('/profileImage')
           .then((response) => {
               currentComponent.setState({ imageName: response.data})
           })

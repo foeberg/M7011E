@@ -29,7 +29,7 @@ export class Prosumer extends Component{
             let currentComponent = this;
             axios.defaults.withCredentials = true;
             axios
-            .get('http://localhost:8081/user')
+            .get('/user')
             .then((res) => {
                 if(res.data.role === "manager"){
                     history.push('/manager')
@@ -50,17 +50,17 @@ export class Prosumer extends Component{
             let currentComponent = this;
             await Promise.all([
                 axios
-                .get('http://localhost:8081/simulator/wind')
+                .get('/simulator/wind')
                 .then((res) => {    
                     currentComponent.setState({ wind: Math.round(res.data * 100)/100
                 })}),
                 axios
-                .get('http://localhost:8081/simulator/managerElectricityPrice')
+                .get('/simulator/managerElectricityPrice')
                 .then((res) => {
                     currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
                 }),
                 axios
-                .get('http://localhost:8081/profileImage')
+                .get('/profileImage')
                 .then((response) => {
                     currentComponent.setState({ imageName: response.data})
                 })
@@ -70,7 +70,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/simulator/householdBuffer')
+                .get('/simulator/householdBuffer')
                 .then((response) => {
                     currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                 })
@@ -80,7 +80,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/simulator/householdConsumption/')
+                .get('/simulator/householdConsumption/')
                 .then((response) => {
                     currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
                 })
@@ -90,7 +90,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/simulator/householdProduction/')
+                .get('/simulator/householdProduction/')
                 .then((response) => {
                     currentComponent.setState({ production: Math.round(response.data * 100)/100 })
                 })
@@ -100,7 +100,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/simulator/sellRatio')
+                .get('/simulator/sellRatio')
                 .then((response) => {
                     currentComponent.setState({ soldToMarket: Math.round(response.data*100)})
                 })
@@ -110,7 +110,7 @@ export class Prosumer extends Component{
                     }
                 }),
                 axios
-                .get('http://localhost:8081/simulator/buyRatio')
+                .get('/simulator/buyRatio')
                 .then((response) => {
                     currentComponent.setState({ buyFromMarket: Math.round(response.data*100)})
                 })
@@ -126,7 +126,7 @@ export class Prosumer extends Component{
                 });
                 currentComponent.interval = setInterval(() => {
                     axios
-                    .get('http://localhost:8081/simulator/householdBuffer')
+                    .get('/simulator/householdBuffer')
                     .then((response) => {
                         currentComponent.setState({ buffer: Math.round(response.data * 100)/100})
                     })
@@ -136,17 +136,17 @@ export class Prosumer extends Component{
                         }
                     });
                     axios
-                        .get('http://localhost:8081/simulator/wind')
+                        .get('/simulator/wind')
                         .then((res) => {
                             currentComponent.setState({ wind: Math.round(res.data * 100)/100})	
                         });
                     axios
-                        .get('http://localhost:8081/simulator/managerElectricityPrice')
+                        .get('/simulator/managerElectricityPrice')
                         .then((res) => {
                             currentComponent.setState({ price: Math.round(res.data * 100)/100 })
                         });
                     axios
-                        .get('http://localhost:8081/simulator/householdConsumption/')
+                        .get('/simulator/householdConsumption/')
                         .then((response) => {
                             currentComponent.setState({ consumption: Math.round(response.data * 100)/100 })
                         })
@@ -156,7 +156,7 @@ export class Prosumer extends Component{
                             }
                         });
                     axios
-                    .get('http://localhost:8081/simulator/householdProduction/')
+                    .get('/simulator/householdProduction/')
                     .then((response) => {
                         currentComponent.setState({ production: Math.round(response.data * 100)/100 })
                     })
@@ -174,7 +174,7 @@ export class Prosumer extends Component{
         
         /*when user want to change ratio of selling to market, send new value to server*/
         sellToMarketHandler = () => {
-            axios.post("http://localhost:8081/simulator/sellRatio", {sellRatio: this.state.soldToMarket/100})
+            axios.post("/simulator/sellRatio", {sellRatio: this.state.soldToMarket/100})
             .then(function (response) {
                 document.getElementById("appliedSell").innerHTML = "Saved changes";
                 $("#appliedSell").show();
@@ -190,7 +190,7 @@ export class Prosumer extends Component{
         }
         /*when user want to change ratio of buying from market, send new value to server*/
         buyFromMarketHandler = () => {
-            axios.post("http://localhost:8081/simulator/buyRatio", {buyRatio: this.state.buyFromMarket/100})
+            axios.post("/simulator/buyRatio", {buyRatio: this.state.buyFromMarket/100})
             .then(function (response) {
                 document.getElementById("appliedBuy").innerHTML = "Saved changes";
                 $("#appliedBuy").show();

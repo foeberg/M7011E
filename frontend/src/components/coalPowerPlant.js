@@ -28,7 +28,7 @@ export class CoalPowerPlant extends Component {
         let currentComponent = this;
         axios.defaults.withCredentials = true;
         axios
-        .get('http://localhost:8081/simulator/marketDemand')
+        .get('/simulator/marketDemand')
         .then((res) => {
             currentComponent.setState({ demand: Math.round(res.data * 100)/100 })	
         })
@@ -38,7 +38,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/electricityPrice')
+        .get('/simulator/electricityPrice')
         .then((res) => {
             currentComponent.setState({ modelledPrice: Math.round(res.data * 100)/100 })	
         })
@@ -48,7 +48,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/managerElectricityPrice')
+        .get('/simulator/managerElectricityPrice')
         .then((res) => {
             currentComponent.setState({ price: Math.round(res.data * 100)/100 })	
         })
@@ -58,7 +58,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/powerplant/status')
+        .get('/simulator/powerplant/status')
         .then((res) => {
             currentComponent.setState({status: res.data})
         })
@@ -68,7 +68,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/powerplant/bufferRatio')
+        .get('/simulator/powerplant/bufferRatio')
         .then((res) => {    
             currentComponent.setState({bufferRate: Math.round(res.data*100) })
         })
@@ -78,7 +78,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/powerplant/buffer')
+        .get('/simulator/powerplant/buffer')
         .then((res) => {    
             currentComponent.setState({buffer: Math.round(res.data * 1000)/100 })
         })
@@ -88,7 +88,7 @@ export class CoalPowerPlant extends Component {
             }
         })
         axios
-        .get('http://localhost:8081/simulator/powerplant/production')
+        .get('/simulator/powerplant/production')
         .then((res) => {  
             currentComponent.setState({production: Math.round(res.data.value * 100)/100,
             productionRate: res.data.ratio * 100})
@@ -100,7 +100,7 @@ export class CoalPowerPlant extends Component {
         })
         currentComponent.interval = setInterval(() => {
             axios
-            .get('http://localhost:8081/simulator/marketDemand')
+            .get('/simulator/marketDemand')
             .then((res) => {
                 currentComponent.setState({ demand: Math.round(res.data * 100)/100 })	
             })
@@ -110,7 +110,7 @@ export class CoalPowerPlant extends Component {
                 }
             })
             axios
-            .get('http://localhost:8081/simulator/powerplant/production')
+            .get('/simulator/powerplant/production')
             .then((res) => {  
                 currentComponent.setState({production: Math.round(res.data.value * 100)/100})
             })
@@ -120,7 +120,7 @@ export class CoalPowerPlant extends Component {
                 }
             })
             axios
-            .get('http://localhost:8081/simulator/powerplant/buffer')
+            .get('/simulator/powerplant/buffer')
             .then((res) => {    
                 currentComponent.setState({buffer: Math.round(res.data * 100)/100 })
             })
@@ -130,7 +130,7 @@ export class CoalPowerPlant extends Component {
                 }
             })
             axios
-            .get('http://localhost:8081/simulator/electricityPrice')
+            .get('/simulator/electricityPrice')
             .then((res) => {
                 currentComponent.setState({ modelledPrice: Math.round(res.data * 100)/100 })	
             })
@@ -157,7 +157,7 @@ export class CoalPowerPlant extends Component {
         e.preventDefault();
         let currentComponent = this;
         if(this.handleValidation()){
-            axios.post('http://localhost:8081/simulator/managerElectricityPrice', {
+            axios.post('/simulator/managerElectricityPrice', {
                 electricityPrice: this.state.input,
             })
             .then(function (response) {
@@ -223,7 +223,7 @@ export class CoalPowerPlant extends Component {
     /*when pressing save changes button for production ratio*/
     applyProductionRate=()=>{
         let currentComponent = this;
-        axios.post("http://localhost:8081/simulator/powerplant/production", {production: this.state.productionRate/100})
+        axios.post("/simulator/powerplant/production", {production: this.state.productionRate/100})
         .then(function (response) {
             console.log(response)
             if(currentComponent.state.status === "Running"){
@@ -245,7 +245,7 @@ export class CoalPowerPlant extends Component {
     
     /*when pressing save changes button for send to buffer ratio*/
     applySendToBuffer=()=>{
-        axios.post("http://localhost:8081/simulator/powerplant/bufferRatio", {bufferRatio: this.state.bufferRate/100})
+        axios.post("/simulator/powerplant/bufferRatio", {bufferRatio: this.state.bufferRate/100})
         .then(function (response) {
             console.log(response)
             document.getElementById("appliedBufferRate").innerHTML = "Saved changes";
@@ -275,7 +275,7 @@ export class CoalPowerPlant extends Component {
     startStopProduction=()=>{
         let currentComponent= this;
         if(this.state.status==="Running"){
-            axios.post("http://localhost:8081/simulator/powerplant/stop")
+            axios.post("/simulator/powerplant/stop")
             .then(function (response) {
                 console.log(response)
                 currentComponent.setState({status: "Stopped", production: 0, productionRatio: 0});
@@ -288,7 +288,7 @@ export class CoalPowerPlant extends Component {
                 setTimeout(function() { $("#startStopMess").hide(); }, 2000);
             });
         }else if(this.state.status === "Stopped"){
-            axios.post("http://localhost:8081/simulator/powerplant/start")
+            axios.post("/simulator/powerplant/start")
             .then(function (response) {
                 console.log(response)
                 currentComponent.setState({status: "Starting"});
