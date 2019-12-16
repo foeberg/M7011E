@@ -210,7 +210,9 @@ class HouseholdClass {
         this.currentConsumption = this.distribution.ppf(Math.random());
 
         // Save the consumption in database, for over time statistic purposes.
-        var currConsumption = new Consumption({
+
+        // NOT CURRENTLY USED
+        /*var currConsumption = new Consumption({
             householdUsername: this.username,
             consumption: this.currentConsumption,
             timestamp: this.date
@@ -219,7 +221,7 @@ class HouseholdClass {
         currConsumption.save(function (err, c) {
             if (err) return console.error(err);
             console.log(c._id + " saved.");
-        });
+        });*/
     }
 
     getSellRatio() {

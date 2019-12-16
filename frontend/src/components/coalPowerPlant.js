@@ -292,7 +292,7 @@ export class CoalPowerPlant extends Component {
             .then(function (response) {
                 console.log(response)
                 currentComponent.setState({status: "Starting"});
-                setTimeout(function(){ currentComponent.setState({status: "Running", production: 10*currentComponent.state.production}) }, 30000);
+                setTimeout(function(){ currentComponent.setState({status: "Running", production: 10*currentComponent.state.production}) }, 20000);
             })
             .catch(function (error) {
                 console.log(error)
