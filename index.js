@@ -42,7 +42,7 @@ app.use(fileUpload());
 
 app.use('/simulator', routes.simulatorRoutes);
 
-app.use('/', routes.apiRoutes);
+app.use('/api/', routes.apiRoutes);
 
 var server = app.listen(config.server_port, function () {
     var host = server.address().address;
