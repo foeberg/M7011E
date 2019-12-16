@@ -40,7 +40,7 @@ app.use(session({
 
 app.use(fileUpload());
 
-app.use('/simulator', routes.simulatorRoutes);
+app.use('/api/simulator', routes.simulatorRoutes);
 
 app.use('/api/', routes.apiRoutes);
 
