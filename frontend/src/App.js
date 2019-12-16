@@ -21,7 +21,7 @@ class App extends Component {
 	logOut =() => {
 		axios.defaults.withCredentials = true;
 		axios
-		.post('http://localhost:8081/logout')
+		.post('/logout')
 		.then((res) => {
 			console.log(res.data);
 			history.push('/');	
