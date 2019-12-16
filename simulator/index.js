@@ -69,7 +69,7 @@ class Simulator {
     }
 
     getHouseholdProduction() {
-        return this.currentWind * 0.2;
+        return this.currentWind * config.household_production_efficiency;
     }
 
     addHousehold(household) {

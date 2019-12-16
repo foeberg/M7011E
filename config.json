@@ -5,6 +5,7 @@
     "powerplant_max_production": 1000,
     "powerplant_buffer_cap": 5000,
     "household_buffer_cap": 200,
+    "household_production_efficiency": 0.5,
     "simulator_hour_length": 10000,
     "cors_origin": "http://localhost:3000",
     "server_port": 8081
