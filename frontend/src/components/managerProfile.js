@@ -25,7 +25,7 @@ export class ManagerProfile extends Component {
             <h1>Profile</h1>
             <div className="flexboxRow">
                 <div style={{width: "60%", padding: "1.0em", margin: "auto"}} >   
-                    <Image source={this.props.imageName} alt={"Manager"}/>
+                    <Image updateImageName={this.props.updateImageName} source={this.props.imageName} alt={"Manager"}/>
                 </div>
                 <UpdateAccount updateState={this.updateState} updateAccount={this.state.updateAccount} changeState={this.changeState} email={this.props.email} username={this.props.username} name={this.props.name}/> 
                 <div className="profileContent" hidden={this.state.updateAccount}>

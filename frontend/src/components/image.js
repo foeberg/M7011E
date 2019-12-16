@@ -29,6 +29,7 @@ export class Image extends Component {
     fd.append("file", this.state.selectedFile, this.state.selectedFile.name);
     axios.post("/profileImage", fd)
         .then(function (response) {
+            currentComponent.props.updateImageName(response.data);
             currentComponent.setState({
                 selectedFile: null,
                 disableInputButton: true

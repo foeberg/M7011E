@@ -213,6 +213,10 @@ export class Prosumer extends Component{
         this.setState({ buyFromMarket: Math.round(value)})
     }
 
+    updateImageName = (name) => {
+        this.setState({ imageName: name})
+    }
+
   render() {
       if(this.state.loading){
         return(<div></div>)
@@ -224,7 +228,7 @@ export class Prosumer extends Component{
                         <h1>Household </h1>
                         <h3>{this.state.name}</h3>
                         <input className="sendButton" style={{marginBottom: "0.5em"}} type="button" value="Log out" onClick={this.props.logOut}/><br/>
-                        <Image source={this.state.imageName} alt={"Household"}/>
+                        <Image updateImageName={this.updateImageName} source={this.state.imageName} alt={"Household"}/>
                     </div> 
                     <div className="mainInfoBox">
                         <h1>Monitoring panel</h1>

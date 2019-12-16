@@ -68,6 +68,10 @@ export class Manager extends Component{
         this.setState({lastname: lastname, password: password})
     }
 
+    updateImageName = (name) => {
+      this.setState({ imageName: name})
+    }
+
   render() {
     if(this.state.loading){
       return(<div></div>)
@@ -80,7 +84,7 @@ export class Manager extends Component{
           <div className="flexboxRowStart">
               <CoalPowerPlant/>
               <TableOfProsumers showProsumers={this.state.showProsumers}/>
-              <ManagerProfile updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} lastname={this.state.lastname} username={this.state.username}/>
+              <ManagerProfile updateImageName={this.updateImageName} updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} lastname={this.state.lastname} username={this.state.username}/>
           </div>    
         </React.Fragment>
       )

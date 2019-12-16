@@ -71,14 +71,14 @@ const postProfileImage = (req, res) => {
                         return;
                     } else {
                         user.imageURL = filename;
-                        user.save((err) => {
+                        user.save((err, user) => {
                             if(err) {
                                 console.error(err);
                                 res.status(500).send('Error saving URL');
                                 return;
                             } else {
                                 console.log('Image URL for user ' + req.session.user.username + ' updated');
-                                res.status(200).send('File uploaded!');
+                                res.status(200).send(user.imageURL);
                                 return;
                             }
                         });
