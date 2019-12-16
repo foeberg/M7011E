@@ -69,7 +69,11 @@ export class Manager extends Component{
     }
 
     updateImageName = (name) => {
-      this.setState({ imageName: name})
+      if(name === this.state.imageName){
+        history.push('/manager')
+      }else{
+          this.setState({ imageName: name})
+      }
     }
 
   render() {

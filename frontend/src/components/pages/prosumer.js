@@ -214,7 +214,11 @@ export class Prosumer extends Component{
     }
 
     updateImageName = (name) => {
-        this.setState({ imageName: name})
+        if(name === this.state.imageName){
+            history.push('/prosumer')
+        }else{
+            this.setState({ imageName: name})
+        }
     }
 
   render() {
