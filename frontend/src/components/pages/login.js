@@ -17,7 +17,7 @@ export class Login extends Component{
   componentDidMount() {
     axios.defaults.withCredentials = true;
 		axios
-		.get('http://localhost:8081/user')
+		.get('http://localhost:8081/api/user')
 		.then((res) => {
 			if(res.data.role === "prosumer"){
 				history.push('/prosumer')
