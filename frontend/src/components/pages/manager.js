@@ -11,7 +11,6 @@ export class Manager extends Component{
         imageName: "placeholderManager.jpg",
         lastname: "",
         username: "",
-        showProsumers: false,
         loading: true
     }
 
@@ -56,11 +55,11 @@ export class Manager extends Component{
     }
 
     /*show either profile or table of prosumers */
-    enterProfile = () => {
-        this.setState({showProsumers: false})
+    enterHome = () => {
+        history.push('/manager')
     }
     enterProsumers = () => {
-        this.setState({showProsumers: true})
+        history.push('/showProsumers')
     }
 
     /*update states*/
@@ -83,12 +82,12 @@ export class Manager extends Component{
       return (
         <React.Fragment>
           <div className="menu">
-              <input type="button" value="Profile" className="menuLink" onClick={() => {this.enterProfile()}}/><input type="button" value="Prosumers" className="menuLink" onClick={() => {this.enterProsumers()}}/><input type="button" value="Log out" className="menuLink" onClick={() => {this.props.logOut()}}/>
+              <input type="button" value="Home" className="menuLink" onClick={() => {this.enterHome()}}/><input type="button" value="Prosumers" className="menuLink" onClick={() => {this.enterProsumers()}}/><input type="button" value="Log out" className="menuLink" onClick={() => {this.props.logOut()}}/>
           </div>
           <div className="flexboxRowStart">
               <CoalPowerPlant/>
-              <TableOfProsumers showProsumers={this.state.showProsumers}/>
-              <ManagerProfile updateImageName={this.updateImageName} updateState={this.updateState} showProsumers={this.state.showProsumers} imageName={this.state.imageName} lastname={this.state.lastname} username={this.state.username}/>
+              <TableOfProsumers updateState={this.updateState} showProsumers={this.props.showProsumers}/>
+              <ManagerProfile updateAccount={this.props.updateAccount} updateImageName={this.updateImageName} updateState={this.updateState} showProsumers={this.props.showProsumers} imageName={this.state.imageName} lastname={this.state.lastname} username={this.state.username}/>
           </div>    
         </React.Fragment>
       )

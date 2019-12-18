@@ -4,6 +4,7 @@ import $ from 'jquery';
 import ShowProsumersSystem from './showProsumersSystem';
 import axios from 'axios';
 import history from '../history';
+import UpdateProsumer from './updateProsumer';
 
 export class TableOfProsumers extends Component {
     /*Renders a table of all prosumers (Manager page) */
@@ -17,7 +18,9 @@ export class TableOfProsumers extends Component {
         sellRatio: 0,
         buyRatio: 0,
         time: 10,
-        username: ""
+        username: "",
+        lastname: "",
+        status: ""
     }
 
     /*get info about prosumers */
@@ -37,7 +40,6 @@ export class TableOfProsumers extends Component {
         axios
         .get('/simulator/blackouts')
         .then((response) => {
-            console.log(response)
             this.setState({blackouts: response.data})
             this.checkForBlackout();
         })
@@ -100,6 +102,7 @@ export class TableOfProsumers extends Component {
                     <td>{username + blackout}</td>
                     <td>{lastname}</td>
                     <td>{status} {<span className="dot" style={this.dotStyle(status)}/>}</td>
+                    <td><button type="submit" className="viewButton" onClick={() => {this.openUpdateProfileModal(username, lastname, status)}}>Profile</button></td>
                     <td><button type="submit" className="viewButton" onClick={() => {this.openModal(username, lastname)}}>View</button></td>
                 </tr>
             )
@@ -108,12 +111,11 @@ export class TableOfProsumers extends Component {
 
     /*block prosumer from selling to the market for x seconds */ 
     applyBlockProsumer = () => {
-        const fd = new FormData();
         let currentComponent = this;
+        const fd = new FormData();
         fd.append("time", this.state.time);
         axios.post("/simulator/blockSelling/" + currentComponent.state.username, fd)
             .then(function (response) {
-                console.log(response)
                 document.getElementById("blocked").innerHTML = currentComponent.state.username + " is blocked for " + currentComponent.state.time + " seconds";
                 $("#blocked").show()
                 setTimeout(function() { 
@@ -121,7 +123,6 @@ export class TableOfProsumers extends Component {
                 }, 3000);
             })
             .catch(function (error) {
-                console.log(error.response)
                 if(error.response.data === "User already blocked."){
                     document.getElementById("blocked").innerHTML = currentComponent.state.username + " is already blocked" ;
                     $("#blocked").show()
@@ -143,6 +144,14 @@ export class TableOfProsumers extends Component {
         document.getElementById("prosumersName").innerHTML= lastname + "'s system";
         document.getElementById("blockName").innerHTML= "Block "+ lastname +" from selling to the market";
         this.getData(username);
+        modal.style.display = "block";
+    }
+
+    /* When the user clicks the "view" button, open the modal */
+    openUpdateProfileModal = (username, lastname, status) => {
+        var modal = document.getElementById("profileModal");
+        document.getElementById("prosumersProfile").innerHTML= lastname + "'s profile";
+        this.setState({username: username, lastname: lastname, status: status})
         modal.style.display = "block";
     }
 
@@ -176,7 +185,18 @@ export class TableOfProsumers extends Component {
         });
     }
 
+    /*update states*/
+    updateState = (lastname, password) => {
+        this.setState({lastname: lastname, password: password})
+    }
+
     /*Close the modal when clicking on button "x" */
+    closeUpdateProfileModal = () => {
+        var modal = document.getElementById("profileModal");
+        this.setState({ username: "", lastname: "", status: ""})
+        modal.style.display = "none";
+    }
+
     closeModal = () => {
         var modal = document.getElementById("myModal");
         clearInterval(this.interval);
@@ -196,12 +216,14 @@ export class TableOfProsumers extends Component {
                         <th>Username</th>
                         <th>Lastname</th>
                         <th>Status</th>
+                        <th>Profile</th>
                         <th>System</th>
                     </tr>
                     {this.renderTableData()}
                </tbody>
             </table>
             <ShowProsumersSystem updateTimeRange={this.updateTimeRange} time={this.state.time} applyBlockProsumer={this.applyBlockProsumer} sellRatio={this.state.sellRatio} buyRatio={this.state.buyRatio} production={this.state.production} consumption={this.state.consumption} buffer={this.state.buffer} closeModal={this.closeModal}/>
+            <UpdateProsumer updateState={this.updateState} dotStyle={this.dotStyle} closeModal={this.closeUpdateProfileModal} username={this.state.username} lastname={this.state.lastname} status={this.state.status}/>
         </div>
     )
   }

@@ -39,7 +39,11 @@ class App extends Component {
 						<Route path ='/prosumer' render={(props)=> 
 							<Prosumer logOut={this.logOut}/>}/>
 						<Route path ='/manager' render={(props)=> 
-							<Manager logOut={this.logOut} />}/>
+							<Manager logOut={this.logOut} showProsumers={false} updateAccount={false}/>}/>
+						<Route path ='/showProsumers' render={(props)=> 
+							<Manager logOut={this.logOut} showProsumers={true} updateAccount={false}/>}/>
+						<Route path ='/updateProfile' render={(props)=> 
+							<Manager logOut={this.logOut} showProsumers={false} updateAccount={true}/>}/>
 						<Route component={PageNotFound}/>
 					</Switch>				
 				</div>
