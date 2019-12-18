@@ -25,11 +25,12 @@ export class ManagerProfile extends Component {
 
     /*delete manager account */    
     deleteAccount = (e) =>{
-        const fd = new FormData();
-        fd.append("username", this.props.username);
         e.preventDefault();
         if (window.confirm("Do you want to delete your account?")) {
-            axios.delete('/user', fd)
+            axios.delete('/user', { data: {
+                username: this.props.username
+            }
+        })
             .then(function (response) {
                 console.log(response)
                 history.push('/');

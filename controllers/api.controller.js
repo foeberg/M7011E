@@ -186,6 +186,7 @@ const updateUser = (req, res) => {
 
 // Only supports deleting managers as of now, since the requirements only stated this
 const deleteUser = (req, res) => {
+    console.log(req.body);
     if(req.body.username == null || req.body.username === '') {
         res.status(400).send('username field not provided');
         return;
@@ -205,9 +206,9 @@ const deleteUser = (req, res) => {
                     return;
                 }
                 console.log('Household ' + req.body.username + ' deleted.');
-
                 // Destroy the session belonging to the user
                 sessionStore.removeUser(req.body.username);
+                res.status(200).send('User deleted.');
             })
         }
     });

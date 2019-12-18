@@ -15,12 +15,13 @@ export class updateProsumer extends Component {
 
     /*delete prosumer account */    
     deleteAccount = (e) =>{
-        const fd = new FormData();
         let currentComponet = this;
-        fd.append("username", this.props.username);
         e.preventDefault();
         if (window.confirm("Do you want to delete " + this.props.username + "'s account?")) {
-            axios.delete('/user', fd)
+            axios.delete('/user', { data: {
+                    username: this.props.username
+                }
+            })
             .then(function (response) {
                 console.log(response);
                 currentComponet.props.closeModal();
