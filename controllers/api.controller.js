@@ -186,7 +186,6 @@ const updateUser = (req, res) => {
 
 // Only supports deleting managers as of now, since the requirements only stated this
 const deleteUser = (req, res) => {
-    console.log(req.body);
     if(req.body.username == null || req.body.username === '') {
         res.status(400).send('username field not provided');
         return;
