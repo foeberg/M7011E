@@ -209,6 +209,7 @@ const deleteUser = (req, res) => {
                 // Destroy the session belonging to the user
                 sessionStore.removeUser(req.body.username);
                 res.status(200).send('User deleted.');
+                return;
             })
         }
     });
