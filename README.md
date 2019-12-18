@@ -68,3 +68,58 @@ and in `/M7011E/frontend/components/image.js` on row 61:
 This is the path to the express server, if you change `server_port` in `config.json`, you need to change that here as well.
 
 ## Running
+
+Now we need to build the react app, so change to `/M7011E/frontend` and run
+
+```
+npm run build
+```
+
+Then, to run the backend express server, change back to `/M7011E` and run
+
+```
+node index.js
+```
+
+## Setting up webserver
+
+We've been using Nginx as webserver on an Ubuntu 18.04 server when deploying the project.
+
+The default configuration file `/etc/nginx/sites-enabled/default` contains the following:
+
+```
+server {
+        listen 80 default_server;
+        listen [::]:80 default_server;
+        
+        root {path-to-repo}/M7011E/frontend/build;
+        
+        index index.html index.htm index.nginx-debian.html;
+
+        server_name {server name};
+
+        location / {
+                try_files $uri /index.html;
+        }
+        
+        location /api/ {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+                proxy_pass http://localhost:8081;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+        }
+        
+        location /householdImages/ {
+                proxy_set_header X-Real-IP $remote_addr;
+                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+                proxy_set_header Host $http_host;
+                proxy_redirect off;
+                proxy_pass http://localhost:8081/householdImages/;
+                proxy_set_header Upgrade $http_upgrade;
+                proxy_set_header Connection "upgrade";
+        }
+    }
+```
