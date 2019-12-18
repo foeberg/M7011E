@@ -16,6 +16,7 @@ export class updateProsumer extends Component {
     /*delete prosumer account */    
     deleteAccount = (e) =>{
         let currentComponet = this;
+        let username = this.props.username;
         e.preventDefault();
         if (window.confirm("Do you want to delete " + this.props.username + "'s account?")) {
             axios.delete('/user', { data: {
@@ -25,6 +26,11 @@ export class updateProsumer extends Component {
             .then(function (response) {
                 console.log(response);
                 currentComponet.props.closeModal();
+                document.getElementById("responseMess").innerHTML = "Deleted " + username + "'s account";
+                $("#responseMess").show();
+                $("#responseMess").css("color", "green");
+                setTimeout(function() { $("#responseMess").hide(); }, 5000);
+
             })
             .catch(function (error) {
                 console.log(error)

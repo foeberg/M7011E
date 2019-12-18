@@ -20,17 +20,12 @@ export class UpdateAccount extends Component {
     /*Validate input*/
     handleValidation(){
         let lastname = this.state.lastname;
-        let password = this.state.password;
         let errors = {};
         let formIsValid = true;
     
         if(!lastname){
           formIsValid = false;
           errors["lastname"] = "Lastname can not be empty";
-        }
-        if(!password){
-          formIsValid = false;
-          errors["password"] = "Password can not be empty";
         }
     
         this.setState({errors: errors});
@@ -52,6 +47,7 @@ export class UpdateAccount extends Component {
             .then(function (response) {
               console.log(response)
               currentComponent.props.updateState(lastname, password);
+              currentComponent.setState({lastname: "", password: "", errors: {}})
               document.getElementById(currentComponent.props.id).innerHTML = "User updated";
               $("#" + currentComponent.props.id).show();
               $("#" + currentComponent.props.id).css("color", "green");
@@ -59,6 +55,7 @@ export class UpdateAccount extends Component {
             })
             .catch(function (error) {
               document.getElementById(currentComponent.props.id).innerHTML = "Couldn´t update";
+              currentComponent.setState({lastname: "", password: "", errors: {}})
               $("#" + currentComponent.props.id).show();
               $("#" + currentComponent.props.id).css("color", "red");
               setTimeout(function() { $("#" + currentComponent.props.id).hide(); }, 5000);

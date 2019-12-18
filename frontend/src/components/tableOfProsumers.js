@@ -192,8 +192,19 @@ export class TableOfProsumers extends Component {
 
     /*Close the modal when clicking on button "x" */
     closeUpdateProfileModal = () => {
+        axios
+        .get('/prosumers')
+        .then((response) => {
+            this.setState({ prosumers: response.data })
+        })
+        .catch((error) => {
+            if(error.response.status === 400){
+                history.push('/');
+            }
+        })
         var modal = document.getElementById("profileModal");
         this.setState({ username: "", lastname: "", status: ""})
+        $("#prosumerMess").hide();
         modal.style.display = "none";
     }
 
@@ -210,6 +221,7 @@ export class TableOfProsumers extends Component {
         <div className="profileBox" hidden={!this.props.showProsumers}>
             <h1>Prosumers</h1>
             <div id="blackouts"></div>
+            <div id="responseMess"></div>
             <table id='prosumers'>
                <tbody>
                     <tr>
