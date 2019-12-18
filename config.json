@@ -1,5 +1,5 @@
 {
-    "db_path": "mongodb://localhost/M7011E",
+    "db_path": "",
     "session_max_age": 86400000,
     "powerplant_startup_time": 20000,
     "powerplant_max_production": 1000,
@@ -7,6 +7,6 @@
     "household_buffer_cap": 200,
     "household_production_efficiency": 0.5,
     "simulator_hour_length": 10000,
-    "cors_origin": "http://localhost:3000",
+    "cors_origin": "",
     "server_port": 8081
 }
