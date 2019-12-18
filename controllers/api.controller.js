@@ -99,13 +99,19 @@ const getProsumers = (req, res) => {
             return;
         } else {
             users.forEach(user => {
-                if(online.includes(user.username)) {
-                    list.push({
-                        status: 'online',
-                        username: user.username,
-                        lastname: user.lastname
-                    });
-                } else {
+                let found = false;
+                for(let i = 0; i < online.length; i++) {
+                    if(user.username === online[i].username) {
+                        list.push({
+                            status: 'online',
+                            username: user.username,
+                            lastname: user.lastname
+                        });
+                        found = true;
+                        break;
+                    }
+                }
+                if(!found) {
                     list.push({
                         status: 'offline',
                         username: user.username,
@@ -137,7 +143,18 @@ const getUser = (req, res) => {
 };
 
 const updateUser = (req, res) => {
-    User.findOne({ username: req.session.user.username }, (err, user) => {
+    // If user is prosumer, update his own credentials
+    let username = req.session.user.username;
+
+    // If user is manager, change the credentials of the username passed
+    if(req.session.user.role === 'manager') {
+        if(req.body.username == null || req.body.username === '') {
+            res.status(400).send('username field not provided');
+            return;
+        }
+        username = req.body.username;
+    }
+    User.findOne({ username: username }, (err, user) => {
         if(err) {
             console.error(err);
             res.status(500).send('Error updating user.');
@@ -169,27 +186,29 @@ const updateUser = (req, res) => {
 
 // Only supports deleting managers as of now, since the requirements only stated this
 const deleteUser = (req, res) => {
-    User.deleteOne({ username: req.session.user.username }, (err) => {
+    if(req.body.username == null || req.body.username === '') {
+        res.status(400).send('username field not provided');
+        return;
+    }
+    User.deleteOne({ username: req.body.username }, (err) => {
         if(err) {
             console.error(err);
             res.status(500).send('Error deleting user.');
             return;
         } else {
-            console.log('User ' + req.session.user.username + ' deleted');
+            console.log('User ' + req.body.username + ' deleted');
 
-            // Destroy the session belonging to the user
-            let user = req.session.user;
-            req.session.destroy((err) => {
+            Household.deleteOne({ username: req.body.username }, (err) => {
                 if(err) {
                     console.error(err);
-                    res.status(500).send('Error logging out');
-                    return;
-                } else {
-                    sessionStore.removeUser(user);
-                    res.status(200).send('User deleted.');
+                    res.status(500).send('Error deleting household.');
                     return;
                 }
-            });
+                console.log('Household ' + req.body.username + ' deleted.');
+
+                // Destroy the session belonging to the user
+                sessionStore.removeUser(req.body.username);
+            })
         }
     });
 };

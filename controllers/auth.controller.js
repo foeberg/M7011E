@@ -34,7 +34,7 @@ const signup = (req, res) => {
                     // Create session, i.e log in after registering
                     req.session.user = user;
 
-                    sessionStore.addUser(user);
+                    sessionStore.addUser(req.session, user);
 
                     // Add the new household to the simulator
                     sim.addHousehold(household);
@@ -60,7 +60,7 @@ const login = (req, res) => {
             if(bcrypt.compareSync(req.body.password, user.password)) {
                 // If password is correct, we create the session
                 req.session.user = user;
-                sessionStore.addUser(user);
+                sessionStore.addUser(req.session, user);
 
                 res.status(200).send('Logged in');
                 return;
@@ -73,18 +73,11 @@ const login = (req, res) => {
 };
 
 const logout = (req, res) => {
-    let user = req.session.user;
-    req.session.destroy((err) => {
-        if(err) {
-            console.error(err);
-            res.status(500).send('Error logging out');
-            return;
-        } else {
-            sessionStore.removeUser(user);
-            res.status(200).send('Logged out');
-            return;
-        }
-    });
+    if(sessionStore.removeUser(req.session.user.username)) {
+        res.status(200).send('Logged out');
+    } else {
+        res.status(500).send('Error logging out');
+    }
 };
 
 module.exports = {

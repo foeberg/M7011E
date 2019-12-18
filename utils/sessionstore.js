@@ -6,20 +6,39 @@ class SessionStore {
         this.expires = config.session_max_age;
     }
 
-    addUser(user) {
-        this.activeSessions.push(user.username);
+    addUser(session, user) {
+        this.activeSessions.push({session: session, username: user.username});
 
         // Remove session when expired
-        setTimeout(function(user) {
-            this.removeUser(user);
-        }.bind(this, user), this.expires);
+        setTimeout(function(username) {
+            this.removeUser(username);
+        }.bind(this, user.username), this.expires);
     }
 
-    removeUser(user) {
+    removeUser(username) {
         let filtered = this.activeSessions.filter((session) => {
-            return session !== user.username;
+            if(session.username === username) {
+                session.session.destroy((err) => {
+                    if(err) {
+                        console.error(err);
+                        return true;
+                    } else {
+                        console.log('User ' + username + ' logged out');
+                        return false;
+                    }
+                });
+            } else {
+                return true;
+            }
         });
-        this.activeSessions = filtered;
+
+        if(this.activeSessions.length === filtered.length) {
+            return false;
+        } else {
+            this.activeSessions = filtered;
+            return true;
+        }
+
     }
 
     getActiveSessions() {
