@@ -42,6 +42,8 @@
 | 2019-12-12  | 0.5     | commenting and cleaning up code on frontend |
 | 2019-12-16  | 4.5     | publish project on ludd server |
 | 2019-12-18  | 2       | update and delete prosumers account (frontend) |
+| 2019-12-18  | 7       | report |
+| 2019-12-19  | 3       | report |
 
 
 
