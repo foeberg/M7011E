@@ -33,3 +33,5 @@
 | 2019-12-13  | 0.5       | Minor bugfixes. |
 | 2019-12-16  | 4.5       | Deploying everything to LUDD server. |
 | 2019-12-18  | 2       | Implemented support for updating and deleting OTHER users as manager |
+| 2019-12-18  | 3       | Report writing |
+| 2019-12-18  | 3       | Report writing |
